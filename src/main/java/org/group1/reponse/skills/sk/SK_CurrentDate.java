@@ -1,4 +1,4 @@
-package org.group1.reponse.skills;
+package org.group1.reponse.skills.sk;
 
 import java.util.Date;
 import java.util.List;

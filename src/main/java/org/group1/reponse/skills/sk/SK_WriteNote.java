@@ -1,4 +1,4 @@
-package org.group1.reponse.skills;
+package org.group1.reponse.skills.sk;
 
 import java.io.IOException;
 import java.util.List;
