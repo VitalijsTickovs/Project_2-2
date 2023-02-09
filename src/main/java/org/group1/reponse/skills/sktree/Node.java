@@ -56,7 +56,6 @@ public class Node{
         return this.skill.getSkill();
     }
 
-
     public void setSkill(iSkill skill){
         this.skill = skill;
     }
@@ -73,5 +72,5 @@ public class Node{
         return (parent == null);
     }
 
-
+    public iSkill getSkill() {return skill;}
 }

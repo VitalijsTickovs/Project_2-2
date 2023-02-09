@@ -19,19 +19,35 @@ public class Tree {
         this.root = root;
     }
 
-    public void checker(){
-
-    }
 
     public void createBranch(List<String> words, iSkill skill){
         queue = new LinkedList<>(words);
         iterator((LinkedList<String>) queue, skill, this.root);
     }
 
-    public String getAction(){
+    public String getAction(List<String> words){
 
-        return null;
+        queue = new LinkedList<>(words);
+        iSkill sk = iterator((LinkedList<String>) queue, this.root);
+        return sk.getSkill(words);
     }
+
+
+    private iSkill iterator(LinkedList<String> words, Node node){
+
+        if(words.size() == 0){
+            return node.getSkill();
+        }else {
+            String word = words.pop();
+            if(node.exist(word)){
+                return iterator(words, node.getMatch(word));
+            }else {
+                node.addChild(new Node(node, word));
+                return iterator(words, node.getMatch(word));
+            }
+        }
+    }
+
 
     private void iterator(LinkedList<String> words, iSkill skill, Node node){
 
@@ -50,9 +66,6 @@ public class Tree {
         }
     }
 
-    void createSkill(String text, iSkill a){
-
-    }
 
     static {
 
@@ -66,6 +79,8 @@ public class Tree {
     }
 
     public static void main(String[] args) throws NullTextException {
+
+
         Tree t = new Tree(new Node(null, null));
         List<String> test = Tokenization.tokenize("what is your name", Delim.SPACE);
         t.createBranch(test, new SK_CurrentDate());

@@ -3,6 +3,8 @@ package org.group1.reponse.procesor;
 import org.group1.collections.CV;
 
 import static org.group1.collections.CV.*;
+import static org.group1.reponse.procesor.helpers.StemBasic.*;
+import static org.group1.reponse.procesor.helpers.StemConstants.*;
 
 public class Stemming {
 
@@ -14,125 +16,60 @@ public class Stemming {
      */
     private Stemming(){}
 
-    public static void main(String[] args) {
-        System.out.println(Steam("emotional"));
-    }
 
-    private static String Steam(String word){
+    /**
+     * This method returns a stemmed word
+     * @param word word to stem
+     * @return the stemmed word
+     */
+    public static String Steam(String word){
 
         int m = getM(word);
         word = step1a(word);
 
-
+        System.out.println(m);
+        m = getM(word);
         if(m > 0){
             word = step1b(word);
         }
 
+        m = getM(word);
         if(_v_(word)){
             word = step1c(word);
         }
 
+        m = getM(word);
         if(m > 0){
             word = step2(word);
         }
 
+        m = getM(word);
         if(m > 0){
             word = step3(word);
         }
 
+        m = getM(word);
         if (m > 1){
             word = step4(word);
         }
 
+        m = getM(word);
         if(m == 1 && !_o(word)){
             word = step5a(word);
         }
 
+        m = getM(word);
         if(m > 1 && _d(word)){
-            word = step5a(word);
+            word = step5b(word);
         }
 
+        m = getM(word);
         if(m > 1 && _l(word)){
-            word = step5a(word);
+            word = step5b(word);
         }
         return word;
     }
 
-    public static boolean _o(String word){
-        return ('o' == word.charAt(word.length() - 1));
-    }
-
-    public static boolean _l(String word){
-        return ('l' == word.charAt(word.length() - 1));
-    }
-
-    public static boolean _d(String word){
-        return ('d' == word.charAt(word.length() - 1));
-    }
-
-    /**
-     * Evaluates if a character in a given position is a vocal
-     * @param word the word
-     * @param position position of the character in the word
-     * @return (C || V)
-     */
-    static CV vocalAt(String word, int position){
-
-        return switch (word.charAt(position)) {
-            case 'a', 'e', 'i', 'o', 'u' -> V;
-            default -> C;
-        };
-    }
-
-    /**
-     * This method returns the m value of the word
-     * @param word The word to evaluate
-     * @return the m value.
-     */
-    private static int getM(String word){ //TODO: Test a lot this method
-
-        int i = 0;
-        int j = word.length() - 1;
-        int n = 0;
-        if(j <= 1) return 0;
-
-        while (true) {
-            if (i > j) return n;
-            if (vocalAt(word, i) == V) break;
-            i++;
-        }
-
-        i++;
-        while (true) {
-            while (true) {
-                if (i > j) return n;
-                if (vocalAt(word, i) == C) break;
-                i++;
-            }
-            i++;
-            n++;
-            while (true) {
-                if (i > j) return n;
-                if (vocalAt(word, i) == V) break;
-                i++;
-            }
-            i++;
-        }
-    }
-
-    /**
-     * This method checks if there is a vocal between words
-     * @param word The input word
-     * @return true || false
-     */
-    private static boolean _v_(String word) {
-        if(word.length() < 3) return false;
-        for (int i = 1; i <= word.length() - 2; i++){
-            if (Stemming.vocalAt(word, i) == V)
-                return true;
-        }
-        return false; //TODO: Check if does not work
-    }
 
     /**
      * This is the step 1a of the algorithm.
@@ -149,6 +86,7 @@ public class Stemming {
 
         return word;
     }
+
 
     /**
      * This is th step 1b
@@ -178,6 +116,12 @@ public class Stemming {
         return word;
     }
 
+
+    /**
+     * This is the second part of the step 1b
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step1b2(String word){
 
         if(word.endsWith("at")) return word.replace("at", "ate");
@@ -189,6 +133,12 @@ public class Stemming {
         return word;
     }
 
+
+    /**
+     * This is the step 1c
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step1c(String word){
 
         if(_v_(word)){
@@ -197,21 +147,13 @@ public class Stemming {
         return word;
     }
 
-    private static final String[] STEP2_I = {
-            "ational", "tional", "enci", "anci", "izer", "abli",
-            "alli", "entli", "eli", "ousli",
-            "ization", "ation", "ator", "alism", "iveness",
-            "fulness", "ousness", "ality", "ivity", "bility"
-    };
 
-    private static final String[] STEP2_O = {
-            "ate", "tion", "ence", "ance", "ize", "able",
-            "al", "ent", "e", "ous", "ize", "ate", "ate",
-            "al", "ive", "ful", "ous", "al", "ive", "ble"
-    };
-
+    /**
+     * This is the step 2
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step2(String word){
-
         if(getM(word) > 0){
             for (int i = 0; i < STEP2_I.length; i++) {
                 if(word.endsWith(STEP2_I[i])) return word.replace(STEP2_I[i], STEP2_O[i]);
@@ -220,14 +162,12 @@ public class Stemming {
         return word;
     }
 
-    private static final String[] STEP3_I = {
-            "icative", "ative", "alize", "iciti", "ical", "ful", "ness"
-    };
 
-    private static final String[] STEP3_O = {
-            "ic", "", "al", "ic", "ic", "ic", ""
-    };
-
+    /**
+     * This is the step 3
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step3(String word){
 
         if(getM(word) > 0){
@@ -238,38 +178,53 @@ public class Stemming {
         return word;
     }
 
-    private static final String[] STEP4_I = {
-            "al", "ance", "ence", "er", "ic", "able", "ible",
-            "ant", "ement", "ment", "ent", "tion", "sion",
-            "ou", "ism", "ate", "iti", "ous", "ive", "ize"
-    };
 
-    private static final String STEP4_O = "";
-
-
+    /**
+     * This is the step 4
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step4(String word){
 
-        if(getM(word) > 0){
+        if(getM(word) > 1){
             for (int i = 0; i < STEP4_I.length; i++) {
+                if(word.endsWith("tion")) return word.replace("tion", "t");
+                if(word.endsWith("tion")) return word.replace("sion", "s");
                 if(word.endsWith(STEP4_I[i])) return word.replace(STEP4_I[i], STEP4_O);
             }
         }
         return word;
     }
 
-    private static final String STEP5_I = "e";
-    private static final String STEP5_O = "";
 
+    /**
+     * This is the step 5a
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step5a(String word){
         if(word.endsWith(STEP5_I)) return word.replace(STEP5_I, STEP5_O);
         return word;
     }
 
+
+    /**
+     * This is the step 2
+     * @param word word for evaluation
+     * @return resultant word.
+     */
     public static String step5b(String word){
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < word.length() - 1; i++) {
             temp.append(word.charAt(i));
         }
         return temp.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Steam("going"));
+        System.out.println(Steam("adjustable"));
+        System.out.println(Steam("accomplished"));
+        System.out.println(Steam("crepuscular"));
     }
 }

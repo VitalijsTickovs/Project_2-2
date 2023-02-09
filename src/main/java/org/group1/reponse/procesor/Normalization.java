@@ -67,8 +67,4 @@ public class Normalization {
         }
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(1);
-    }
 }
