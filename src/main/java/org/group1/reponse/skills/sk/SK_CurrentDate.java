@@ -7,12 +7,13 @@ public class SK_CurrentDate implements iSkill{
 
     @Override
     public String getSkill(List<String> words) {
+
         return new Date().toString();
     }
 
     @Override
     public String getSkill() {
-        return new Date().toString();
+        return new Date().toString()  + "dejan";
     }
 
     public static void main(String[] args) {

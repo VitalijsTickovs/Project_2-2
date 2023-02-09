@@ -7,7 +7,7 @@ public class SK_WriteNote implements iSkill{
 
     @Override
     public String getSkill() {
-        return null;
+        return "kjsdnfbñosb";
     }
 
     @Override

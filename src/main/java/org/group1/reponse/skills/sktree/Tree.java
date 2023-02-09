@@ -4,6 +4,7 @@ import org.group1.collections.Delim;
 import org.group1.exception.NullTextException;
 import org.group1.reponse.procesor.Tokenization;
 import org.group1.reponse.skills.sk.SK_CurrentDate;
+import org.group1.reponse.skills.sk.SK_WriteNote;
 import org.group1.reponse.skills.sk.iSkill;
 
 import java.util.LinkedList;
@@ -27,10 +28,16 @@ public class Tree {
         iterator((LinkedList<String>) queue, skill, this.root);
     }
 
-    public void iterator(LinkedList<String> words, iSkill skill, Node node){
+    public String getAction(){
+
+        return null;
+    }
+
+    private void iterator(LinkedList<String> words, iSkill skill, Node node){
 
         if(words.size() == 0){
             node.setSkill(skill);
+            System.out.println(node.getAction());
         }else {
             String word = words.pop();
             if(node.exist(word)){
@@ -43,23 +50,28 @@ public class Tree {
         }
     }
 
+    void createSkill(String text, iSkill a){
+
+    }
+
     static {
 
         //RULE 1:
-        String a = "what is your name";
+        String a = "what is your date";
         iSkill b = new SK_CurrentDate();
 
         //RULE 2:
-        String a2 = "what is your name";
-        iSkill b2 = new SK_CurrentDate();
+        String a2 = "what is your adress";
+        iSkill b2 = new SK_WriteNote();
     }
 
     public static void main(String[] args) throws NullTextException {
-        Tree t = new Tree(new Node(null, "a"));
+        Tree t = new Tree(new Node(null, null));
         List<String> test = Tokenization.tokenize("what is your name", Delim.SPACE);
         t.createBranch(test, new SK_CurrentDate());
-        List<String> test2 = Tokenization.tokenize("what your addres", Delim.SPACE);
-        t.createBranch(test2, new SK_CurrentDate());
+
+        List<String> test2 = Tokenization.tokenize("what is your addres", Delim.SPACE);
+        t.createBranch(test2, new SK_WriteNote());
 
     }
 }

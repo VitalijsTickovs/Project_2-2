@@ -52,6 +52,11 @@ public class Node{
         return this.skill.getSkill(action);
     }
 
+    public String getAction(){
+        return this.skill.getSkill();
+    }
+
+
     public void setSkill(iSkill skill){
         this.skill = skill;
     }

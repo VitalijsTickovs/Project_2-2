@@ -6,5 +6,4 @@ public interface iSkill {
 
     String getSkill();
     String getSkill(List<String> words);
-
 }

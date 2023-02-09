@@ -33,4 +33,8 @@ public class Tokenization {
         }
         return list; //TODO: Is possible to return null?
     }
+
+    public StringTokenizer getTokens(String text, Delim delim){
+        return new StringTokenizer(text, delim.delim);
+    }
 }
