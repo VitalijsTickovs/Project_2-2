@@ -10,9 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -33,7 +37,7 @@ public class ChatWindow {
         UIpane = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
         UIstage = new Stage();
-        UIscene.setFill(Color.LIGHTPINK);
+        UIscene.setFill(Color.LIGHTGRAY);
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
@@ -66,11 +70,12 @@ public class ChatWindow {
 //        loginButtonView.setFitHeight(50);
 //        loginButtonView.setFitWidth(80);
         sendUserInput = new Button();
+        sendUserInput.setText("SEND");
+        sendUserInput.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
         sendUserInput.setStyle("-fx-background-color: transparent");
-        sendUserInput.setGraphic(sendUserView);
+        sendUserInput.setTextFill(Color.WHITE);
         sendUserInput.setLayoutX(310);
         sendUserInput.setLayoutY(445);
-        sendUserInput.setCursor(Cursor.CLOSED_HAND);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -93,5 +98,15 @@ public class ChatWindow {
         });
         UIpane.getChildren().add(sendUserInput);
     }
+        public void keyBoardHandler(){
+            UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent ke) {
+                    if (ke.getCode() == KeyCode.ESCAPE) {
+                        System.out.println("Key Pressed: " + ke.getCode());
+                        ke.consume();
+                    }
+                }
+            });
+        }
 
 }
