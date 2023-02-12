@@ -34,6 +34,7 @@ public class LoginScreen {
     static int screenWidth = 700;
     static int screenHeight = 500;
     public Button loginButton;
+    private Stage chatWindow;
     private Image loginButtonImage= new Image("GUI/login.png",150,60,false,true);
     private ImageView loginButtonView = new ImageView(loginButtonImage);
     private Image robotImage= new Image("GUI/Joe.png",300,500,false,true);
@@ -49,6 +50,11 @@ public class LoginScreen {
     }
     public Stage getUIstage(){
         return UIstage;
+    }
+    public void setStage(Stage mainStage){
+        this.chatWindow=mainStage;
+        mainStage.close();
+        UIstage.show();
     }
     //WHY DO U HAVE TO DO SO MUCH FOR ONE FUCKING BUTTON????
     //LIBGDX>>>>>>JAVAFX

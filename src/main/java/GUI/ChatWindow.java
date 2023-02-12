@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -28,9 +29,8 @@ public class ChatWindow {
     private Stage UIstage;
     private Stage menuStage;
     private Scene UIscene;
-    private TextField userInput;
-    private TextArea userOutput;
-    private Button sendUserInput = new Button("send");
+    private TextArea userInput,userOutput;
+    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
     private Image sendUserImage= new Image("GUI/send.png",70,30,false,true);
     private ImageView sendUserView = new ImageView(sendUserImage);
     public ChatWindow(){
@@ -45,30 +45,32 @@ public class ChatWindow {
     }
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
-        mainStage.hide();
+        mainStage.close();
         UIstage.show();
     }
     public void design(){
-        userInput = new TextField();
+        //User input textField
+        userInput = new TextArea();
         userInput.setPrefSize(250,50);
         userInput.setTranslateX(50);
         userInput.setTranslateY(430);
+        userInput.setWrapText(true);
         UIpane.getChildren().add(userInput);
 
+        //Chat textField
         userOutput = new TextArea();
         userOutput.setPrefSize(250,330);
         userOutput.setTranslateX(50);
         userOutput.setTranslateY(50);
         userOutput.setCursor(Cursor.CLOSED_HAND);
-
         UIpane.getChildren().add(userOutput);
         userOutput.setEditable(false);
+        userOutput.setWrapText(true);
 
         ColorAdjust effect = new ColorAdjust();
         effect.setBrightness(-0.5);
 
-//        loginButtonView.setFitHeight(50);
-//        loginButtonView.setFitWidth(80);
+        // send button
         sendUserInput = new Button();
         sendUserInput.setText("SEND");
         sendUserInput.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
@@ -97,6 +99,112 @@ public class ChatWindow {
             }
         });
         UIpane.getChildren().add(sendUserInput);
+
+        //side menu
+        Rectangle sideMenu = new Rectangle(400,50,250,330);
+        sideMenu.setFill(Color.DARKGRAY);
+        UIpane.getChildren().add(sideMenu);
+
+        //help button
+        helpButton = new Button();
+        helpButton.setText("HELP");
+        helpButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        helpButton.setStyle("-fx-background-color: transparent");
+        helpButton.setTextFill(Color.WHITE);
+        helpButton.setLayoutX(490);
+        helpButton.setLayoutY(170);
+        helpButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                helpButton.setEffect(effect);
+            }
+        });
+        helpButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                helpButton.setEffect(null);
+            }
+        });
+        UIpane.getChildren().add(helpButton);
+
+        //skills editor button
+        skillsButton = new Button();
+        skillsButton.setText("SKILLS EDITOR");
+        skillsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        skillsButton.setStyle("-fx-background-color: transparent");
+        skillsButton.setTextFill(Color.WHITE);
+        skillsButton.setLayoutX(430);
+        skillsButton.setLayoutY(130);
+        skillsButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                skillsButton.setEffect(effect);
+            }
+        });
+        skillsButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                skillsButton.setEffect(null);
+            }
+        });
+        UIpane.getChildren().add(skillsButton);
+
+        //logout button
+        logoutButton = new Button();
+        logoutButton.setText("SIGN OUT");
+        logoutButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        logoutButton.setStyle("-fx-background-color: transparent");
+        logoutButton.setTextFill(Color.WHITE);
+        logoutButton.setLayoutX(460);
+        logoutButton.setLayoutY(210);
+        logoutButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logoutButton.setEffect(effect);
+            }
+        });
+        logoutButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logoutButton.setEffect(null);
+            }
+        });
+        logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                LoginScreen loginScreen = new LoginScreen();
+                loginScreen.setStage(UIstage);
+            }
+        });
+        UIpane.getChildren().add(logoutButton);
+
+        //exit Button
+        exitButton = new Button();
+        exitButton.setText("EXIT");
+        exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        exitButton.setStyle("-fx-background-color: transparent");
+        exitButton.setTextFill(Color.WHITE);
+        exitButton.setLayoutX(490);
+        exitButton.setLayoutY(250);
+        exitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                exitButton.setEffect(effect);
+            }
+        });
+        exitButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                exitButton.setEffect(null);
+            }
+        });
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                UIstage.close();
+            }
+        });
+        UIpane.getChildren().add(exitButton);
     }
         public void keyBoardHandler(){
             UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
