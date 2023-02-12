@@ -73,10 +73,10 @@ public class LoginScreen implements CustomStage {
 
         loginButton = new Button();
         loginButton.setText("LOGIN");
-        loginButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        loginButton.setFont(Font.font("Impact", FontWeight.BOLD,25));
         loginButton.setStyle("-fx-background-color: transparent");
         loginButton.setTextFill(Color.WHITE);
-        loginButton.setLayoutX(130);
+        loginButton.setLayoutX(142);
         loginButton.setLayoutY(240);
         loginButton.setCursor(Cursor.CLOSED_HAND);
         loginButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -102,29 +102,41 @@ public class LoginScreen implements CustomStage {
         UIpane.getChildren().add(loginButton);
         robotImageView.setLayoutX(340);
         robotImageView.setLayoutY(30);
+        robotImageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                robotImageView.setEffect(effect);
+            }
+        });
+        robotImageView.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                robotImageView.setEffect(null);
+            }
+        });
         UIpane.getChildren().add(robotImageView);
 
         Text username = new Text("Username: ");
-        username.setFont(Font.font("Comic Sans MS",20));
+        username.setFont(Font.font("Impact",20));
         username.setStyle("-fx-font-weight: bold");
         username.setFill(Color.WHITE);
-        username.setTranslateX(130);
+        username.setTranslateX(145);
         username.setTranslateY(120);
         UIpane.getChildren().add(username);
 
         Text password = new Text("Password: ");
-        password.setFont(Font.font("Comic Sans MS",20));
+        password.setFont(Font.font("Impact",20));
         password.setStyle("-fx-font-weight: bold");
         password.setFill(Color.WHITE);
-        password.setTranslateX(130);
+        password.setTranslateX(145);
         password.setTranslateY(190);
         UIpane.getChildren().add(password);
 
         TextField loginTextField = new TextField();
-        loginTextField.setTranslateX(100);
+        loginTextField.setTranslateX(110);
         loginTextField.setTranslateY(130);
         TextField passwordTextField = new TextField();
-        passwordTextField.setTranslateX(100);
+        passwordTextField.setTranslateX(110);
         passwordTextField.setTranslateY(200);
         UIpane.getChildren().add(loginTextField);
         UIpane.getChildren().add(passwordTextField);

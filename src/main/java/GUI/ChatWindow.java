@@ -74,11 +74,11 @@ public class ChatWindow implements CustomStage {
         // send button
         sendUserInput = new Button();
         sendUserInput.setText("SEND");
-        sendUserInput.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         sendUserInput.setStyle("-fx-background-color: transparent");
         sendUserInput.setTextFill(Color.WHITE);
         sendUserInput.setLayoutX(310);
-        sendUserInput.setLayoutY(445);
+        sendUserInput.setLayoutY(437);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -109,10 +109,10 @@ public class ChatWindow implements CustomStage {
         //help button
         helpButton = new Button();
         helpButton.setText("HELP");
-        helpButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        helpButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         helpButton.setStyle("-fx-background-color: transparent");
         helpButton.setTextFill(Color.WHITE);
-        helpButton.setLayoutX(490);
+        helpButton.setLayoutX(480);
         helpButton.setLayoutY(170);
         helpButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -137,10 +137,10 @@ public class ChatWindow implements CustomStage {
         //skills editor button
         skillsButton = new Button();
         skillsButton.setText("SKILLS EDITOR");
-        skillsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        skillsButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         skillsButton.setStyle("-fx-background-color: transparent");
         skillsButton.setTextFill(Color.WHITE);
-        skillsButton.setLayoutX(430);
+        skillsButton.setLayoutX(420);
         skillsButton.setLayoutY(130);
         skillsButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -166,10 +166,10 @@ public class ChatWindow implements CustomStage {
         //logout button
         logoutButton = new Button();
         logoutButton.setText("SIGN OUT");
-        logoutButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        logoutButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         logoutButton.setStyle("-fx-background-color: transparent");
         logoutButton.setTextFill(Color.WHITE);
-        logoutButton.setLayoutX(460);
+        logoutButton.setLayoutX(450);
         logoutButton.setLayoutY(210);
         logoutButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -195,10 +195,10 @@ public class ChatWindow implements CustomStage {
         //exit Button
         exitButton = new Button();
         exitButton.setText("EXIT");
-        exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
+        exitButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         exitButton.setStyle("-fx-background-color: transparent");
         exitButton.setTextFill(Color.WHITE);
-        exitButton.setLayoutX(490);
+        exitButton.setLayoutX(480);
         exitButton.setLayoutY(250);
         exitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
