@@ -77,6 +77,7 @@ public class ChatWindow implements CustomStage {
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         sendUserInput.setStyle("-fx-background-color: transparent");
         sendUserInput.setTextFill(Color.WHITE);
+        sendUserInput.setCursor(Cursor.CLOSED_HAND);
         sendUserInput.setLayoutX(310);
         sendUserInput.setLayoutY(437);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
@@ -114,6 +115,7 @@ public class ChatWindow implements CustomStage {
         helpButton.setTextFill(Color.WHITE);
         helpButton.setLayoutX(480);
         helpButton.setLayoutY(170);
+        helpButton.setCursor(Cursor.CLOSED_HAND);
         helpButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -129,7 +131,8 @@ public class ChatWindow implements CustomStage {
         helpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                HelpWindow helpWindow = new HelpWindow();
+                helpWindow.setStage(UIstage);
             }
         });
         UIpane.getChildren().add(helpButton);
@@ -142,6 +145,7 @@ public class ChatWindow implements CustomStage {
         skillsButton.setTextFill(Color.WHITE);
         skillsButton.setLayoutX(420);
         skillsButton.setLayoutY(130);
+        skillsButton.setCursor(Cursor.CLOSED_HAND);
         skillsButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -171,6 +175,7 @@ public class ChatWindow implements CustomStage {
         logoutButton.setTextFill(Color.WHITE);
         logoutButton.setLayoutX(450);
         logoutButton.setLayoutY(210);
+        logoutButton.setCursor(Cursor.CLOSED_HAND);
         logoutButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -199,6 +204,7 @@ public class ChatWindow implements CustomStage {
         exitButton.setStyle("-fx-background-color: transparent");
         exitButton.setTextFill(Color.WHITE);
         exitButton.setLayoutX(480);
+        exitButton.setCursor(Cursor.CLOSED_HAND);
         exitButton.setLayoutY(250);
         exitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override

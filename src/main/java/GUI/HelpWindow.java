@@ -24,6 +24,13 @@ public class HelpWindow implements CustomStage{
         UIstage.setScene(UIscene);
         keyboardHandler();
     }
+
+    public void setStage(Stage mainStage){
+        this.chatStage=mainStage;
+        mainStage.close();
+        UIstage.show();
+    }
+
     @Override
     public void design() {
 
