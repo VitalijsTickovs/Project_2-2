@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 
 
-public class ChatWindow {
+public class ChatWindow implements CustomStage {
 
     String chat = "";
     private AnchorPane UIpane;
@@ -41,13 +41,14 @@ public class ChatWindow {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
-
+        keyboardHandler();
     }
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
         mainStage.close();
         UIstage.show();
     }
+    @Override
     public void design(){
         //User input textField
         userInput = new TextArea();
@@ -125,6 +126,12 @@ public class ChatWindow {
                 helpButton.setEffect(null);
             }
         });
+        helpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
         UIpane.getChildren().add(helpButton);
 
         //skills editor button
@@ -145,6 +152,13 @@ public class ChatWindow {
             @Override
             public void handle(MouseEvent event) {
                 skillsButton.setEffect(null);
+            }
+        });
+        skillsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SkillEditor skillEditor = new SkillEditor();
+                skillEditor.setStage(UIstage);
             }
         });
         UIpane.getChildren().add(skillsButton);
@@ -206,11 +220,13 @@ public class ChatWindow {
         });
         UIpane.getChildren().add(exitButton);
     }
-        public void keyBoardHandler(){
+    @Override
+        public void keyboardHandler(){
             UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent ke) {
                     if (ke.getCode() == KeyCode.ESCAPE) {
-                        System.out.println("Key Pressed: " + ke.getCode());
+                        LoginScreen loginScreen = new LoginScreen();
+                        loginScreen.setStage(UIstage);
                         ke.consume();
                     }
                 }

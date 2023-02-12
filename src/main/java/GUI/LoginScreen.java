@@ -10,6 +10,8 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -25,7 +27,7 @@ import javax.swing.plaf.PanelUI;
 import java.awt.event.ActionListener;
 
 
-public class LoginScreen {
+public class LoginScreen implements CustomStage {
     //VIEW SETTINGS
     private AnchorPane UIpane;
     private Stage UIstage;
@@ -47,6 +49,7 @@ public class LoginScreen {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
+        keyboardHandler();
     }
     public Stage getUIstage(){
         return UIstage;
@@ -58,6 +61,7 @@ public class LoginScreen {
     }
     //WHY DO U HAVE TO DO SO MUCH FOR ONE FUCKING BUTTON????
     //LIBGDX>>>>>>JAVAFX
+    @Override
     public void design(){
 
         ColorAdjust effect = new ColorAdjust();
@@ -67,10 +71,6 @@ public class LoginScreen {
         rectangle.setFill(Color.DARKGRAY);
         UIpane.getChildren().add(rectangle);
 
-
-
-//        loginButtonView.setFitHeight(50);
-//        loginButtonView.setFitWidth(80);
         loginButton = new Button();
         loginButton.setText("LOGIN");
         loginButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,20));
@@ -129,6 +129,18 @@ public class LoginScreen {
         UIpane.getChildren().add(loginTextField);
         UIpane.getChildren().add(passwordTextField);
 
+    }
+
+    @Override
+    public void keyboardHandler() {
+        UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.ESCAPE) {
+                    UIstage.close();
+                    ke.consume();
+                }
+            }
+        });
     }
 
 }
