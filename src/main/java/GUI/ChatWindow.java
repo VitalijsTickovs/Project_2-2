@@ -1,5 +1,7 @@
 package GUI;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -83,8 +85,11 @@ public class ChatWindow implements CustomStage {
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                chat = chat + "you: "+ userInput.getText() + "\n";
-                userOutput.setText(chat);
+                userOutput.setScrollTop(Double.MIN_VALUE);
+                chat =  "you: "+ userInput.getText() + "\n";
+                chat =  chat + "bot: "+ "I cannot answer this question \n";
+                //userOutput.setText(chat);
+                userOutput.appendText(chat + "\n");
                 System.out.println(chat);
             }
         });
