@@ -15,17 +15,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import javax.lang.model.type.NullType;
-import javax.swing.plaf.PanelUI;
-import java.awt.event.ActionListener;
-
 
 public class LoginScreen implements CustomStage {
     //VIEW SETTINGS

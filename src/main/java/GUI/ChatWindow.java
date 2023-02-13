@@ -28,6 +28,7 @@ public class ChatWindow implements CustomStage {
     private Scene UIscene;
     private TextArea userInput,userOutput;
     private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
+    ErrorHandling errorHandling = new ErrorHandling();
 
     public ChatWindow(){
         UIpane = new AnchorPane();
@@ -79,12 +80,14 @@ public class ChatWindow implements CustomStage {
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                userOutput.setScrollTop(Double.MIN_VALUE);
-                chat =  "you: "+ userInput.getText() + "\n";
-                chat =  chat + "bot: "+ "I cannot answer this question \n";
-                //userOutput.setText(chat);
-                userOutput.appendText(chat + "\n");
-                System.out.println(chat);
+                if(errorHandling.stringLengthError(userInput.getText())) {
+                    userOutput.setScrollTop(Double.MIN_VALUE);
+                    chat = "you: " + userInput.getText() + "\n";
+                    chat = chat + "bot: " + "I cannot answer this question \n";
+                    //userOutput.setText(chat);
+                    userOutput.appendText(chat + "\n");
+                    System.out.println(chat);
+                }else System.out.println("invalid message");
             }
         });
         sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {
