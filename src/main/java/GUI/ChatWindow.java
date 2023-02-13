@@ -1,17 +1,12 @@
 package GUI;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -33,8 +28,7 @@ public class ChatWindow implements CustomStage {
     private Scene UIscene;
     private TextArea userInput,userOutput;
     private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
-    private Image sendUserImage= new Image("GUI/send.png",70,30,false,true);
-    private ImageView sendUserView = new ImageView(sendUserImage);
+
     public ChatWindow(){
         UIpane = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);

@@ -37,8 +37,6 @@ public class LoginScreen implements CustomStage {
     static int screenHeight = 500;
     public Button loginButton;
     private Stage chatWindow;
-    private Image loginButtonImage= new Image("GUI/login.png",150,60,false,true);
-    private ImageView loginButtonView = new ImageView(loginButtonImage);
     private Image robotImage= new Image("GUI/Joe.png",300,500,false,true);
     private ImageView robotImageView = new ImageView(robotImage);
     public LoginScreen(){
@@ -102,18 +100,18 @@ public class LoginScreen implements CustomStage {
         UIpane.getChildren().add(loginButton);
         robotImageView.setLayoutX(340);
         robotImageView.setLayoutY(30);
-        robotImageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                robotImageView.setEffect(effect);
-            }
-        });
-        robotImageView.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                robotImageView.setEffect(null);
-            }
-        });
+//        robotImageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                robotImageView.setEffect(effect);
+//            }
+//        });
+//        robotImageView.setOnMouseExited(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                robotImageView.setEffect(null);
+//            }
+//        });
         UIpane.getChildren().add(robotImageView);
 
         Text username = new Text("Username: ");
