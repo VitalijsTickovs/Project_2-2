@@ -36,11 +36,12 @@ public class HelpWindow implements CustomStage{
 
     }
 
-    @Override
+    //@Override
     public void keyboardHandler() {
         UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("hiddfsdp");
                     ChatWindow chatWindow = new ChatWindow();
                     chatWindow.setStage(UIstage);
                     ke.consume();

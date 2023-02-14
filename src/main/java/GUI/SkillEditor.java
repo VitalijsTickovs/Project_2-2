@@ -27,7 +27,7 @@ public class SkillEditor implements CustomStage{
         mainStage.close();
         UIstage.show();
     }
-    @Override
+   // @Override
     public void keyboardHandler(){
         UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {

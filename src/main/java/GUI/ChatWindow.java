@@ -228,7 +228,7 @@ public class ChatWindow implements CustomStage {
         });
         UIpane.getChildren().add(exitButton);
     }
-    @Override
+//    @Override
         public void keyboardHandler(){
             UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent ke) {
