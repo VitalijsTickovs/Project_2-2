@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
@@ -17,12 +18,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.util.ArrayList;
 
 
 public class ChatWindow implements CustomStage {
 
+    ArrayList<TextArea> listText= new ArrayList();
     String chat = "";
-    private AnchorPane UIpane;
+    private AnchorPane UIpane,scrollChat;
     private Stage UIstage;
     private Stage menuStage;
     private Scene UIscene;
@@ -32,9 +36,10 @@ public class ChatWindow implements CustomStage {
 
     public ChatWindow(){
         UIpane = new AnchorPane();
+        scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
         UIstage = new Stage();
-        UIscene.setFill(Color.LIGHTGRAY);
+        UIscene.setFill(Color.rgb(18,64,76));
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
@@ -49,64 +54,26 @@ public class ChatWindow implements CustomStage {
     public void design(){
         //User input textField
         userInput = new TextArea();
-        userInput.setPrefSize(250,50);
-        userInput.setTranslateX(50);
-        userInput.setTranslateY(430);
+        userInput.setPrefSize(400,50);
+        userInput.setTranslateX(400);
+        userInput.setTranslateY(470);
         userInput.setWrapText(true);
         UIpane.getChildren().add(userInput);
 
         //Chat textField
-        userOutput = new TextArea();
-        userOutput.setPrefSize(250,330);
-        userOutput.setTranslateX(50);
-        userOutput.setTranslateY(50);
-        userOutput.setCursor(Cursor.CLOSED_HAND);
-        UIpane.getChildren().add(userOutput);
-        userOutput.setEditable(false);
-        userOutput.setWrapText(true);
+//        userOutput = new TextArea();
+//        userOutput.setPrefSize(250,330);
+//        userOutput.setTranslateX(50);
+//        userOutput.setTranslateY(50);
+//        userOutput.setCursor(Cursor.CLOSED_HAND);
+//        UIpane.getChildren().add(userOutput);
+//        userOutput.setEditable(false);
+//        userOutput.setWrapText(true);
 
-        ColorAdjust effect = new ColorAdjust();
-        effect.setBrightness(-0.5);
-
-        // send button
-        sendUserInput = new Button();
-        sendUserInput.setText("SEND");
-        sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        sendUserInput.setStyle("-fx-background-color: transparent");
-        sendUserInput.setTextFill(Color.WHITE);
-        sendUserInput.setCursor(Cursor.CLOSED_HAND);
-        sendUserInput.setLayoutX(310);
-        sendUserInput.setLayoutY(437);
-        sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(errorHandling.stringLengthError(userInput.getText())) {
-                    userOutput.setScrollTop(Double.MIN_VALUE);
-                    chat = "you: " + userInput.getText() + "\n";
-                    chat = chat + "bot: " + "I cannot answer this question \n";
-                    //userOutput.setText(chat);
-                    userOutput.appendText(chat + "\n");
-                    System.out.println(chat);
-                }else System.out.println("invalid message");
-            }
-        });
-        sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sendUserInput.setEffect(effect);
-            }
-        });
-        sendUserInput.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sendUserInput.setEffect(null);
-            }
-        });
-        UIpane.getChildren().add(sendUserInput);
 
         //side menu
-        Rectangle sideMenu = new Rectangle(400,50,250,330);
-        sideMenu.setFill(Color.DARKGRAY);
+        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
+        sideMenu.setFill(Color.rgb(159,182,189));
         UIpane.getChildren().add(sideMenu);
 
         //help button
@@ -115,19 +82,19 @@ public class ChatWindow implements CustomStage {
         helpButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         helpButton.setStyle("-fx-background-color: transparent");
         helpButton.setTextFill(Color.WHITE);
-        helpButton.setLayoutX(480);
+        helpButton.setLayoutX(20);
         helpButton.setLayoutY(170);
         helpButton.setCursor(Cursor.CLOSED_HAND);
         helpButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                helpButton.setEffect(effect);
+                helpButton.setTextFill(Color.rgb(42,97,117));
             }
         });
         helpButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                helpButton.setEffect(null);
+                helpButton.setTextFill(Color.WHITE);
             }
         });
         helpButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -145,19 +112,19 @@ public class ChatWindow implements CustomStage {
         skillsButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         skillsButton.setStyle("-fx-background-color: transparent");
         skillsButton.setTextFill(Color.WHITE);
-        skillsButton.setLayoutX(420);
+        skillsButton.setLayoutX(20);
         skillsButton.setLayoutY(130);
         skillsButton.setCursor(Cursor.CLOSED_HAND);
         skillsButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                skillsButton.setEffect(effect);
+                skillsButton.setTextFill(Color.rgb(42,97,117));
             }
         });
         skillsButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                skillsButton.setEffect(null);
+                skillsButton.setTextFill(Color.WHITE);
             }
         });
         skillsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -175,19 +142,19 @@ public class ChatWindow implements CustomStage {
         logoutButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         logoutButton.setStyle("-fx-background-color: transparent");
         logoutButton.setTextFill(Color.WHITE);
-        logoutButton.setLayoutX(450);
+        logoutButton.setLayoutX(20);
         logoutButton.setLayoutY(210);
         logoutButton.setCursor(Cursor.CLOSED_HAND);
         logoutButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                logoutButton.setEffect(effect);
+                logoutButton.setTextFill(Color.rgb(42,97,117));
             }
         });
         logoutButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                logoutButton.setEffect(null);
+                logoutButton.setTextFill(Color.WHITE);
             }
         });
         logoutButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -205,19 +172,19 @@ public class ChatWindow implements CustomStage {
         exitButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         exitButton.setStyle("-fx-background-color: transparent");
         exitButton.setTextFill(Color.WHITE);
-        exitButton.setLayoutX(480);
+        exitButton.setLayoutX(20);
         exitButton.setCursor(Cursor.CLOSED_HAND);
         exitButton.setLayoutY(250);
         exitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                exitButton.setEffect(effect);
+                exitButton.setTextFill(Color.rgb(42,97,117));
             }
         });
         exitButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                exitButton.setEffect(null);
+                exitButton.setTextFill(Color.WHITE);
             }
         });
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -227,6 +194,73 @@ public class ChatWindow implements CustomStage {
             }
         });
         UIpane.getChildren().add(exitButton);
+
+        ScrollPane scrollPane = new ScrollPane();
+
+        // send button
+        sendUserInput = new Button();
+        sendUserInput.setText("SEND");
+        sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        sendUserInput.setStyle("-fx-background-color: transparent");
+        sendUserInput.setTextFill(Color.WHITE);
+        sendUserInput.setCursor(Cursor.CLOSED_HAND);
+        sendUserInput.setLayoutX(810);
+        sendUserInput.setLayoutY(480);
+        scrollChat.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
+        sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(errorHandling.stringLengthError(userInput.getText())) {
+                    //user input
+                    listText.add(new TextArea(userInput.getText()));
+                    listText.get(listText.size()-1).setPrefSize(100,50);
+                    listText.get(listText.size()-1).setLayoutX(0);
+                    listText.get(listText.size()-1).setLayoutY(y);
+                    y+=50;
+                    scrollChat.getChildren().add(listText.get(listText.size()-1));
+
+                    //bot responding
+                    listText.add(new TextArea("I cannot answer your question"));
+                    listText.get(listText.size()-1).setPrefSize(200,50);
+                    listText.get(listText.size()-1).setLayoutX(200);
+                    listText.get(listText.size()-1).setLayoutY(y);
+                    y+=50;
+                    scrollChat.getChildren().add(listText.get(listText.size()-1));
+
+                    //scrollPane.setVvalue(1.0);
+                }else System.out.println("invalid message");
+            }
+        });
+        sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                sendUserInput.setTextFill(Color.rgb(42,97,117));
+            }
+        });
+        sendUserInput.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                sendUserInput.setTextFill(Color.WHITE);
+            }
+        });
+        UIpane.getChildren().add(sendUserInput);
+
+        //adding components that will go into the scrollPane
+
+
+        scrollChat.setStyle("-fx-background-color: transparent");
+
+        scrollPane.setTranslateX(400);
+        scrollPane.setTranslateY(50);
+        scrollPane.setPrefSize(400,400);
+        scrollPane.setStyle("-fx-background-color: transparent;" + " -fx-border-color: red");
+        scrollPane.setContent(scrollChat);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+       // scrollPane.setContent(exitButton);
+        UIpane.getChildren().add(scrollPane);
+        UIstage.setOnShown(e ->
+                scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
     }
 //    @Override
         public void keyboardHandler(){
@@ -240,5 +274,5 @@ public class ChatWindow implements CustomStage {
                 }
             });
         }
-
+    private int y=0;
 }
