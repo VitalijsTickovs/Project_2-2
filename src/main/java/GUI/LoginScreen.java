@@ -1,6 +1,5 @@
 package GUI;
 
-import com.sun.javafx.geom.Point2D;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -8,10 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -33,8 +28,6 @@ public class LoginScreen implements CustomStage {
     static int screenHeight = 700;
     public Button loginButton;
     private Stage chatWindow;
-//    private Image robotImage= new Image("GUI/Joe.png",300,500,false,true);
-//    private ImageView robotImageView = new ImageView(robotImage);
     public LoginScreen(){
         UIpane = new AnchorPane();
         UIstage = new Stage();
@@ -58,12 +51,6 @@ public class LoginScreen implements CustomStage {
     @Override
     public void design(){
 
-        ColorAdjust effect = new ColorAdjust();
-        effect.setBrightness(-0.5);
-
-//        Rectangle rectangle = new Rectangle(40, 40, 300, 400);
-//        rectangle.setFill(Color.DARKGRAY);
-//        UIpane.getChildren().add(rectangle);
         Line line = new Line(screenWidth/2.0,screenHeight/5.0,screenWidth/2.0,(screenHeight/5.0)*4);
         line.setStyle("-fx-stroke-width: 2px");
         line.setStroke(Color.rgb(159,182,189));

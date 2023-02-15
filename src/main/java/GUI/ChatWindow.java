@@ -1,5 +1,6 @@
 package GUI;
 
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -7,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -17,10 +17,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 import java.util.ArrayList;
-
+import org.apache.commons.lang3.text.WordUtils;
 
 public class ChatWindow implements CustomStage {
 
@@ -48,6 +46,12 @@ public class ChatWindow implements CustomStage {
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
         mainStage.close();
+        UIstage.show();
+    }
+    public void setStage(Stage mainStage,Stage setPreviousChat){
+        this.menuStage=mainStage;
+        mainStage.close();
+        this.UIstage=setPreviousChat;
         UIstage.show();
     }
     @Override
@@ -204,26 +208,35 @@ public class ChatWindow implements CustomStage {
                 if(errorHandling.stringLengthError(userInput.getText())) {
                     //user input
                     listText.add(new TextArea(userInput.getText()));
-                    listText.get(listText.size()-1).setPrefSize(countCharAtLongestLine(userInput.getText())*8+20,countLines(userInput.getText())*20);
+                    listText.get(listText.size()-1).setWrapText(true);
+                    if ((countCharAtLongestLine( WordUtils.wrap(userInput.getText(), 30))*7+20)>150){
+                        listText.get(listText.size() - 1).setPrefSize(countCharAtLongestLine( WordUtils.wrap(userInput.getText(), 30))*7+20, countLines( WordUtils.wrap(userInput.getText(), 30)));
+                    }else {
+                        listText.get(listText.size() - 1).setPrefSize(countCharAtLongestLine(userInput.getText())*7+20, countLines(userInput.getText()) );
+                    }
                     listText.get(listText.size()-1).setLayoutX(0);
                     listText.get(listText.size()-1).setLayoutY(y);
                     listText.get(listText.size()-1).setEditable(false);
-                    listText.get(listText.size()-1).setWrapText(true);
                     listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
-                    y+=50;
+                    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                    y+=listText.get(listText.size()-1).getPrefHeight()+20;
                     scrollChat.getChildren().add(listText.get(listText.size()-1));
 
                     //bot responding
                     listText.add(new TextArea("I cannot answer your question"));
-                    listText.get(listText.size()-1).setPrefSize(220,countLines("I cannot answer your question")*20);
+                    if ((countCharAtLongestLine(userInput.getText())*7+20)>220){
+                        listText.get(listText.size()-1).setPrefSize(220,countLines("I cannot answer your question"));
+                    }else {
+                        listText.get(listText.size() - 1).setPrefSize(countCharAtLongestLine("I cannot answer your question")*7+20, countLines("I cannot answer your question") );
+                    }
                     listText.get(listText.size()-1).setLayoutX(240);
                     listText.get(listText.size()-1).setEditable(false);
                     listText.get(listText.size()-1).setWrapText(true);
                     listText.get(listText.size()-1).setLayoutY(y);
                     listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);" + "-fx-text-fill: white ");
-                    y+=50;
+                    y+=listText.get(listText.size()-1).getPrefHeight()+20;
                     scrollChat.getChildren().add(listText.get(listText.size()-1));
 
                     //scrollPane.setVvalue(1.0);
@@ -274,9 +287,16 @@ public class ChatWindow implements CustomStage {
                 }
             });
         }
+
         public int countLines(String string){
             String[] lines = string.split("\r\n|\r|\n");
-            return lines.length;
+            System.out.println("counde lines: "+lines.length);
+            int count=lines.length;
+            for (int i = 0; i < lines.length; i++) {
+                count=count+18;
+            }
+            System.out.println("height "+count);
+            return count;
         }
         public int countCharAtLongestLine(String string){
         int count=0;
@@ -286,6 +306,8 @@ public class ChatWindow implements CustomStage {
                     count = lines[i].length();
                 }
             }
+
+            System.out.println("counted chars: "+count);
             return count;
         }
     private int y=0;
