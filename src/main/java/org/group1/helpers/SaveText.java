@@ -74,15 +74,16 @@ public class SaveText {
      * finding for the specific question
      * @return data read from the txt file
      */
-    public Skill load(String question){
+    public Skill loadSkill(String question){
         Question question1 = new Question();
         question1.add(question);
         try{
-            Skill loadedSkill;
-            List<String> listOfStrings = new ArrayList<String>();
+            Skill loadedSkill = null;
             for(String fileName: skills){
                 boolean isMatching = false;
-                BufferedReader bf = new BufferedReader(new FileReader(fileName));
+                //Load the file
+                //To be changed to load the skills from the database
+                BufferedReader bf = new BufferedReader(new FileReader(DIR+"/"+fileName));
                 CSVReader reader = new CSVReader(bf);
                 String[] line;
                 ArrayList<ArrayList<String>> loadedSlots = new ArrayList<>();
@@ -91,38 +92,38 @@ public class SaveText {
                 while ((line = reader.readNext()) != null) {
                     //Check the first line if the question is exactly matched with the skill question
                     if (!isMatching){
+                        //Matching the question
+                        //TODO: process the question
                         boolean isRightQuestion = line[0].equals(question);
+                        System.out.println(isRightQuestion);
                         if(isRightQuestion){
-                            isMatching=isRightQuestion;
-
+                            isMatching = true;
                             //Slot init
                             int slotNum = line.length-2;
                             for(int i=0; i< slotNum; i++){
                                 loadedSlots.add(new ArrayList<>());
                             }
-
                         }else{
                             break;
                         }
                     }
-
-                    //Slots
-                    for(int i=1; i< line.length-1; i++){
-                        loadedSlots.get(i).add(line[i]);
+                    if(isMatching) {
+                        //Slots
+                        for (int i = 1; i < line.length - 1; i++) {
+                            loadedSlots.get(i).add(line[i]);
+                        }
+                        //Action
+                        action.add(line[line.length - 1]);
                     }
+                    //TODO: add the action with the slots to the rule
 
-                    //Action
-                    action.add(line[line.length-1]);
-
-                    //Make the rule
-
+                    bf.close();
 
                 }
-
-                loadedSkill = new Skill(question1, (Slot[]) loadedSlots.toArray(), action);
-
-                bf.close();
-                return loadedSkill;
+                if(isMatching) {
+                    loadedSkill = new Skill(question1, loadedSlots.toArray(new Slot[0]), action);
+                    return loadedSkill;
+                }
             }
             return null;
         } catch (FileNotFoundException e) {
@@ -137,5 +138,6 @@ public class SaveText {
     public static void main(String[] args) {
         SaveText sv = new SaveText();
         System.out.println(sv.skills);
+        sv.loadSkill("Question Which lectures are there on <DAY> at <TIME>");
     }
 }
