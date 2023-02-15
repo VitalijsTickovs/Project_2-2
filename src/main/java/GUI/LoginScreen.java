@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
@@ -99,21 +100,7 @@ public class LoginScreen implements CustomStage {
             }
         });
         UIpane.getChildren().add(loginButton);
-//        robotImageView.setLayoutX(340);
-//        robotImageView.setLayoutY(30);
-//        robotImageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                robotImageView.setEffect(effect);
-//            }
-//        });
-//        robotImageView.setOnMouseExited(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                robotImageView.setEffect(null);
-//            }
-//        });
-//        UIpane.getChildren().add(robotImageView);
+
         Text username = new Text("Username: ");
         username.setFont(Font.font("Impact",20));
         username.setStyle("-fx-font-weight: bold");
@@ -155,14 +142,16 @@ public class LoginScreen implements CustomStage {
 
         TextField loginTextField = new TextField();
         loginTextField.setPrefWidth(250);
+        loginTextField.setPrefHeight(30);
         loginTextField.setTranslateX(550);
         loginTextField.setTranslateY(280);
         loginTextField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);" + "-fx-text-fill: white;");
-        TextField passwordTextField = new TextField();
+        PasswordField passwordTextField = new PasswordField();
         passwordTextField.setPrefWidth(250);
+        passwordTextField.setPrefHeight(30);
         passwordTextField.setTranslateX(550);
         passwordTextField.setTranslateY(350);
-        passwordTextField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;");
+        passwordTextField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;"+"-fx-font-size: 8");
         UIpane.getChildren().add(loginTextField);
         UIpane.getChildren().add(passwordTextField);
 

@@ -54,22 +54,13 @@ public class ChatWindow implements CustomStage {
     public void design(){
         //User input textField
         userInput = new TextArea();
-        userInput.setPrefSize(400,50);
-        userInput.setTranslateX(400);
-        userInput.setTranslateY(470);
+        userInput.setPrefSize(470,70);
+        userInput.setTranslateX(340);
+        userInput.setTranslateY(570);
         userInput.setWrapText(true);
+        userInput.setFont(Font.font("Arial Narrow",15));
+        userInput.setStyle("-fx-control-inner-background:rgb(159,182,189);"+ "-fx-text-fill: white ");
         UIpane.getChildren().add(userInput);
-
-        //Chat textField
-//        userOutput = new TextArea();
-//        userOutput.setPrefSize(250,330);
-//        userOutput.setTranslateX(50);
-//        userOutput.setTranslateY(50);
-//        userOutput.setCursor(Cursor.CLOSED_HAND);
-//        UIpane.getChildren().add(userOutput);
-//        userOutput.setEditable(false);
-//        userOutput.setWrapText(true);
-
 
         //side menu
         Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
@@ -205,7 +196,7 @@ public class ChatWindow implements CustomStage {
         sendUserInput.setTextFill(Color.WHITE);
         sendUserInput.setCursor(Cursor.CLOSED_HAND);
         sendUserInput.setLayoutX(810);
-        sendUserInput.setLayoutY(480);
+        sendUserInput.setLayoutY(590);
         scrollChat.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -213,17 +204,25 @@ public class ChatWindow implements CustomStage {
                 if(errorHandling.stringLengthError(userInput.getText())) {
                     //user input
                     listText.add(new TextArea(userInput.getText()));
-                    listText.get(listText.size()-1).setPrefSize(100,50);
+                    listText.get(listText.size()-1).setPrefSize(countCharAtLongestLine(userInput.getText())*8+20,countLines(userInput.getText())*20);
                     listText.get(listText.size()-1).setLayoutX(0);
                     listText.get(listText.size()-1).setLayoutY(y);
+                    listText.get(listText.size()-1).setEditable(false);
+                    listText.get(listText.size()-1).setWrapText(true);
+                    listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
+                    listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
                     y+=50;
                     scrollChat.getChildren().add(listText.get(listText.size()-1));
 
                     //bot responding
                     listText.add(new TextArea("I cannot answer your question"));
-                    listText.get(listText.size()-1).setPrefSize(200,50);
-                    listText.get(listText.size()-1).setLayoutX(200);
+                    listText.get(listText.size()-1).setPrefSize(220,countLines("I cannot answer your question")*20);
+                    listText.get(listText.size()-1).setLayoutX(240);
+                    listText.get(listText.size()-1).setEditable(false);
+                    listText.get(listText.size()-1).setWrapText(true);
                     listText.get(listText.size()-1).setLayoutY(y);
+                    listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
+                    listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);" + "-fx-text-fill: white ");
                     y+=50;
                     scrollChat.getChildren().add(listText.get(listText.size()-1));
 
@@ -250,10 +249,11 @@ public class ChatWindow implements CustomStage {
 
         scrollChat.setStyle("-fx-background-color: transparent");
 
-        scrollPane.setTranslateX(400);
+        scrollPane.setTranslateX(340);
         scrollPane.setTranslateY(50);
-        scrollPane.setPrefSize(400,400);
-        scrollPane.setStyle("-fx-background-color: transparent;" + " -fx-border-color: red");
+        scrollPane.setPrefSize(470,460);
+        // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
+        scrollPane.setStyle("-fx-background-color: transparent;" );
         scrollPane.setContent(scrollChat);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -273,6 +273,20 @@ public class ChatWindow implements CustomStage {
                     }
                 }
             });
+        }
+        public int countLines(String string){
+            String[] lines = string.split("\r\n|\r|\n");
+            return lines.length;
+        }
+        public int countCharAtLongestLine(String string){
+        int count=0;
+            String[] lines = string.split("\r\n|\r|\n");
+            for (int i = 0; i < lines.length; i++) {
+                if(lines[i].length()>count){
+                    count = lines[i].length();
+                }
+            }
+            return count;
         }
     private int y=0;
 }
