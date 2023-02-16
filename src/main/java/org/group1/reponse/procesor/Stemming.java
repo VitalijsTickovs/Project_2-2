@@ -2,6 +2,9 @@ package org.group1.reponse.procesor;
 
 import org.group1.collections.CV;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.group1.collections.CV.*;
 import static org.group1.reponse.procesor.helpers.StemBasic.*;
 import static org.group1.reponse.procesor.helpers.StemConstants.*;
@@ -17,6 +20,13 @@ public class Stemming {
     private Stemming(){}
 
 
+    public static List<String> exctract(List<String> tokens){
+        List<String> steamed = new ArrayList<>();
+        for(String token: tokens){
+            steamed.add(Steam(token));
+        }
+        return steamed;
+    }
     /**
      * This method returns a stemmed word
      * @param word word to stem
@@ -26,8 +36,6 @@ public class Stemming {
 
         int m = getM(word);
         word = step1a(word);
-
-        System.out.println(m);
         m = getM(word);
         if(m > 0){
             word = step1b(word);

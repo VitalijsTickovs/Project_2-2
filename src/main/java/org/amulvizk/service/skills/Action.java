@@ -14,5 +14,11 @@ public class Action implements iDataStore{
         action.add(text);
     }
 
-
+    public String toString(){
+        String toret = "";
+        for(String text : action){
+            toret += " "+text;
+        }
+        return toret;
+    }
 }

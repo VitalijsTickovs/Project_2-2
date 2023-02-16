@@ -14,7 +14,7 @@ public class PreProcessor {
      */
     public static List<String> preprocess(String text) throws Exception{
         List<String> validEntries = new ArrayList<>();
-        for(String word : StopWordRemover.eliminate(Normalization.normalize(Tokenization.tokenize(text, Delim.SPACE)))){
+        for(String word : Stemming.exctract(StopWordRemover.eliminate(Normalization.normalize(Tokenization.tokenize(text, Delim.SPACE))))){
             if(word.length() > 1) validEntries.add(word);
         }
         return validEntries;

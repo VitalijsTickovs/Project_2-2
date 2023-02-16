@@ -2,13 +2,6 @@ package org.amulvizk.service;
 
 public class RegularExpresions {
 
-    public static void main(String[] args) {
-
-        System.out.println(validaDNI("15367453Z"));
-        System.out.println(validaNombre("Aron"));
-        System.out.println(validarEntero("0"));
-    }
-
 
     // {n} -> repetir n veces
     public static boolean validarEntero(String numero){

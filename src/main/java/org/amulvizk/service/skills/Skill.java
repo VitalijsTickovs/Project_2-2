@@ -1,8 +1,12 @@
 package org.amulvizk.service.skills;
 
+import java.util.function.Predicate;
 import org.amulvizk.service.FileService;
 import org.group1.collections.Delim;
+import org.group1.exception.NullTextException;
+import org.group1.helpers.TXTReader;
 import org.group1.reponse.procesor.PreProcessor;
+import org.group1.reponse.procesor.Stemming;
 import org.group1.reponse.procesor.Tokenization;
 
 import java.io.FileNotFoundException;
@@ -18,26 +22,22 @@ public class Skill implements Comparable{
     static Pattern pattern;
     static Matcher matcher;
 
-    public static void main(String[] args) throws Exception{
-        Question question = new Question("What lecture do we have on <DAY> at <TIME>?");
-        Skill test = new Skill(question, new Slot[]{new Slot(), new Slot()}, new Action());
-        System.out.println(generateKeyWords(question.getQuestion()));
-        System.out.println(question.getQuestion());
-        System.out.println(test.isMatch("What lecture do we have on Monday at 10:00?"));
-        System.out.println(test.isMatch("Do we have a lecture on Monday at 10:00?"));
-        System.out.println(test.isMatch("What lecture do we have on Monday at 10:00?"));
-        System.out.println(test.isMatch("On Monday at 10:00 do we have a lecture?"));
-        System.out.println(test.isMatch("What are you doing today?"));
+    private Predicate<String> isKeyWord;
 
+    public static void main(String[] args) throws Exception{
+        String test1 = "Action <DAY> Monday <TIME> 11 On Monday noon we have Theoretical Computer Science";
+        String test2 = "Action <DAY> Saturday There are no lectures on Saturday";
+
+        Skill test = new Skill(new Question("Which lectures are there on <DAY> at <TIME>"));
+        System.out.println(test.keywords);
     }
 
-    public Rule rule;
-    public Slot[] slot;
+    public ArrayList<Rule> rule;
+    public Slot slot;
     public Action action;
-    public Question question;
+    private Question question;
     public static FileService fileService;
-    List<String> keywords;
-
+    public List<String> keywords;
     /**
      * Used to load skills
      */
@@ -46,10 +46,11 @@ public class Skill implements Comparable{
         this.action = action;
         this.question = question;
         try{
-            this.keywords = generateKeyWords(question.getQuestion());
-        } catch (Exception e) {
-            e.printStackTrace();
+            this.setQuestion(question);
+        }catch (Exception e) {
+            System.out.println(e);
         }
+
     }
 
     public Skill(String text) throws Exception {
@@ -82,10 +83,19 @@ public class Skill implements Comparable{
      */
     public boolean isMatch(String question) throws Exception{
         List<String> text = PreProcessor.preprocess(question);
-        for(String s: text){
-            if(keywords.contains(s)) return true;
+        if(question == null || question.equals("")) return false;
+        return text.containsAll(keywords);
+    }
+
+    public String getAnswer(String question) throws Exception{
+        if(!isMatch(question)) return "faulty call on skill";
+        List<String> tocheck = PreProcessor.preprocess(question);
+        tocheck.removeIf(isKeyWord);
+        for(Rule rule: this.rule){
+            boolean containsArray = rule.pairs.stream().anyMatch(sublist -> Arrays.equals(sublist.split(" "), tocheck.toArray()));
+            if(containsArray) return rule.action.toString();
         }
-        return false;
+        return "couldn't find match";
     }
 
     /**
@@ -120,7 +130,6 @@ public class Skill implements Comparable{
     }
 
     public void processQuestion(String text) throws FileNotFoundException {
-
         List<String> words = Arrays.stream(Arrays
                 .stream(text
                         .split("\n"))
@@ -186,28 +195,72 @@ public class Skill implements Comparable{
                 .toList();
 
         lines.forEach((l)-> action.add(l));
+        lines.forEach((l)-> System.out.println("process action: " + l));
 
+
+        for(String line: lines){
+            try {
+                Rule rule = createPair(line);
+               this.rule.add(rule);
+            }catch(NullTextException e){
+                e.printStackTrace();
+            }
+        }
     }
 
+
+    private static Rule createPair(String line) throws NullTextException {
+        boolean firstHolder = true;
+        String[] tocheck = line.split(" ");
+        List<String> placeHolders = new ArrayList<>();
+        Action action = new Action();
+        for(int i = tocheck.length-1; i >=0; i--){
+            if(isPlaceHolder(tocheck[i])){
+                List<String> unprocessed = Tokenization.tokenize(tocheck[i+1], Delim.SPACE);
+                unprocessed = Stemming.exctract(unprocessed);
+                List<String> processed = new ArrayList<>();
+                for(String text : unprocessed){
+                    processed.add(text.toLowerCase());
+                }
+                String process = String.join(" ", processed);
+                placeHolders.add(process);
+                if(firstHolder){
+                    action.add(String.join(" ", Arrays.copyOfRange(tocheck, i+2, tocheck.length)));
+                    firstHolder = false;
+                }
+            }
+        }
+        return new Rule(placeHolders, action);
+    }
+
+    private static boolean isPlaceHolder(String text){
+        return text.matches("^<[A-Z]+>$");
+    }
+
+    public String toString(){
+        String toRet = "";
+        toRet += "question: " + question.getQuestion() + " slot size: " + this.slot.getSlot().size();
+        return toRet;
+    }
 
     @Override
     public int compareTo(Object o) {
         return 0;
     }
 
-    public void setRule(Rule rule) {
-        this.rule = rule;
-    }
 
-    public void setSlot(Slot[] slot) {
-        this.slot = slot;
+    public void setQuestion(Question question){
+        try{
+            System.out.println("this should hit");
+            this.keywords = generateKeyWords(question.getQuestion());
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        this.question = question;
+
     }
 
     public void setAction(Action action) {
         this.action = action;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
     }
 }

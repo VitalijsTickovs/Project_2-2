@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Slot implements iDataStore{
 
-    List<String[]> slots;
+    List<String> slots;
 
     public Slot() {
         slots = new ArrayList<>();
@@ -14,7 +14,7 @@ public class Slot implements iDataStore{
 
     @Override
     public void add(String text) {
-
+        this.slots.add(text);
     }
 
     public List<String> getSlot(){
@@ -31,6 +31,11 @@ public class Slot implements iDataStore{
 
     public void setRows(int rows){
 
+    }
+
+    public String getRepsonse(List<String> features){
+
+        return null;
     }
 
 }
