@@ -1,6 +1,6 @@
 package org.amulvizk.service.skills;
 
-import java.util.Collections;
+import java.util.*;
 import java.util.function.Predicate;
 import org.amulvizk.service.FileService;
 import org.group1.collections.Delim;
@@ -12,9 +12,6 @@ import org.group1.reponse.procesor.Tokenization;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,9 +88,10 @@ public class Skill implements Comparable{
         if(!isMatch(question)) return "faulty call on skill";
         List<String> tocheck = PreProcessor.preprocess(question);
         tocheck.removeIf(isKeyWord);
-        Collections.reverse(tocheck);
         for(Rule rule: this.rule){
-            boolean containsArray = rule.pairs.equals(tocheck);
+            Collections.sort(tocheck);
+            Collections.sort(rule.pairs);
+            boolean containsArray = tocheck.equals(rule.pairs);
             if(containsArray) return rule.action.toString();
         }
         return "couldn't find match";
