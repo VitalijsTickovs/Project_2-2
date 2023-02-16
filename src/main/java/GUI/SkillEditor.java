@@ -24,7 +24,7 @@ public class SkillEditor implements CustomStage{
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button displaySkills,back,help,sendUserInput;
+    private Button displaySkills,back,help,sendUserInput,defineSkills;
     ErrorHandling errorHandling = new ErrorHandling();
     public  SkillEditor(){
         UIpane = new AnchorPane();
@@ -38,6 +38,11 @@ public class SkillEditor implements CustomStage{
     }
     public void setStage(Stage mainStage){
         this.chatStage=mainStage;
+        mainStage.close();
+        UIstage.show();
+    }
+    public void setStage(Stage mainStage,Stage chatStage){
+        this.chatStage=chatStage;
         mainStage.close();
         UIstage.show();
     }
@@ -84,10 +89,27 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               //TODO: change the window to the one where you can choose skills
+              DisplaySkills displaySkills = new DisplaySkills();
+              displaySkills.setStage(UIstage,chatStage);
             }
         });
         UIpane.getChildren().add(displaySkills);
+
+        defineSkills = new Button();
+        defineSkills.setText("DEFINE SKILLS");
+        defineSkills.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        defineSkills.setStyle("-fx-background-color: transparent");
+        defineSkills.setTextFill(Color.rgb(42,97,117));
+        defineSkills.setLayoutX(20);
+        defineSkills.setLayoutY(170);
+
+        defineSkills.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //TODO: change the window to the one where you can choose skills
+            }
+        });
+        UIpane.getChildren().add(defineSkills);
 
         help = new Button();
         help.setText("HELP");
@@ -95,7 +117,7 @@ public class SkillEditor implements CustomStage{
         help.setStyle("-fx-background-color: transparent");
         help.setTextFill(Color.WHITE);
         help.setLayoutX(20);
-        help.setLayoutY(170);
+        help.setLayoutY(210);
         help.setCursor(Cursor.CLOSED_HAND);
         help.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -117,7 +139,7 @@ public class SkillEditor implements CustomStage{
         });
         UIpane.getChildren().add(help);
 
-        TextArea questionInput = new TextArea("                  ... <  > ... <  > ... ");
+        TextArea questionInput = new TextArea();
         questionInput.setFont(Font.font("Arial Narrow",25));
         questionInput.setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
         questionInput.setLayoutX(385);
@@ -132,7 +154,7 @@ public class SkillEditor implements CustomStage{
         back.setStyle("-fx-background-color: transparent");
         back.setTextFill(Color.WHITE);
         back.setLayoutX(20);
-        back.setLayoutY(210);
+        back.setLayoutY(250);
         back.setCursor(Cursor.CLOSED_HAND);
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -166,11 +188,12 @@ public class SkillEditor implements CustomStage{
         sendUserInput = new Button();
         sendUserInput.setText("SUBMIT");
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        sendUserInput.setStyle("-fx-background-color: transparent");
+        sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setTextFill(Color.WHITE);
         sendUserInput.setCursor(Cursor.CLOSED_HAND);
-        sendUserInput.setLayoutX(810);
-        sendUserInput.setLayoutY(390);
+        sendUserInput.setPrefSize(400,50);
+        sendUserInput.setLayoutX(386);
+        sendUserInput.setLayoutY(380);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -182,13 +205,13 @@ public class SkillEditor implements CustomStage{
         sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                sendUserInput.setTextFill(Color.rgb(42,97,117));
+                sendUserInput.setStyle("-fx-background-color: rgba(42,97,117,1)");
             }
         });
         sendUserInput.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                sendUserInput.setTextFill(Color.WHITE);
+                sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
         UIpane.getChildren().add(sendUserInput);

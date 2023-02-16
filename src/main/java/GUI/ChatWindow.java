@@ -13,9 +13,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import org.apache.commons.lang3.text.WordUtils;
@@ -202,6 +204,7 @@ public class ChatWindow implements CustomStage {
         sendUserInput.setLayoutX(810);
         sendUserInput.setLayoutY(590);
         scrollChat.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -219,7 +222,6 @@ public class ChatWindow implements CustomStage {
                     listText.get(listText.size()-1).setEditable(false);
                     listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
-                    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                     y+=listText.get(listText.size()-1).getPrefHeight()+20;
                     scrollChat.getChildren().add(listText.get(listText.size()-1));
 
@@ -274,6 +276,30 @@ public class ChatWindow implements CustomStage {
         UIpane.getChildren().add(scrollPane);
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
+
+//         //logo
+//        Text logo1 = new Text("UM ");
+//        logo1.setFont(Font.font("Impact",40));
+//        logo1.setStyle("-fx-font-weight: bold");
+//        logo1.setFill(Color.rgb(75,105,116));
+//        logo1.setTranslateX(60);
+//        logo1.setTranslateY(100);
+//        UIpane.getChildren().add(logo1);
+//
+//        Text logo = new Text("Chat ");
+//        logo.setFont(Font.font("Impact",40));
+//        logo.setStyle("-fx-font-weight: bold");
+//        logo.setFill(Color.WHITE);
+//        logo.setTranslateX(110);
+//        logo.setTranslateY(100);
+//        UIpane.getChildren().add(logo);
+//
+//        Polygon triangle = new Polygon(50,100 ,50,70 ,20,100);
+//        triangle.setFill(Color.rgb(75,105,116));
+//        UIpane.getChildren().add(triangle);
+//        Polygon triangle1 = new Polygon(200,100 ,200,70 ,230,70);
+//        triangle1.setFill(Color.rgb(75,105,116));
+//        UIpane.getChildren().add(triangle1);
     }
 //    @Override
         public void keyboardHandler(){
