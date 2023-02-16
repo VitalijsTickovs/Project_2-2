@@ -75,8 +75,7 @@ public class SaveText {
      * @return data read from the txt file
      */
     public Skill loadSkill(String question){
-        Question question1 = new Question();
-        question1.add(question);
+        Question question1 = new Question(question);
         try{
             Skill loadedSkill = null;
             for(String fileName: skills){

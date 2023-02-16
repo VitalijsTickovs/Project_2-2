@@ -11,6 +11,9 @@ public class Normalization {
     public static final int A = 96;
     public static final int Z = 123;
 
+    public static final int ZERO = 48;
+    public static final int NINE = 58;
+
     /**
      * Kind of s Singleton pattern but not really is just that I don´t
      * want that people can create multiple instances of this class.
@@ -40,9 +43,9 @@ public class Normalization {
      * @return Real words.
      * @throws NullTextException The text must not be null
      */
-    public static List<String> clean(List<String> text) throws NullTextException {
+    private static List<String> clean(List<String> text) {
 
-        List<String> normalizedText = normalize(text);
+        List<String> normalizedText = text;
         List<String> list = new ArrayList<>();
 
         for (String word : normalizedText) {
@@ -61,7 +64,7 @@ public class Normalization {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < word.length(); i++) {
-            if(word.charAt(i) > A && word.charAt(i) < Z){
+            if((word.charAt(i) > A && word.charAt(i) < Z) || (word.charAt(i) > ZERO && word.charAt(i) < NINE)){
                 sb.append(word.charAt(i));
             }
         }

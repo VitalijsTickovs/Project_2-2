@@ -1,20 +1,42 @@
 package org.amulvizk.service.skills;
 
 import org.amulvizk.service.FileService;
+import org.group1.collections.Delim;
+import org.group1.reponse.procesor.PreProcessor;
+import org.group1.reponse.procesor.Tokenization;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Skill implements Comparable{
+
+    static Pattern pattern;
+    static Matcher matcher;
+
+    public static void main(String[] args) throws Exception{
+        Question question = new Question("What lecture do we have on <DAY> at <TIME>?");
+        Skill test = new Skill(question, new Slot[]{new Slot(), new Slot()}, new Action());
+        System.out.println(generateKeyWords(question.getQuestion()));
+        System.out.println(question.getQuestion());
+        System.out.println(test.isMatch("What lecture do we have on Monday at 10:00?"));
+        System.out.println(test.isMatch("Do we have a lecture on Monday at 10:00?"));
+        System.out.println(test.isMatch("What lecture do we have on Monday at 10:00?"));
+        System.out.println(test.isMatch("On Monday at 10:00 do we have a lecture?"));
+        System.out.println(test.isMatch("What are you doing today?"));
+
+    }
 
     public Rule rule;
     public Slot[] slot;
     public Action action;
     public Question question;
     public static FileService fileService;
+    List<String> keywords;
 
     /**
      * Used to load skills
@@ -23,18 +45,45 @@ public class Skill implements Comparable{
         this.slot = slot;
         this.action = action;
         this.question = question;
+        try{
+            this.keywords = generateKeyWords(question.getQuestion());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-//    public Skill(String text) throws IOException {
-//
-//        fileService = new FileService();
-//        this.rule = new Rule();
-//        this.question = new Question();
-//        slot = new Slot();
-//        this.action = new Action();
-//
-//        generateSkills(text);
-//    }
+    //TODO: use some sort of pattern matching to find the best match i.e. a certain accuracy against a treshold
+    /**
+     * Used to check if a question matches a skill
+     * @param question The question
+     * @return True if the question matches the skill
+     */
+    public boolean isMatch(String question) throws Exception{
+        List<String> text = PreProcessor.preprocess(question);
+        for(String s: text){
+            if(keywords.contains(s)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Used to generate keywords from a question
+     * @param text The question
+     * @return The keywords
+     */
+    private static List<String> generateKeyWords(String text) throws Exception {
+        pattern = Pattern.compile("<\\w+>");
+        matcher = pattern.matcher(text);
+
+        List<String> toRemove = new ArrayList<>();
+        while (matcher.find()) {
+            toRemove.add(matcher.group());
+        }
+        for(String s: toRemove){
+            text = text.replace(s, "");
+        }
+        return PreProcessor.preprocess(text);
+    }
 
     public void generateSkills(String text) throws FileNotFoundException {
 
@@ -46,26 +95,6 @@ public class Skill implements Comparable{
                 .contains("Question");
 
         if(check) processQuestion(text);
-    }
-
-    public static void main(String[] args) throws IOException {
-
-        /*
-        FileService service = new FileService();
-        Skill b = new Skill(service.read(1));
-
-         */
-
-        String[] day = {"monday", "Wednesday dhen hug", "Thursday", "Friday", "Saturday"};
-
-        String time = "14";
-
-        for (int i = 0; i < day.length; i++) {
-            String regex = "Question Which lectures are there on " +  day[i] + " at " + time;
-            System.out.println(
-                    regex.matches("^Question Which lectures are there on ([A-z]{1}[a-z]*+[ ]?){1,3} at [0-9]*$"));
-        }
-
     }
 
     public void processQuestion(String text) throws FileNotFoundException {
