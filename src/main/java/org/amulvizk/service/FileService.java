@@ -11,7 +11,7 @@ public class FileService {
     private static int id = 0;
     private static String path;
 
-    private final String DIR_TXT = "/src/org/amulvizk/service/data/";
+    private final String DIR_TXT = "/src/main/java/org/amulvizk/service/data";
     private final String FILES_NAMES = "Rule_";
     private final String FILES_EXTENSION = ".txt";
 

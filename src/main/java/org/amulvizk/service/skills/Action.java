@@ -12,7 +12,6 @@ public class Action implements iDataStore{
     @Override
     public void add(String text) {
         action.add(text);
-
     }
 
 

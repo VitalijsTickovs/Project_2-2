@@ -14,18 +14,24 @@ public class FileReader {
     public FileReader() throws IOException {
         service = new org.amulvizk.service.FileService();
         skills = new ArrayList<>();
-        //generateSkills();
+        generateSkills();
     }
 
-//    public void generateSkills() throws IOException {
-//        List<String> text = service.readAll();
-//
-//        text.forEach((t) -> {
-//            try {
-//                skills.add(new Skill(t));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
+    public void generateSkills() throws IOException {
+        List<String> text = service.readAll();
+
+        text.forEach((t) -> {
+            try {
+                skills.add(new Skill(t));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        FileReader file = new FileReader();
+        System.out.println(file.skills.get(0).getAnswer("What lecture do we have on saturday"));
+    }
 }

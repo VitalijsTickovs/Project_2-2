@@ -41,7 +41,7 @@ public class Skill implements Comparable{
     /**
      * Used to load skills
      */
-    public Skill(Question question, Slot[] slot, Action action){
+    public Skill(Question question, Slot slot, Action action){
         this.slot = slot;
         this.action = action;
         this.question = question;
@@ -51,6 +51,28 @@ public class Skill implements Comparable{
             e.printStackTrace();
         }
     }
+
+    public Skill(String text) throws Exception {
+        if(text == null) throw new Exception("text is null in insertion");
+        this.isKeyWord = word -> keywords.contains(word);
+        this.action = new Action();
+        fileService = new FileService();
+        this.rule = new ArrayList<>();
+        System.out.println("htihtihtihtihtithithithitht");
+        generateSkills(text);
+    }
+
+    public Skill(Question question){
+        this.isKeyWord = word -> keywords.contains(word);
+        setQuestion(question);
+        try{
+            this.setQuestion(question);
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public Skill(){}
 
     //TODO: use some sort of pattern matching to find the best match i.e. a certain accuracy against a treshold
     /**
@@ -110,26 +132,45 @@ public class Skill implements Comparable{
 
         words.forEach((w)-> {if(w.matches("^<[A-Z]+>$")) names.add(w);});
 
+        Question question1 = new Question(String.join(" ", Arrays.copyOfRange(words.toArray(new String[0]),1,words.size())));
+        this.setQuestion(question1);
+
+
+        System.out.println("procesquestion names: " + names);
         processSlot(text, names);
 
     }
 
-    public void processSlot(String text, List<String> variables) {
+    public void processSlot(String text, List<String> entries) {
+        List<Slot> listSlot = new ArrayList<>();
 
-        for (String variable : variables){
+        for (String entry : entries){
 
             List<String> lines =  Arrays
                     .stream(text
                             .split("\n"))
                     .toList()
                     .stream()
-                    .filter((s)-> s.contains("Slot") && s.contains(variable))
+                    .filter((s)-> s.contains("Slot") && s.contains(entry))
                     .toList();
 
-            //lines.forEach(System.out::println);
-            //System.out.println();
-            //slot.add(lines.toArray(new String[0]));
+            String[] key;
+            String toadd="";
+            Slot slot = new Slot();
+            for(String line: lines){
+                key = line.split(" ");
+                if(line.contains(entry)){
+                    for(int i=2; i<key.length;i++){
+                         toadd += key[i];
+                    }
+                    slot.add(toadd);
+                    toadd="";
+                }
+            }
+            listSlot.add(slot);
         }
+        System.out.println("First slot: " + listSlot.get(1).getSlot());
+        System.out.println("Processlot: " + text);
         processAction(text);
     }
 

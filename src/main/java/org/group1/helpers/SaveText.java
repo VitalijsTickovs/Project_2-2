@@ -14,10 +14,12 @@ import java.util.List;
 
 
 public class SaveText {
-    private final static String DIR = "src/main/resources/skills";
+    private final static String DIR = "/src/main/resources/skills";
     private ArrayList<String> skills;
 
     private static int skillNum;
+
+    private int placeHolderEnd = 0;
 
     public SaveText(){
         skills = loadSkills();
@@ -78,49 +80,43 @@ public class SaveText {
         Question question1 = new Question(question);
         try{
             Skill loadedSkill = null;
-            for(String fileName: skills){
+            for(String fileName: skills) {
                 boolean isMatching = false;
+                loadedSkill = new Skill(question1);
                 //Load the file
                 //To be changed to load the skills from the database
-                BufferedReader bf = new BufferedReader(new FileReader(DIR+"/"+fileName));
-                CSVReader reader = new CSVReader(bf);
-                String[] line;
+                BufferedReader bf = new BufferedReader(new FileReader(DIR + "/" + fileName));
+                String line;
                 ArrayList<ArrayList<String>> loadedSlots = new ArrayList<>();
+                String slotName="";
                 // Action init
                 Action action = new Action();
-                while ((line = reader.readNext()) != null) {
+                while ((line = bf.readLine()) != null) {
                     //Check the first line if the question is exactly matched with the skill question
-                    if (!isMatching){
+                    if (!isMatching) {
                         //Matching the question
-                        //TODO: process the question
-                        boolean isRightQuestion = line[0].equals(question);
-                        System.out.println(isRightQuestion);
-                        if(isRightQuestion){
+                        boolean isRightQuestion = loadedSkill.isMatch(line);
+                        if (isRightQuestion) {
                             isMatching = true;
-                            //Slot init
-                            int slotNum = line.length-2;
-                            for(int i=0; i< slotNum; i++){
-                                loadedSlots.add(new ArrayList<>());
-                            }
-                        }else{
+                        } else {
                             break;
                         }
                     }
-                    if(isMatching) {
-                        //Slots
-                        for (int i = 1; i < line.length - 1; i++) {
-                            loadedSlots.get(i).add(line[i]);
+                    //Slots
+                    if(line.contains("Slot")){
+                        String placeHolder = getPlaceHolder(line);
+                        if(!slotName.equals(placeHolder)){
+                            loadedSlots.add(new ArrayList<>());
+                            slotName = placeHolder;
                         }
-                        //Action
-                        action.add(line[line.length - 1]);
                     }
+                    //Action
+                    action.add(line);
                     //TODO: add the action with the slots to the rule
 
                     bf.close();
-
                 }
-                if(isMatching) {
-                    loadedSkill = new Skill(question1, loadedSlots.toArray(new Slot[0]), action);
+                if (isMatching) {
                     return loadedSkill;
                 }
             }
@@ -131,12 +127,40 @@ public class SaveText {
             throw new RuntimeException(e);
         } catch (CsvException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private String getSlot(String line){
+        return line.substring(this.placeHolderEnd+1);
+    }
+
+    /**
+     * Retrieves slot placeholder name
+     * @param slotLine
+     * @return
+     */
+    private String getPlaceHolder(String slotLine){
+        String placeHolder ="";
+        boolean foundPlaceHolder = false;
+        for(int i=0; i<slotLine.length(); i++){
+            placeHolder = placeHolder + slotLine.charAt(i);
+            if(slotLine.charAt(i) == '<'){
+                    foundPlaceHolder = true;
+                }else if(slotLine.charAt(i)=='>'){
+                    this.placeHolderEnd = i;
+                    return placeHolder;
+                }
+
+        }
+        return null;
     }
 
     public static void main(String[] args) {
         SaveText sv = new SaveText();
         System.out.println(sv.skills);
-        sv.loadSkill("Question Which lectures are there on <DAY> at <TIME>");
+        Skill skill = sv.loadSkill("Question Which lectures are there on Monday at 9");
+        System.out.println(skill.slot);
     }
 }
