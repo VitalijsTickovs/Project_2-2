@@ -32,6 +32,6 @@ public class FileReader {
     public static void main(String[] args) throws Exception {
 
         FileReader file = new FileReader();
-        System.out.println(file.skills.get(0).getAnswer("What lecture do we have on saturday"));
+        System.out.println(file.skills.get(0).getAnswer("What lecture do we have on monday at 11"));
     }
 }

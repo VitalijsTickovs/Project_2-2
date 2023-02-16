@@ -1,5 +1,6 @@
 package org.amulvizk.service.skills;
 
+import java.util.Collections;
 import java.util.function.Predicate;
 import org.amulvizk.service.FileService;
 import org.group1.collections.Delim;
@@ -59,7 +60,6 @@ public class Skill implements Comparable{
         this.action = new Action();
         fileService = new FileService();
         this.rule = new ArrayList<>();
-        System.out.println("htihtihtihtihtithithithitht");
         generateSkills(text);
     }
 
@@ -91,8 +91,9 @@ public class Skill implements Comparable{
         if(!isMatch(question)) return "faulty call on skill";
         List<String> tocheck = PreProcessor.preprocess(question);
         tocheck.removeIf(isKeyWord);
+        Collections.reverse(tocheck);
         for(Rule rule: this.rule){
-            boolean containsArray = rule.pairs.stream().anyMatch(sublist -> Arrays.equals(sublist.split(" "), tocheck.toArray()));
+            boolean containsArray = rule.pairs.equals(tocheck);
             if(containsArray) return rule.action.toString();
         }
         return "couldn't find match";
@@ -145,7 +146,6 @@ public class Skill implements Comparable{
         this.setQuestion(question1);
 
 
-        System.out.println("procesquestion names: " + names);
         processSlot(text, names);
 
     }
@@ -178,14 +178,11 @@ public class Skill implements Comparable{
             }
             listSlot.add(slot);
         }
-        System.out.println("First slot: " + listSlot.get(1).getSlot());
-        System.out.println("Processlot: " + text);
         processAction(text);
     }
 
 
     public void processAction(String text){
-
         List<String> lines =  Arrays
                 .stream(text
                         .split("\n"))
@@ -196,7 +193,6 @@ public class Skill implements Comparable{
 
         lines.forEach((l)-> action.add(l));
         lines.forEach((l)-> System.out.println("process action: " + l));
-
 
         for(String line: lines){
             try {
