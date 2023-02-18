@@ -12,7 +12,7 @@ public class Normalization {
     public static final int Z = 123;
 
     public static final int ZERO = 48;
-    public static final int NINE = 58;
+    public static final int NINE = 57;
 
     /**
      * Kind of s Singleton pattern but not really is just that I don´t
@@ -64,7 +64,7 @@ public class Normalization {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < word.length(); i++) {
-            if((word.charAt(i) > A && word.charAt(i) < Z) || (word.charAt(i) > ZERO && word.charAt(i) < NINE)){
+            if((word.charAt(i) > A && word.charAt(i) < Z) || (word.charAt(i) >= ZERO && word.charAt(i) <= NINE)){
                 sb.append(word.charAt(i));
             }
         }

@@ -1,11 +1,8 @@
 package org.group1.reponse.procesor;
 
-import org.group1.collections.CV;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.group1.collections.CV.*;
 import static org.group1.reponse.procesor.helpers.StemBasic.*;
 import static org.group1.reponse.procesor.helpers.StemConstants.*;
 
@@ -20,7 +17,7 @@ public class Stemming {
     private Stemming(){}
 
 
-    public static List<String> exctract(List<String> tokens){
+    public static List<String> extract(List<String> tokens){
         List<String> steamed = new ArrayList<>();
         for(String token: tokens){
             steamed.add(Steam(token));

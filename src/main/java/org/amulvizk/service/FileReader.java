@@ -1,6 +1,7 @@
 package org.amulvizk.service;
 
 import org.amulvizk.service.skills.Skill;
+import org.group1.reponse.procesor.PreProcessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +31,9 @@ public class FileReader {
     }
 
     public static void main(String[] args) throws Exception {
-
         FileReader file = new FileReader();
-        System.out.println(file.skills.get(0).getAnswer("What lecture do we have on monday at 11"));
+        System.out.println(file.skills.get(0).getAnswer("What lecture do we have on monday at 11?"));
+        System.out.println(file.skills.get(0).getAnswer("On monday at 9 what lecture do we have?"));
+
     }
 }
