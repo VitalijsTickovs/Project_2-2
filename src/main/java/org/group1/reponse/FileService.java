@@ -1,4 +1,4 @@
-package org.amulvizk.service;
+package org.group1.reponse;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,20 +11,9 @@ public class FileService {
     private static int id = 0;
     private static String path;
 
-    private final String DIR_TXT = "/src/main/java/org/amulvizk/service/data";
+    private final String DIR_TXT = "/src/main/java/org/group1/reponse/data";
     private final String FILES_NAMES = "Rule_";
     private final String FILES_EXTENSION = ".txt";
-
-    public static void main(String[] args) throws IOException{
-        FileService f = new FileService();
-        System.out.println();
-        List<String> a = f.readAll();
-
-        f.write("knc´´bc´´b´´vbc´´ebw");
-        a.forEach(System.out::println);
-
-
-    }
 
     public FileService() throws IOException {
         path = new File(".").getCanonicalPath();

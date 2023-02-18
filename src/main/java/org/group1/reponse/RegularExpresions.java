@@ -1,4 +1,4 @@
-package org.amulvizk.service;
+package org.group1.reponse;
 
 public class RegularExpresions {
 

@@ -1,13 +1,11 @@
-package org.amulvizk.service.skills;
+package org.group1.reponse.skills;
 
 import java.util.*;
 import java.util.function.Predicate;
-import org.amulvizk.service.FileService;
-import org.group1.collections.Delim;
+import org.group1.reponse.FileService;
 import org.group1.exception.NullTextException;
 import org.group1.reponse.procesor.PreProcessor;
 import org.group1.reponse.procesor.Stemming;
-import org.group1.reponse.procesor.Tokenization;
 
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;

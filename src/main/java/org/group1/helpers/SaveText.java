@@ -1,16 +1,13 @@
 package org.group1.helpers;
 
-import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
-import org.amulvizk.service.skills.Action;
-import org.amulvizk.service.skills.Question;
-import org.amulvizk.service.skills.Skill;
-import org.amulvizk.service.skills.Slot;
+import org.group1.reponse.skills.Action;
+import org.group1.reponse.skills.Question;
+import org.group1.reponse.skills.Skill;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SaveText {

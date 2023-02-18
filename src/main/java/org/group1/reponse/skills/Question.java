@@ -1,8 +1,4 @@
-package org.amulvizk.service.skills;
-
-import org.group1.reponse.procesor.PreProcessor;
-
-import java.util.List;
+package org.group1.reponse.skills;
 
 public class Question implements iDataStore{
 

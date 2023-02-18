@@ -1,4 +1,4 @@
-package org.amulvizk.service.skills.distances;
+package org.group1.reponse.skills.distances;
 
 public interface iDistance {
 

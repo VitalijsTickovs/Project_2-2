@@ -1,7 +1,6 @@
-package org.amulvizk.service;
+package org.group1.reponse;
 
-import org.amulvizk.service.skills.Skill;
-import org.group1.reponse.procesor.PreProcessor;
+import org.group1.reponse.skills.Skill;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class FileReader {
     FileService service;
 
     public FileReader() throws IOException {
-        service = new org.amulvizk.service.FileService();
+        service = new FileService();
         skills = new ArrayList<>();
         generateSkills();
     }

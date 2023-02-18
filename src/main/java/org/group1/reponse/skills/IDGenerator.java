@@ -1,4 +1,4 @@
-package org.amulvizk.service.skills;
+package org.group1.reponse.skills;
 
 import org.group1.reponse.procesor.PreProcessor;
 
