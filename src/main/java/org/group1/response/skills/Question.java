@@ -1,17 +1,12 @@
-package org.group1.reponse.skills;
+package org.group1.response.skills;
 
 public class Question implements iDataStore{
-
     String question;
-    double questionID;
 
     public Question(String question) {
         this.question = question;
     }
 
-    public Question(){
-
-    }
 
     public void setQuestion(String question) {
         this.question = question;

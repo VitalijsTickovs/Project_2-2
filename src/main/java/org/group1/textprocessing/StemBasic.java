@@ -1,4 +1,4 @@
-package org.group1.reponse.procesor.helpers;
+package org.group1.textprocessing;
 
 import org.group1.linguistics.ConsonantsVowels;
 

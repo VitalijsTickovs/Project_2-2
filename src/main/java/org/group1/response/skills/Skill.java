@@ -1,53 +1,39 @@
-package org.group1.reponse.skills;
+package org.group1.response.skills;
 
 import java.util.*;
 import java.util.function.Predicate;
-import org.group1.reponse.FileService;
-import org.group1.exception.NullTextException;
-import org.group1.reponse.procesor.PreProcessor;
-import org.group1.reponse.procesor.Stemming;
+
+import org.group1.processor.PreProcessor;
 
 import java.io.FileNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Skill implements Comparable{
+public class Skill {
 
-    static Pattern pattern;
-    static Matcher matcher;
-    private Predicate<String> isKeyWord;
+
+    // Skill Attributes
     public ArrayList<Rule> rule;
     public Slot slot;
     public Action action;
     private Question question;
-    public static FileService fileService;
-    public List<String> keywords;
-    /**
-     * Used to load skills
-     */
 
+    // Keyword
+    public List<String> keywords;
+
+
+    /**
+     * Used to load skills.
+     * The text file would be the rule file with all the slots
+     *      (e.g. Rule_1, Rule_2, etc.)
+     */
     public Skill(String text) throws Exception {
-        if(text == null) throw new Exception("text is null in insertion");
-        this.isKeyWord = word -> keywords.contains(word);
-        this.action = new Action();
-        fileService = new FileService();
+        if(text == null) throw new Exception("Text is null in insertion");
         this.rule = new ArrayList<>();
         generateSkills(text);
     }
 
-    public Skill(Question question){
-        this.isKeyWord = word -> keywords.contains(word);
-        setQuestion(question);
-        try{
-            this.setQuestion(question);
-        }catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public Skill(){}
-
-    //TODO: use some sort of pattern matching to find the best match i.e. a certain accuracy against a threshold
+    //TODO: use some sort of pattern matching to find the best match i.e. a certain accuracy against a threshold ('distance')
     /**
      * Used to check if a question matches a skill
      * @param question The question
@@ -59,24 +45,7 @@ public class Skill implements Comparable{
         return text.containsAll(keywords);
     }
 
-    /**
-     * Used to get the answer to a question
-     * @param question, the question
-     * @return The answer to the question
-     * @throws Exception
-     */
-    public String getAnswer(String question) throws Exception{
-        if(!isMatch(question)) return "faulty call on skill";
-        List<String> tocheck = PreProcessor.preprocess(question);
-        tocheck.removeIf(isKeyWord);
-        for(Rule rule: this.rule){
-            Collections.sort(tocheck);
-            Collections.sort(rule.pairs);
-            boolean containsArray = tocheck.equals(rule.pairs);
-            if(containsArray) return rule.action.toString();
-        }
-        return "No answer found";
-    }
+
 
     /**
      * Used to generate keywords from a question
@@ -84,8 +53,9 @@ public class Skill implements Comparable{
      * @return The keywords
      */
     private static List<String> generateKeyWords(String text) throws Exception {
-        pattern = Pattern.compile("<\\w+>");
-        matcher = pattern.matcher(text);
+
+        Pattern pattern = Pattern.compile("<\\w+>");
+        Matcher matcher = pattern.matcher(text);
 
         List<String> toRemove = new ArrayList<>();
         while (matcher.find()) {
@@ -96,6 +66,8 @@ public class Skill implements Comparable{
         }
         return PreProcessor.preprocess(text);
     }
+
+    // TODO: fix for lowercase letters...
 
     /**
      * Used to generate a skill from a text
@@ -111,6 +83,7 @@ public class Skill implements Comparable{
                 .get(0)
                 .contains("Question");
 
+        // check if it contains a question
         if(check) processQuestion(text);
     }
 
@@ -129,7 +102,7 @@ public class Skill implements Comparable{
 
         List<String> names = new ArrayList<>();
 
-        words.forEach((w)-> {if(w.matches("^<[A-Z]+>$")) names.add(w);});
+        words.forEach((w)-> {if(isPlaceHolder(w)) names.add(w);});
         this.setQuestion(new Question(String.join(" ", Arrays.copyOfRange(words.toArray(new String[0]),1,words.size()))));
         processSlot(text, names);
     }
@@ -184,6 +157,7 @@ public class Skill implements Comparable{
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
@@ -211,11 +185,12 @@ public class Skill implements Comparable{
      * Used to get the rule from a line
      * @param line The line
      * @return The rule
-     * @throws NullTextException If the text is null
      */
-    private static Rule getRule(String line) throws Exception {
+    private static Rule getRule(String line) {
         return new Rule(getPlaceHolders(line), getAction(line));
     }
+
+    // TODO: instead of stemming do preprocessing... however, do this in rule, separation of concern
 
     /**
      * Used to check if a string is a placeholder
@@ -227,7 +202,7 @@ public class Skill implements Comparable{
         String[] tocheck = line.split(" ");
         for(int i = tocheck.length-1; i >=0; i--){
             if(isPlaceHolder(tocheck[i])){
-                placeHolders.add(Stemming.Steam(tocheck[i+1].toLowerCase()));
+                placeHolders.add(tocheck[i+1]);
             }
         }
         return placeHolders;
@@ -237,9 +212,8 @@ public class Skill implements Comparable{
      * Used to get the action from a line
      * @param line The line
      * @return The action
-     * @throws NullTextException If the text is null
      */
-    private static Action getAction(String line) throws Exception{
+    private static Action getAction(String line) {
         String[] tocheck = line.split(" ");
         Action action = new Action();
         for(int i = tocheck.length-1; i >=0; i--){
@@ -260,17 +234,7 @@ public class Skill implements Comparable{
         return text.matches("^<[A-Z]+>$");
     }
 
-    public String toString(){
-        String toRet = "";
-        toRet += "question: " + question.getQuestion() + " slot size: " + this.slot.getSlot().size();
-        return toRet;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
-
+    // Setters
     public void setQuestion(Question question){
         try{
             this.keywords = generateKeyWords(question.getQuestion());
@@ -283,4 +247,42 @@ public class Skill implements Comparable{
     public void setAction(Action action) {
         this.action = action;
     }
+
+
+    // Override
+    @Override
+    public String toString(){
+        String toRet = "";
+        toRet += "question: " + question.getQuestion() + " slot size: " + this.slot.getSlot().size();
+        return toRet;
+    }
+
+
+
+    // ====================================
+    /**
+     * Used to get the answer to a question
+     * @param question, the question
+     * @return The answer to the question
+     * @throws Exception
+     */
+    public String getAnswer(String question) throws Exception{
+        Predicate<String> isKeyWord = word -> keywords.contains(word);
+        if(!isMatch(question)) {
+            throw new Exception("Faulty Call on Skill...");
+        }
+
+        List<String> tocheck = PreProcessor.preprocess(question);
+
+        tocheck.removeIf(isKeyWord);
+        for(Rule rule: this.rule){
+            Collections.sort(tocheck);
+            Collections.sort(rule.pairs);
+            boolean containsArray = tocheck.equals(rule.pairs);
+            if(containsArray) return rule.action.toString();
+        }
+        return "No answer found";
+    }
+
+
 }

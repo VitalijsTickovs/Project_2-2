@@ -1,4 +1,4 @@
-package org.group1.reponse.skills;
+package org.group1.response.skills;
 
 public interface iDataStore {
 

@@ -1,10 +1,10 @@
-package org.group1.reponse.procesor;
+package org.group1.textprocessing;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.group1.reponse.procesor.helpers.StemBasic.*;
-import static org.group1.reponse.procesor.helpers.StemConstants.*;
+import static org.group1.textprocessing.StemBasic.*;
+import static org.group1.textprocessing.StemConstants.*;
 
 public class Stemming {
 
@@ -20,7 +20,7 @@ public class Stemming {
     public static List<String> extract(List<String> tokens){
         List<String> steamed = new ArrayList<>();
         for(String token: tokens){
-            steamed.add(Steam(token));
+            steamed.add(stem(token));
         }
         return steamed;
     }
@@ -29,7 +29,7 @@ public class Stemming {
      * @param word word to stem
      * @return the stemmed word
      */
-    public static String Steam(String word){
+    public static String stem(String word){
 
         int m = getM(word);
         word = step1a(word);
@@ -227,9 +227,9 @@ public class Stemming {
     }
 
     public static void main(String[] args) {
-        System.out.println(Steam("going"));
-        System.out.println(Steam("adjustable"));
-        System.out.println(Steam("accomplished"));
-        System.out.println(Steam("crepuscular"));
+        System.out.println(stem("going"));
+        System.out.println(stem("adjustable"));
+        System.out.println(stem("accomplished"));
+        System.out.println(stem("crepuscular"));
     }
 }

@@ -1,4 +1,4 @@
-package org.group1.reponse.skills;
+package org.group1.response.skills;
 
 import java.util.ArrayList;
 import java.util.List;

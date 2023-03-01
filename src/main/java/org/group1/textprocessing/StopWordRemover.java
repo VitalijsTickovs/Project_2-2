@@ -1,4 +1,4 @@
-package org.group1.reponse.procesor;
+package org.group1.textprocessing;
 
 import org.group1.exception.NullTextException;
 import org.group1.helpers.TXTReader;
@@ -11,7 +11,7 @@ public class StopWordRemover {
     /**
      * Stop word database: https://www.kaggle.com/datasets/heeraldedhia/stop-words-in-28-languages?select=english.txt
      */
-    private static String stopwordPath = "src/main/java/org/group1/reponse/procesor/helpers/StopWords.txt";
+    private static String stopwordPath = "src/main/resources/linguistics/StopWords.txt";
     private static List<String> stopwords;
     private static Predicate<String> isStopWord;
 

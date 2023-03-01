@@ -1,4 +1,4 @@
-package org.group1.reponse.skills;
+package org.group1.response.skills;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,6 @@ public class Slot implements iDataStore{
         return String.join(" ", this.slots.toArray(new String[0]));
     }
 
-    public void setCols(int cols){
-
-    }
-
-    public void setRows(int rows){
-
-    }
 
     public String getRepsonse(List<String> features){
 

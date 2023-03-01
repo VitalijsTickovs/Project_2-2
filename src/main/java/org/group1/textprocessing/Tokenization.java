@@ -1,4 +1,4 @@
-package org.group1.reponse.procesor;
+package org.group1.textprocessing;
 
 import org.group1.linguistics.Delim;
 import org.group1.exception.NullTextException;

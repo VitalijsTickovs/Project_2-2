@@ -1,4 +1,4 @@
-package org.group1.reponse.skills.distances;
+package org.group1.response.distances;
 
 public class Edit implements iDistance{
 

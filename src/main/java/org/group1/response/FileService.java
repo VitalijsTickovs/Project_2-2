@@ -1,4 +1,4 @@
-package org.group1.reponse;
+package org.group1.response;
 
 import java.io.*;
 import java.util.ArrayList;

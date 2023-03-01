@@ -1,6 +1,10 @@
-package org.group1.reponse.procesor;
+package org.group1.processor;
 
 import org.group1.linguistics.Delim;
+import org.group1.textprocessing.Normalization;
+import org.group1.textprocessing.Stemming;
+import org.group1.textprocessing.StopWordRemover;
+import org.group1.textprocessing.Tokenization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +13,8 @@ public class PreProcessor {
 
     /**
      * This method is used to preprocess the text
+     * It goes through the pipeline of processing steps
+     * It's the main access point to gather processed text
      * @param text The text input.
      * @return The output is a list of words or set of words
      */

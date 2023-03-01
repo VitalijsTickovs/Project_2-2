@@ -1,6 +1,6 @@
-package org.group1.reponse;
+package org.group1.response;
 
-import org.group1.reponse.skills.Skill;
+import org.group1.response.skills.Skill;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +48,15 @@ public class SkillGenerator {
                 return skill.getAnswer(question);
         }
         return null;
+    }
+
+
+    /**
+     * Retrieve the skills
+     * @return
+     */
+    public List<Skill> getSkills(){
+        return this.skills;
     }
 
     //TODO: fix the problem with isMatch
