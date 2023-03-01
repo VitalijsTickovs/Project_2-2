@@ -144,7 +144,7 @@ public class SkillDetails implements CustomStage {
         TableColumn col1 = new TableColumn(" Name");
         TableColumn col2 = new TableColumn(" Name");
         TableColumn col3 = new TableColumn(" Name");
-        col1.setPrefWidth(150);s
+        col1.setPrefWidth(150);
         col2.setPrefWidth(150);
         col3.setPrefWidth(150);
 
