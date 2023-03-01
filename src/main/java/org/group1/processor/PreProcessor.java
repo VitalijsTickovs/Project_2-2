@@ -19,8 +19,19 @@ public class PreProcessor {
      * @return The output is a list of words or set of words
      */
     public static List<String> preprocess(String text) throws Exception{
+       return preprocess(Tokenization.tokenize(text, Delim.SPACE));
+    }
+
+    /**
+     * This method is used to preprocess the text
+     * It goes through the pipeline of processing steps
+     * It's the main access point to gather processed text
+     * @param text The text input.
+     * @return The output is a list of words or set of words
+     */
+    public static List<String> preprocess(List<String> text) throws Exception{
         List<String> validEntries = new ArrayList<>();
-        for(String word : Stemming.extract(StopWordRemover.eliminate(Normalization.normalize(Tokenization.tokenize(text, Delim.SPACE))))){
+        for(String word : Stemming.extract(StopWordRemover.eliminate(Normalization.normalize(text)))){
             if(word.length() >= 1 && word != Delim.SPACE.toString()) validEntries.add(word);
         }
         return validEntries;

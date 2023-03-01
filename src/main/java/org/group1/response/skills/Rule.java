@@ -1,5 +1,7 @@
 package org.group1.response.skills;
 
+import org.group1.processor.PreProcessor;
+
 import java.util.List;
 
 
@@ -14,8 +16,8 @@ public class Rule {
     public Action action;
 
     // TODO: add the preprocessing here.. (instead of in skill)
-    public Rule(List<String> pairs, Action action) {
-        this.pairs = pairs;
+    public Rule(List<String> pairs, Action action) throws Exception{
+        this.pairs = PreProcessor.preprocess(pairs);
         this.action = action;
     }
 

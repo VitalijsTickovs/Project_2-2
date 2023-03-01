@@ -30,6 +30,7 @@ public class Skill {
     public Skill(String text) throws Exception {
         if(text == null) throw new Exception("Text is null in insertion");
         this.rule = new ArrayList<>();
+        this.action = new Action();
         generateSkills(text);
     }
 
@@ -74,7 +75,7 @@ public class Skill {
      * @param text, the text
      * @throws FileNotFoundException, if the file is not found
      */
-    public void generateSkills(String text) throws FileNotFoundException {
+    public void generateSkills(String text) throws Exception {
 
         boolean check = Arrays
                 .stream(text
@@ -92,7 +93,7 @@ public class Skill {
      * @param text, the text
      * @throws FileNotFoundException, if the file is not found
      */
-    public void processQuestion(String text) throws FileNotFoundException {
+    public void processQuestion(String text) throws Exception {
         List<String> words = Arrays.stream(Arrays
                 .stream(text
                         .split("\n"))
@@ -186,7 +187,7 @@ public class Skill {
      * @param line The line
      * @return The rule
      */
-    private static Rule getRule(String line) {
+    private static Rule getRule(String line) throws Exception{
         return new Rule(getPlaceHolders(line), getAction(line));
     }
 
