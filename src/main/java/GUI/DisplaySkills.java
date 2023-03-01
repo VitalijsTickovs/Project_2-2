@@ -169,7 +169,6 @@ public class DisplaySkills implements  CustomStage {
         //scrollpane with skills
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        //scrollChat.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
 
         scrollChat.setStyle("-fx-background-color: transparent");
 
@@ -185,17 +184,6 @@ public class DisplaySkills implements  CustomStage {
         UIpane.getChildren().add(scrollPane);
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
-        //Display the skills
-        //TODO : MAKE THIS AUTOMATED
-//        TableView table = new TableView();
-//        table.setEditable(true);
-//
-//        TableColumn firstNameCol = new TableColumn("First Name");
-//        TableColumn lastNameCol = new TableColumn("Last Name");
-//        TableColumn emailCol = new TableColumn("Email");
-//
-//        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
-//        scrollChat.getChildren().add(table);
 
         for (int i = 0,y=20; i < skills.size(); i++) {
             String temp = skills.get(i);

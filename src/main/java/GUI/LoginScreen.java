@@ -46,8 +46,6 @@ public class LoginScreen implements CustomStage {
         mainStage.close();
         UIstage.show();
     }
-    //WHY DO U HAVE TO DO SO MUCH FOR ONE FUCKING BUTTON????
-    //LIBGDX>>>>>>JAVAFX
     @Override
     public void design(){
 
