@@ -1,6 +1,6 @@
 package org.group1.reponse.procesor;
 
-import org.group1.collections.Delim;
+import org.group1.linguistics.Delim;
 import org.group1.exception.NullTextException;
 
 import java.util.ArrayList;

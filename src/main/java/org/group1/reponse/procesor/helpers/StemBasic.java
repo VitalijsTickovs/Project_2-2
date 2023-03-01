@@ -1,9 +1,9 @@
 package org.group1.reponse.procesor.helpers;
 
-import org.group1.collections.CV;
+import org.group1.linguistics.ConsonantsVowels;
 
-import static org.group1.collections.CV.C;
-import static org.group1.collections.CV.V;
+import static org.group1.linguistics.ConsonantsVowels.C;
+import static org.group1.linguistics.ConsonantsVowels.V;
 
 public class StemBasic {
 
@@ -96,7 +96,7 @@ public class StemBasic {
      * @param position position of the character in the word
      * @return (C || V)
      */
-    public static CV vocalAt(String word, int position){
+    public static ConsonantsVowels vocalAt(String word, int position){
 
         return switch (word.charAt(position)) {
             case 'a', 'e', 'i', 'o', 'u' -> V;

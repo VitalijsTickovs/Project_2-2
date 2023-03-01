@@ -10,8 +10,7 @@ public class FileService {
 
     private static int id = 0;
     private static String path;
-
-    private final String DIR_TXT = "/src/main/java/org/group1/reponse/data";
+    private final String DIR_TXT = "/src/main/resources/skills/";
     private final String FILES_NAMES = "Rule_";
     private final String FILES_EXTENSION = ".txt";
 
@@ -29,8 +28,6 @@ public class FileService {
 
         return allFiles;
     }
-
-
 
     public String read(int n) throws FileNotFoundException {
 
@@ -132,13 +129,20 @@ public class FileService {
 
     public void write(String text) throws IOException {
 
-        File archivo = new File(getNextName());
+        File file = new File(getNextName());
 
-        FileWriter writer = new FileWriter(archivo);
+        FileWriter writer = new FileWriter(file);
 
         writer.append(text);
 
         writer.close();
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        FileService fs = new FileService();
+        fs.write("LoveYouGuys");
 
     }
 }

@@ -6,25 +6,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileReader {
+public class SkillGenerator {
 
     List<Skill> skills;
     FileService service;
 
-    public FileReader() throws IOException {
+    /**
+     * Build a file service and list for skills.
+     * This also generates the skills.
+     * @throws IOException
+     */
+    public SkillGenerator() throws IOException {
         service = new FileService();
         skills = new ArrayList<>();
         generateSkills();
     }
 
-    public String getAnswer(String question) throws Exception {
-        for (Skill skill : skills) {
-            if(skill.isMatch(question))
-                return skill.getAnswer(question);
-        }
-        return null;
-    }
-
+    /**
+     * Method that actually generates from skills.
+     * Reads all files from directory and creates skills.
+     * @throws IOException
+     */
     public void generateSkills() throws IOException {
         List<String> text = service.readAll();
 
@@ -37,8 +39,22 @@ public class FileReader {
         });
     }
 
+
+    // THIS METHOD HAS A CONNECTION TO SKILL
+    // NEEDS SOME FORM OF INTERFACE, CABLE
+    public String getAnswer(String question) throws Exception {
+        for (Skill skill : skills) {
+            if(skill.isMatch(question))
+                return skill.getAnswer(question);
+        }
+        return null;
+    }
+
+    //TODO: fix the problem with isMatch
+
+    // TestingGround for Mr. Tom
     public static void main(String[] args) throws Exception {
-        FileReader file = new FileReader();
+        SkillGenerator file = new SkillGenerator();
         System.out.println(file.getAnswer("What lecture do we have on monday at 11?"));
         System.out.println(file.getAnswer("On monday at 9 what lecture do we have?"));
         System.out.println(file.getAnswer("What lecture do we have on monday at 9?"));

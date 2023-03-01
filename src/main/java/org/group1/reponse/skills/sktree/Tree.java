@@ -1,6 +1,6 @@
 package org.group1.reponse.skills.sktree;
 
-import org.group1.collections.Delim;
+import org.group1.linguistics.Delim;
 import org.group1.exception.NullTextException;
 import org.group1.reponse.procesor.Tokenization;
 import org.group1.reponse.skills.sk.SK_CurrentDate;

@@ -1,4 +1,4 @@
-package org.group1.collections;
+package org.group1.linguistics;
 
 public enum WordType {
     NOUN,
