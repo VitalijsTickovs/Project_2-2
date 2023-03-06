@@ -1,13 +1,15 @@
 package org.group1.response;
 
-import org.group1.processor.PreProcessor;
+import org.group1.response.matching.RuleMatcher;
+import org.group1.response.matching.SkillMatcher;
+import org.group1.response.matching.Support.iMatcher;
+import org.group1.response.distances.Jaro;
+import org.group1.response.distances.iDistance;
 import org.group1.response.skills.Rule;
 import org.group1.response.skills.Skill;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Endpoint to ...
@@ -15,12 +17,16 @@ import java.util.function.Predicate;
 public class Response {
     SkillGenerator sg;
     List<Skill> skills;
+    iDistance distance;
+    iMatcher<Skill> skillMatcher;
+    iMatcher<Rule> ruleMatcher;
+    static final String  noAnswerFound = "No answer found (note: this string should be the one from the end of each skill file)";
 
-    public Response() throws IOException {
-
-        // where exactly implement distance
+    public Response(iDistance distance) throws IOException {
+       this.distance = distance;
+       this.skillMatcher = new SkillMatcher(distance);
+       this.ruleMatcher = new RuleMatcher(distance);
     }
-
     /**
      * Used to get the answer to a question
      * @param question, the question
@@ -28,40 +34,38 @@ public class Response {
      * @throws Exception
      */
     public String getAnswer(String question) throws Exception{
-        Predicate<String> isKeyWord;
         if(skills == null || sg == null) sg = new SkillGenerator(); skills = sg.getSkills();
-
-        List<String> tocheck = PreProcessor.preprocess(question);
-
-        for(Skill skill: this.skills) {
-            isKeyWord = word -> skill.keywords.contains(word);
-            if(!tocheck.stream().anyMatch(isKeyWord)) continue; //
-
-            tocheck.removeIf(isKeyWord);
-            for(Rule rule: skill.rule){
-                Collections.sort(tocheck);
-                Collections.sort(rule.pairs);
-                boolean containsArray = tocheck.equals(rule.pairs);
-                if(containsArray) return rule.action.toString();
-            }
+        Skill match = skillMatcher.match(skills, question);
+        if(match != null) {
+                Rule rule = ruleMatcher.match(match.getRules(), question);
+                if(rule != null) return validResponse(rule.action.toString());
         }
-        return "No answer found";
+        return noAnswerFound;
     }
 
+    /**
+     * Checks if the response is valid
+     * @param response, the response
+     * @return the response if valid, else noAnswerFound
+     */
+    private static String validResponse(String response) {
+        if(response == null) return noAnswerFound;
+        if(response.equals("")) return noAnswerFound;
+        return response;
+    }
+
+//we want to sort a collection of rules
+
     public static void main(String[] args) throws IOException{
-        Response r = new Response();
+        Response r = new Response(new Jaro());
         try {
             System.out.println(r.getAnswer("what lecture do we has on monday at 9?"));
-            System.out.println(r.getAnswer("         monday     9  what    lectures"));
-            System.out.println(r.getAnswer("what is the weather on monday?"));
+            System.out.println(r.getAnswer("what lactur do we has on munday at 9?"));
+            System.out.println(r.getAnswer("on minday what lcture do we have at 9?"));
+            System.out.println(r.getAnswer("what weeter on munday?"));
+            System.out.println(r.getAnswer("what lactur do we has on munday at 13?"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    // self
-    //  sort on distance
-    //  need numerical value for matching
-
-
 }

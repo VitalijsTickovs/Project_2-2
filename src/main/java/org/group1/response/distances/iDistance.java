@@ -5,5 +5,5 @@ package org.group1.response.distances;
  */
 public interface iDistance {
 
-    float calculate(String a, String b);
+    double calculate(String a, String b);
 }

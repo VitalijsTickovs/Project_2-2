@@ -31,7 +31,7 @@ public class PreProcessor {
      */
     public static List<String> preprocess(List<String> text) throws Exception{
         List<String> validEntries = new ArrayList<>();
-        for(String word : Stemming.extract(StopWordRemover.eliminate(Normalization.normalize(text)))){
+        for(String word : StopWordRemover.eliminate(Normalization.normalize(text))){
             if(word.length() >= 1 && word != Delim.SPACE.toString()) validEntries.add(word);
         }
         return validEntries;

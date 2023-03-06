@@ -104,7 +104,7 @@ public class Skill {
         List<String> names = new ArrayList<>();
 
         words.forEach((w)-> {if(isPlaceHolder(w)) names.add(w);});
-        this.setQuestion(new Question(String.join(" ", Arrays.copyOfRange(words.toArray(new String[0]),1,words.size()))));
+        this.setQuestion(new Question(String.join(" ", Arrays.copyOfRange(words.toArray(new String[0]),1,words.size())), names));
         processSlot(text, names);
     }
 
@@ -232,7 +232,7 @@ public class Skill {
      * @return True if it is a placeholder
      */
     private static boolean isPlaceHolder(String text){
-        return text.matches("^<[A-Z]+>$");
+        return text.matches("^<[A-Z]+>.*$");
     }
 
     // Setters
@@ -283,6 +283,10 @@ public class Skill {
             if(containsArray) return rule.action.toString();
         }
         return "No answer found";
+    }
+
+    public List<Rule> getRules(){
+        return this.rule;
     }
 
 

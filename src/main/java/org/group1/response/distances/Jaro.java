@@ -1,7 +1,9 @@
 package org.group1.response.distances;
 
-public class Jaro {
-    public static double jaroDistance(String a, String b){
+public class Jaro implements iDistance{
+
+    @Override
+    public double calculate(String a, String b){
         // If the Strings are equal
         if (a.equals(b))
             return 1.0;
@@ -67,13 +69,5 @@ public class Jaro {
         return (    ((double)match) / ((double)aLength)+
                     ((double)match) / ((double)bLength)+
                     ((double)match - t) / ((double)match)) /3; //Divide by 3 to normalize it
-    }
-
-    public static void main(String[] args)
-    {
-        String s1 = "hwat lecrure thre monaday", s2 = "Which lectures are there on Monday";
-
-        // Print jaro Similarity of two Strings
-        System.out.print(jaroDistance(s1, s2) +"\n");
     }
 }
