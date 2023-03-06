@@ -8,11 +8,22 @@ class DistanceSorter implements Comparator<String> {
     String wordToCompare;
     iDistance distance;
 
+    /**
+     * Constructor for the DistanceSorter
+     * @param wordToCompare, the word to compare to
+     * @param distance, the distance to use
+     */
     public DistanceSorter(String wordToCompare, iDistance distance) {
         this.wordToCompare = wordToCompare;
         this.distance = distance;
     }
 
+    /**
+     * Compares two words
+     * @param o1, the first word
+     * @param o2, the second word
+     * @return, the result of the comparison
+     */
     @Override
     public int compare(String o1, String o2) {
         ;
