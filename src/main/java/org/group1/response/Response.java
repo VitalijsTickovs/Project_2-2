@@ -54,16 +54,14 @@ public class Response {
         return response;
     }
 
-//we want to sort a collection of rules
-
     public static void main(String[] args) throws IOException{
         Response r = new Response(new Jaro());
         try {
-            System.out.println(r.getAnswer("what lecture do we has on monday at 9?"));
+            System.out.println(r.getAnswer("what lactures do we has on monday at 9?"));
             System.out.println(r.getAnswer("what lactur do we has on munday at 9?"));
             System.out.println(r.getAnswer("on minday what lcture do we have at 9?"));
             System.out.println(r.getAnswer("what weeter on munday?"));
-            System.out.println(r.getAnswer("what lactur do we has on munday at 13?"));
+            System.out.println(r.getAnswer("what lactures do we has on munday at 13?"));
         } catch (Exception e) {
             e.printStackTrace();
         }

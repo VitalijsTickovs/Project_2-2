@@ -34,20 +34,6 @@ public class Skill {
         generateSkills(text);
     }
 
-    //TODO: use some sort of pattern matching to find the best match i.e. a certain accuracy against a threshold ('distance')
-    /**
-     * Used to check if a question matches a skill
-     * @param question The question
-     * @return True if the question matches the skill
-     */
-    public boolean isMatch(String question) throws Exception{
-        List<String> text = PreProcessor.preprocess(question);
-        if(question == null || question.equals("")) return false;
-        return text.containsAll(keywords);
-    }
-
-
-
     /**
      * Used to generate keywords from a question
      * @param text The question
@@ -256,33 +242,6 @@ public class Skill {
         String toRet = "";
         toRet += "question: " + question.getQuestion() + " slot size: " + this.slot.getSlot().size();
         return toRet;
-    }
-
-
-
-    // ====================================
-    /**
-     * Used to get the answer to a question
-     * @param question, the question
-     * @return The answer to the question
-     * @throws Exception
-     */
-    public String getAnswer(String question) throws Exception{
-        Predicate<String> isKeyWord = word -> keywords.contains(word);
-        if(!isMatch(question)) {
-            throw new Exception("Faulty Call on Skill...");
-        }
-
-        List<String> tocheck = PreProcessor.preprocess(question);
-
-        tocheck.removeIf(isKeyWord);
-        for(Rule rule: this.rule){
-            Collections.sort(tocheck);
-            Collections.sort(rule.pairs);
-            boolean containsArray = tocheck.equals(rule.pairs);
-            if(containsArray) return rule.action.toString();
-        }
-        return "No answer found";
     }
 
     public List<Rule> getRules(){
