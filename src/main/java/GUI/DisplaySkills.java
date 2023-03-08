@@ -43,7 +43,7 @@ public class DisplaySkills implements  CustomStage {
         mainStage.close();
         UIstage.show();
     }
-    //TODO: connect it to the database
+    //TODO: connect it to the database(for now from txt files)
     public void loadSkillsFromDatabase(){
         for (int i = 1; i < 15; i++) {
             skills.add("Skill "+ i);

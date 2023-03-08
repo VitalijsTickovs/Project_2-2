@@ -234,9 +234,9 @@ public class ChatWindow implements CustomStage {
                      y+=listText.get(listText.size()-1).getPrefHeight()+20;
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
-                     //TODO: BOT RESPONSE LOGIC
+                     //TODO Linking: BOT RESPONSE LOGIC
                      //bot responding
-                     setBotChatText("something");
+                     setBotChatText("");
                      listText.add(new TextArea(currentBotInput));
                      if ((countCharAtLongestLine(userInput.getText())*7+20)>220){
                          listText.get(listText.size()-1).setPrefSize(220,countLines(currentBotInput));
@@ -275,7 +275,7 @@ public class ChatWindow implements CustomStage {
              return currentBotInput;
          }
          public void setBotChatText(String string){
-         this.currentBotInput = "I cannot answer this question";
+         this.currentBotInput = string;
          }
          public String getUserInputString(){
             return currentUserInput;
