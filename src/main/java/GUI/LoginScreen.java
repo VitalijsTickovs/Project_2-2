@@ -1,9 +1,10 @@
 package GUI;
-
+import database.DastabaseMenager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -18,8 +19,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class LoginScreen implements CustomStage {
     //VIEW SETTINGS
+    DastabaseMenager databaseMenager = new DastabaseMenager();
     private AnchorPane UIpane;
     private Stage UIstage;
     private Scene UIscene;
@@ -28,6 +33,8 @@ public class LoginScreen implements CustomStage {
     static int screenHeight = 700;
     public Button loginButton;
     private Stage chatWindow;
+    TextField loginTextField;
+    PasswordField passwordTextField;
     public LoginScreen(){
         UIpane = new AnchorPane();
         UIstage = new Stage();
@@ -79,9 +86,22 @@ public class LoginScreen implements CustomStage {
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("hello");
-                ChatWindow chatWindow=new ChatWindow();
-                chatWindow.setStage(UIstage);
+                try {
+                    if(checkValidLodgin()){
+                        System.out.println("hello");
+                        ChatWindow chatWindow=new ChatWindow();
+                        chatWindow.setStage(UIstage);
+                    }else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("INVALID LOGIN");
+                        alert.setHeaderText("WRONG PASSWORD/USERNAME");
+                        String s ="Please make sure you have typed correct login/password";
+                        alert.setContentText(s);
+                        alert.show();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
         UIpane.getChildren().add(loginButton);
@@ -125,13 +145,14 @@ public class LoginScreen implements CustomStage {
         triangle1.setFill(Color.rgb(159,182,189));
         UIpane.getChildren().add(triangle1);
 
-        TextField loginTextField = new TextField();
+        loginTextField= new TextField();
         loginTextField.setPrefWidth(250);
         loginTextField.setPrefHeight(30);
         loginTextField.setTranslateX(550);
         loginTextField.setTranslateY(280);
         loginTextField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);" + "-fx-text-fill: white;");
-        PasswordField passwordTextField = new PasswordField();
+
+        passwordTextField = new PasswordField();
         passwordTextField.setPrefWidth(250);
         passwordTextField.setPrefHeight(30);
         passwordTextField.setTranslateX(550);
@@ -152,6 +173,16 @@ public class LoginScreen implements CustomStage {
                 }
             }
         });
+    }
+    public boolean checkValidLodgin() throws SQLException {
+        ArrayList<String> username = databaseMenager.getAllUsernames();
+        ArrayList<String> password = databaseMenager.getAllPasswords();
+        for (int i = 0; i < username.size(); i++) {
+            if(username.get(i).equals(loginTextField.getText())&& password.get(i).equals(passwordTextField.getText())){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

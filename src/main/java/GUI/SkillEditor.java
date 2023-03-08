@@ -214,9 +214,5 @@ public class SkillEditor implements CustomStage{
             }
         });
         UIpane.getChildren().add(sendUserInput);
-
-
-
     }
-
 }

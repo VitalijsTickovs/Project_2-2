@@ -1,0 +1,9 @@
+CREATE DATABASE skills;
+USE skills;
+CREATE TABLE users (
+                           username VARCHAR(50) NOT NULL,
+                           password VARCHAR(20) NOT NULL,
+                           CONSTRAINT  PK_username PRIMARY KEY (username)
+
+);
+INSERT INTO users VALUES('Natalia','12345');
