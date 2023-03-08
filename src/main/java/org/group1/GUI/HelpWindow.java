@@ -29,8 +29,12 @@ public class HelpWindow implements CustomStage{
 
 
         // TODO: make it bonitinho
-        Label exampleLabel = new Label("Example: What <DRINK> does <USER> like?");
-        Label exampleLabel2 = new Label("Example: What <LOCATION> is <COMPANY> head quarters located?");
+        Label lb1 = new Label("HOW TO DEFINE QUESTIONS?");
+        Label exampleLabel = new Label("Which <FRUITS> are favourite in <COUNTRY>?");
+        Label exampleLabel2 = new Label("What  <LOCATION> is <COMPANY> head quarters located?");
+
+        Label lb2 = new Label("HOW TO DEFINE ACTIONS?");
+
 
         exampleLabel.setLayoutX(10);
         exampleLabel.setLayoutY(10);

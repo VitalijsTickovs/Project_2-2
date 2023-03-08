@@ -26,7 +26,6 @@ public class SkillEditor implements CustomStage{
 
     FileService fs;
 
-
     private AnchorPane UIpane;
     private Stage UIstage;
     private Scene UIscene;
@@ -36,6 +35,12 @@ public class SkillEditor implements CustomStage{
 
     private String skillInput="";
     public  SkillEditor(){
+
+        try {
+            fs = new FileService();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         UIpane = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
         UIstage = new Stage();
@@ -200,7 +205,7 @@ public class SkillEditor implements CustomStage{
         });
         UIpane.getChildren().add(back);
 
-        Text username = new Text("Write your question");
+        Text username = new Text("Define your question");
         username.setFont(Font.font("Impact",40));
         username.setStyle("-fx-font-weight: bold");
         username.setFill(Color.WHITE);
@@ -209,13 +214,13 @@ public class SkillEditor implements CustomStage{
         UIpane.getChildren().add(username);
 
         sendUserInput = new Button();
-        sendUserInput.setText("SUBMIT");
+        sendUserInput.setText("SUBMIT QUESTION");
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setTextFill(Color.WHITE);
         sendUserInput.setCursor(Cursor.CLOSED_HAND);
-        sendUserInput.setPrefSize(400,50);
-        sendUserInput.setLayoutX(386);
+        sendUserInput.setPrefSize(200,50);
+        sendUserInput.setLayoutX(500);
         sendUserInput.setLayoutY(380);
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override

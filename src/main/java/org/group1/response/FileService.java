@@ -84,6 +84,8 @@ public class FileService {
             id = files.length;
         }
 
+
+        System.out.println("epic: " + path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION);
         return  path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION;
     }
 
@@ -127,7 +129,6 @@ public class FileService {
     public void write(String text) throws IOException {
 
         File file = new File(getNextName());
-
 
         FileWriter writer = new FileWriter(file);
 
