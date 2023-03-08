@@ -1,4 +1,4 @@
-package GUI;
+package org.group1.GUI;
 
 public class ErrorHandling {
     public boolean stringLengthError(String string){
