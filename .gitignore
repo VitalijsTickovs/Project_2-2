@@ -1,3 +1,5 @@
+gradle-wrapper.jar
+gradle-wrapper.properties
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
