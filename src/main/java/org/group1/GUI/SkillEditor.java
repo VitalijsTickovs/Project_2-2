@@ -197,7 +197,10 @@ public class SkillEditor implements CustomStage{
             @Override
             public void handle(ActionEvent event) {
                 if(errorHandling.stringLengthError(questionInput.getText())) {
-
+                    String question = "Question " + questionInput.getText();
+                    //TODO: pass it to skill editor
+                    // Go skill processor
+                    //
                 }else System.out.println("invalid message");
             }
         });

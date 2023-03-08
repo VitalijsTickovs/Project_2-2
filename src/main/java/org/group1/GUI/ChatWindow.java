@@ -40,9 +40,11 @@ public class ChatWindow implements CustomStage {
     private Stage menuStage;
     private Scene UIscene;
     private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
+    private GenerateResponse responseGenerator;
 
 
     public ChatWindow(){
+        responseGenerator = new GenerateResponse();
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
