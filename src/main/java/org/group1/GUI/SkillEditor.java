@@ -31,7 +31,7 @@ public class SkillEditor implements CustomStage{
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button displaySkills,back,help,sendUserInput,defineSkills;
+    private Button displaySkills,back,help,sendUserInput,defineSkills,addActions;
     ErrorHandling errorHandling = new ErrorHandling();
     public  SkillEditor(){
         UIpane = new AnchorPane();
@@ -72,6 +72,19 @@ public class SkillEditor implements CustomStage{
         Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
         sideMenu.setFill(Color.rgb(159,182,189));
         UIpane.getChildren().add(sideMenu);
+
+        //add actions button
+        addActions = new Button();
+        addActions.setText("ADD ACTIONS");
+        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        addActions.setStyle("-fx-background-color: transparent");
+        addActions.setTextFill(Color.WHITE);
+        addActions.setLayoutX(20);
+        addActions.setLayoutY(400);
+        addActions.setTextFill(Color.rgb(42,97,117));
+        addActions.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(addActions);
+
 
         displaySkills = new Button();
         displaySkills.setText("DISPLAY SKILLS");
@@ -117,6 +130,7 @@ public class SkillEditor implements CustomStage{
             }
         });
         UIpane.getChildren().add(defineSkills);
+
 
         help = new Button();
         help.setText("HELP");

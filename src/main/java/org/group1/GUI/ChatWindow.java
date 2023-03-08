@@ -39,7 +39,7 @@ public class ChatWindow implements CustomStage {
     private Stage UIstage;
     private Stage menuStage;
     private Scene UIscene;
-    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
+    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, addActions;
     private GenerateResponse responseGenerator;
 
 
@@ -99,6 +99,10 @@ public class ChatWindow implements CustomStage {
          skillsButton.setLayoutY(130);
          skillsButton.setCursor(Cursor.CLOSED_HAND);
          UIpane.getChildren().add(skillsButton);
+
+
+
+
 
          //logout button
          logoutButton = new Button();

@@ -24,7 +24,7 @@ public class DisplaySkills implements  CustomStage {
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button submit,displaySkills,back,help,defineSkills;
+    private Button submit,displaySkills,back,help,defineSkills,addActions;
 
     public DisplaySkills(){
         loadSkillsFromDatabase();
@@ -75,6 +75,19 @@ public class DisplaySkills implements  CustomStage {
         displaySkills.setLayoutY(130);
         displaySkills.setTextFill(Color.rgb(42,97,117));
         displaySkills.setCursor(Cursor.CLOSED_HAND);
+
+
+        //add actions button
+        addActions = new Button();
+        addActions.setText("ADD ACTIONS");
+        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        addActions.setStyle("-fx-background-color: transparent");
+        addActions.setTextFill(Color.WHITE);
+        addActions.setLayoutX(20);
+        addActions.setLayoutY(400);
+        addActions.setTextFill(Color.rgb(42,97,117));
+        addActions.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(addActions);
 
         UIpane.getChildren().add(displaySkills);
 
