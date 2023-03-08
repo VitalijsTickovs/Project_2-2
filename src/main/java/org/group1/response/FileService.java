@@ -117,6 +117,11 @@ public class FileService {
     public boolean deleteFiles(int start){ return getFiles()[start].delete(); }
 
 
+    /**
+     * This writes to a new available 'rule_n' file.
+     * @param text
+     * @throws IOException
+     */
     public void write(String text) throws IOException {
 
         File file = new File(getNextName());

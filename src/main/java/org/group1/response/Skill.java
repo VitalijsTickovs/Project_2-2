@@ -37,6 +37,7 @@ public class Skill {
      * @throws IOException
      */
     public void generateSkills() throws Exception {
+
         List<String> texts = service.readAll();
 
         for (String text : texts){
