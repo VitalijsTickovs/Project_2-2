@@ -198,10 +198,22 @@ public class SkillEditor implements CustomStage{
             public void handle(ActionEvent event) {
                 if(errorHandling.stringLengthError(questionInput.getText())) {
                     String question = "Question " + questionInput.getText();
-                    //TODO: pass it to skill editor
-                    // Go skill processor
-                    //
-                }else System.out.println("invalid message");
+
+                    // this makes the next available rule .txt
+                    // in which we will add the actions & slots
+                    try {
+                        fs = new FileService();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        fs.write(question);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    // TODO: write to txt file in recourses/skills/rule_
+
+                }  else System.out.println("invalid message");
             }
         });
         sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {

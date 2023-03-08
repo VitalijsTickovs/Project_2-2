@@ -9,7 +9,8 @@ import java.io.IOException;
 
 //TODO:
 // - (1) write down the question - need to process it..
-// - (2) excel style action input
+// - (2) input all possible slots
+// - (3) excel style action input
 
 
 public class HelloApplication extends Application {
