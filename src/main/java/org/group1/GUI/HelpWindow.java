@@ -2,6 +2,7 @@ package org.group1.GUI;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,6 +24,26 @@ public class HelpWindow implements CustomStage{
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         keyboardHandler();
+//
+
+
+
+        // TODO: make it bonitinho
+        Label exampleLabel = new Label("Example: What <DRINK> does <USER> like?");
+        Label exampleLabel2 = new Label("Example: What <LOCATION> is <COMPANY> head quarters located?");
+
+        exampleLabel.setLayoutX(10);
+        exampleLabel.setLayoutY(10);
+
+        exampleLabel2.setLayoutX(10);
+        exampleLabel2.setLayoutY(30);
+
+        exampleLabel.setWrapText(true);
+        exampleLabel2.setWrapText(true);
+
+        UIpane.getChildren().add(exampleLabel);
+        UIpane.getChildren().add(exampleLabel2);
+
     }
 
     public void setStage(Stage mainStage){
@@ -42,11 +63,18 @@ public class HelpWindow implements CustomStage{
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.ESCAPE) {
                     System.out.println("hiddfsdp");
-                    ChatWindow chatWindow = new ChatWindow();
+                    ChatWindow chatWindow = null;
+                    try {
+                        chatWindow = new ChatWindow();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     chatWindow.setStage(UIstage);
                     ke.consume();
                 }
             }
         });
     }
+
+    //TODO: add example text here
 }

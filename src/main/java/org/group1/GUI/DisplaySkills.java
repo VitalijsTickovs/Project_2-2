@@ -158,7 +158,12 @@ public class DisplaySkills implements  CustomStage {
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ChatWindow chatWindow = new ChatWindow();
+                ChatWindow chatWindow = null;
+                try {
+                    chatWindow = new ChatWindow();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 chatWindow.setStage(UIstage,chatStage);
             }
         });

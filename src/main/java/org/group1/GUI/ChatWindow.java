@@ -1,5 +1,7 @@
 package org.group1.GUI;
 
+
+import org.group1.response.GenerateResponse;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -19,8 +21,12 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import org.apache.commons.lang3.text.WordUtils;
 
+
 public class ChatWindow implements CustomStage {
 
+    //TODO:
+    // - clear the input window after user input is send
+    // - ...
     ArrayList<TextArea> listText= new ArrayList();
     String chat = "";
     String currentUserInput="";
@@ -233,9 +239,9 @@ public class ChatWindow implements CustomStage {
                      y+=listText.get(listText.size()-1).getPrefHeight()+20;
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
-                     //TODO: BOT RESPONSE LOGIC
-                     //bot responding
-                     setBotChatText("something");
+                     //Getting response from the bot
+                     setBotChatText(responseGenerator.getBotResponse(userInput.getText()));
+
                      listText.add(new TextArea(currentBotInput));
                      if ((countCharAtLongestLine(userInput.getText())*7+20)>220){
                          listText.get(listText.size()-1).setPrefSize(220,countLines(currentBotInput));
@@ -269,12 +275,12 @@ public class ChatWindow implements CustomStage {
          });
 
      }
-         // Here we set bot response
+         // TODO: Here we set bot response
          public String getBotInputString(){
              return currentBotInput;
          }
-         public void setBotChatText(String string){
-         this.currentBotInput = "I cannot answer this question";
+         public void setBotChatText(String botResponse){
+            this.currentBotInput = botResponse;
          }
          public String getUserInputString(){
             return currentUserInput;
