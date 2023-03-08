@@ -222,6 +222,7 @@ public class SkillEditor implements CustomStage{
                     // TODO: write to txt file in recourses/skills/rule_
 
                 }  else System.out.println("invalid message");
+                questionInput.setText("");
             }
         });
         sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {

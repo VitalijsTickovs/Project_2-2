@@ -134,4 +134,13 @@ public class FileService {
         writer.close();
 
     }
+    public void writeToFile(String id, String text) throws IOException{
+        File file = new File(path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION);
+
+        FileWriter writer = new FileWriter(file);
+
+        writer.append(text);
+
+        writer.close();
+    }
 }
