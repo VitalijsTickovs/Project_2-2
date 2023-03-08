@@ -31,8 +31,10 @@ public class SkillEditor implements CustomStage{
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button displaySkills,back,help,sendUserInput,defineSkills,addActions;
+    private Button displaySkills,back,help,sendUserInput,defineSkills,addActions,actionButton, slotButton;
     ErrorHandling errorHandling = new ErrorHandling();
+
+    private String skillInput="";
     public  SkillEditor(){
         UIpane = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
@@ -220,23 +222,84 @@ public class SkillEditor implements CustomStage{
             public void handle(ActionEvent event) {
                 if(errorHandling.stringLengthError(questionInput.getText())) {
                     String question = "Question " + questionInput.getText();
+                    skillInput += question +"\n";
+                    //TODO:
+                    // - clear window
+                    // - show prompt to 'add slots and actions' (cause question was done)
+
+                    UIpane.getChildren().remove(sendUserInput);
+                    username.setText("Add the slots");
+                    UIpane.getChildren().add(slotButton);
+//                    // this makes the next available rule .txt
+//                    // in which we will add the actions & slots
+                }  else System.out.println("invalid message");
+                questionInput.setText("");
+                // TODO: go into this file to define slots and actions...
+
+            }
+        });
+
+        slotButton = new Button();
+        slotButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        slotButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        slotButton.setText("SUBMIT SLOT");
+        slotButton.setTextFill(Color.WHITE);
+        slotButton.setCursor(Cursor.CLOSED_HAND);
+        slotButton.setPrefSize(200,50);
+        slotButton.setLayoutX(700);
+        slotButton.setLayoutY(380);
+        slotButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(errorHandling.stringLengthError(questionInput.getText())) {
+                    String slot = "Slot" + questionInput.getText();
+                    //TODO for each line add "Slot" before each placeholder
+                    skillInput += slot + "\n";
+
+                    UIpane.getChildren().remove(slotButton);
+                    username.setText("Add the actions");
+                    UIpane.getChildren().add(actionButton);
+                }  else System.out.println("invalid message");
+                questionInput.setText("");
+            }
+        });
+
+        actionButton = new Button();
+        actionButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        actionButton.setText("SUBMIT ACTION");
+        actionButton.setTextFill(Color.WHITE);
+        actionButton.setCursor(Cursor.CLOSED_HAND);
+        actionButton.setPrefSize(200,50);
+        actionButton.setLayoutX(500);
+        actionButton.setLayoutY(380);
+        actionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(errorHandling.stringLengthError(questionInput.getText())) {
+                    String action = "Action " + questionInput.getText();
+                    skillInput += action +"\n";
+                    skillInput += "Action I have no idea.";
+                    //TODO:
+                    // - clear window
+                    // - show prompt to 'add slots and actions' (cause question was done)
+
 
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                     try {
-                        fs = new FileService();
+                        fs.write(skillInput);
+                        skillInput="";
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    try {
-                        fs.write(question);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    // TODO: write to txt file in recourses/skills/rule_
+                    //transition into slot input, then into action input
+                    //each time open the same file id, used in fs
 
                 }  else System.out.println("invalid message");
                 questionInput.setText("");
+                // TODO: go into this file to define slots and actions...
+
             }
         });
         sendUserInput.setOnMouseEntered(new EventHandler<MouseEvent>() {

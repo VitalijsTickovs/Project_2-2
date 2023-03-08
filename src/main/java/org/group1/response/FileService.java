@@ -74,12 +74,14 @@ public class FileService {
     private String getNextName() throws IOException{
 
         String[] files = getFilesPath();
+        System.out.println("File count: " + files.length);
 
         if (id == 0){
-            id = Integer.parseInt(files[0].substring(
-                    files[files.length - 1].length() - (FILES_EXTENSION.length() + (files.length + "").length()),
-                    files[files.length - 1].length() - FILES_EXTENSION.length())
-            );
+//            id = Integer.parseInt(files[0].substring(
+//                    files[files.length - 1].length() - (FILES_EXTENSION.length() + (files.length + "").length()),
+//                    files[files.length - 1].length() - FILES_EXTENSION.length())
+//            );
+            id = files.length;
         }
 
         return  path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION;
@@ -133,14 +135,5 @@ public class FileService {
 
         writer.close();
 
-    }
-    public void writeToFile(String id, String text) throws IOException{
-        File file = new File(path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION);
-
-        FileWriter writer = new FileWriter(file);
-
-        writer.append(text);
-
-        writer.close();
     }
 }
