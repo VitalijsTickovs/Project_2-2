@@ -1,5 +1,0 @@
-Question What <LOCATION> is <COMPANY> stationed
-Slot <LOCATION> Maastricht
-Slot <COMPANY> QPark
-Action <COMPANY> QPark <LOCATION> Maastricht Qpark is located in Maastricht
-Action I have no idea
