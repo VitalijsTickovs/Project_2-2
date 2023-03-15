@@ -10,7 +10,6 @@ public class SkillProcessor {
 
     private String originalQuestion;
     private String deafault;
- //quest 1 ksjabcka      ans kasbdola
     private Set<String> slotSet;
     private List<String> questions;
     private List<String> actions;

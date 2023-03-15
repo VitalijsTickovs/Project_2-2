@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.response.FileService;
 
 import java.util.ArrayList;
 
@@ -24,9 +25,11 @@ public class DisplaySkills implements  CustomStage {
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button submit,displaySkills,back,help,defineSkills,addActions;
+    private Button submit,displaySkills,back,help,defineSkills;
+    private int skillSize;
 
-    public DisplaySkills(){
+    public DisplaySkills(int id){
+        this.skillSize = id;
         loadSkillsFromDatabase();
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
@@ -45,7 +48,7 @@ public class DisplaySkills implements  CustomStage {
     }
     //TODO: connect it to the database
     public void loadSkillsFromDatabase(){
-        for (int i = 1; i < 15; i++) {
+        for (int i = 1; i < this.skillSize; i++) {
             skills.add("Skill "+ i);
         }
     }
@@ -61,18 +64,6 @@ public class DisplaySkills implements  CustomStage {
         displaySkills.setTextFill(Color.rgb(42,97,117));
         displaySkills.setCursor(Cursor.CLOSED_HAND);
         UIpane.getChildren().add(displaySkills);
-
-        //add actions button
-        addActions = new Button();
-        addActions.setText("ADD ACTIONS");
-        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        addActions.setStyle("-fx-background-color: transparent");
-        addActions.setTextFill(Color.WHITE);
-        addActions.setLayoutX(20);
-        addActions.setLayoutY(400);
-        addActions.setTextFill(Color.rgb(42,97,117));
-        addActions.setCursor(Cursor.CLOSED_HAND);
-        UIpane.getChildren().add(addActions);
 
         //defineSkills button
         defineSkills = new Button();

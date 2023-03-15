@@ -77,15 +77,11 @@ public class FileService {
         System.out.println("File count: " + files.length);
 
         if (id == 0){
-//            id = Integer.parseInt(files[0].substring(
-//                    files[files.length - 1].length() - (FILES_EXTENSION.length() + (files.length + "").length()),
-//                    files[files.length - 1].length() - FILES_EXTENSION.length())
-//            );
             id = files.length;
         }
 
 
-        System.out.println("epic: " + path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION);
+        System.out.println("epic: " + path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION);
         return  path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION;
     }
 
@@ -108,7 +104,7 @@ public class FileService {
      * ESTO ES UNA PUTA LOCURA
      * @return
      */
-    public File[] getFiles(){
+    public static File[] getFiles(){
 
         return new File((path + DATA_TXT_SKILLS.path)).listFiles(); }
 
@@ -136,5 +132,9 @@ public class FileService {
 
         writer.close();
 
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -20,7 +20,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.response.FileService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class SkillDetails implements CustomStage {
     public SkillDetails(String skillName){
         setColumnNames();
         this.skillName=skillName;
+
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
@@ -109,7 +112,7 @@ public class SkillDetails implements CustomStage {
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DisplaySkills displaySkills = new DisplaySkills();
+                DisplaySkills displaySkills = new DisplaySkills(FileService.getFiles().length);
                 displaySkills.setStage(UIstage,chatStage);
             }
         });
