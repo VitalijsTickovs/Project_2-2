@@ -1,5 +1,8 @@
 package org.group1.GUI;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -8,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -17,6 +21,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SkillDetails implements CustomStage {
     // TODO: YOU WILL HAVE TO DEAL WITH CHAT HISTORY
     private AnchorPane UIpane,scrollChat;
@@ -24,8 +31,22 @@ public class SkillDetails implements CustomStage {
     private Scene UIscene;
     private Stage chatStage;
     private Button back,help;
+    List<String> columnNames;
     String skillName;
+
+
+    private TableView<TestSkill> table = new TableView<TestSkill>();
+    private final ObservableList<TestSkill> data =
+            FXCollections.observableArrayList(
+                    new TestSkill("Jacob", "Smith", "jacob.smith@example.com"),
+                    new TestSkill("Isabella", "Johnson", "isabella.johnson@example.com"),
+                    new TestSkill("Ethan", "Williams", "ethan.williams@example.com"),
+                    new TestSkill("Emma", "Jones", "emma.jones@example.com"),
+                    new TestSkill("Michael", "Brown", "michael.brown@example.com")
+            );
+
     public SkillDetails(String skillName){
+        setColumnNames();
         this.skillName=skillName;
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
@@ -41,7 +62,13 @@ public class SkillDetails implements CustomStage {
         mainStage.close();
         UIstage.show();
     }
-
+    public void setColumnNames(){
+        columnNames = new ArrayList<>();
+        columnNames.add("hello");
+        columnNames.add("name");
+        columnNames.add("ofjdaisf");
+        columnNames.add("nafaisdjjiofdsme");
+    }
 
     @Override
     public void design() {
@@ -137,18 +164,51 @@ public class SkillDetails implements CustomStage {
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
         //Display the skills
         //TODO : MAKE THIS AUTOMATED
-        TableView table = new TableView();
+
+        TableView<ObservableList<String>> table = new TableView<>();
         table.setPrefWidth(470);
         table.setEditable(true);
 
-        TableColumn col1 = new TableColumn(" Name");
-        TableColumn col2 = new TableColumn(" Name");
-        TableColumn col3 = new TableColumn(" Name");
-        col1.setPrefWidth(150);
-        col2.setPrefWidth(150);
-        col3.setPrefWidth(150);
+        for (int i = 0; i < columnNames.size(); i++) {
+            final int finalIdx = i;
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+                    columnNames.get(i)
+            );
+            column.setCellValueFactory(param ->
+                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
+            );
+            table.getColumns().add(column);
+        }
+        //add data
+        int N_ROWS=2;
+        String Data="arr";
+        String Mail="more arr";
+        for (int i = 0; i < N_ROWS; i++) {
+            table.getItems().add(
+                    FXCollections.observableArrayList(
+                            Data,Mail,"dsfsd","fdhus"
+                    )
+            );
+            Data="chaneg";
+            Mail="works";
+        }
 
-        table.getColumns().addAll(col1, col2, col3);
+//        TableColumn col1 = new TableColumn(" Name");
+//        TableColumn col2 = new TableColumn(" Name");
+//        TableColumn col3 = new TableColumn(" Name");
+//        col1.setCellValueFactory(
+//                new PropertyValueFactory<TestSkill, String>("firstName"));
+//        col2.setCellValueFactory(
+//                new PropertyValueFactory<TestSkill, String>("lastName"));
+//        col3.setCellValueFactory(
+//                new PropertyValueFactory<TestSkill, String>("email"));
+
+//        col1.setPrefWidth(150);
+//        col2.setPrefWidth(150);
+//        col3.setPrefWidth(150);
+//
+//        table.setItems(data);
+//        table.getColumns().addAll(col1, col2, col3);
         scrollChat.getChildren().add(table);
         scrollPane.setContent(scrollChat);
     }

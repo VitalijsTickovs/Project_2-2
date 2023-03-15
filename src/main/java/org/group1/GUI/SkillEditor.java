@@ -281,7 +281,7 @@ public class SkillEditor implements CustomStage{
 
                     UIpane.getChildren().remove(slotButton);
                     username.setText("Add the actions");
-                    UIpane.getChildren().add(actionButton);
+                  //  UIpane.getChildren().add(actionButton);
                 }  else System.out.println("invalid message");
                 questionInput.setText("");
             }
@@ -315,6 +315,18 @@ public class SkillEditor implements CustomStage{
                 questionInput.setText("");
                 // TODO: go into this file to define slots and actions...
 
+            }
+        });
+        actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
+            }
+        });
+        actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
 

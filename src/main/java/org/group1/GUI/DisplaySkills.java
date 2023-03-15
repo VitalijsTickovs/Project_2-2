@@ -203,6 +203,9 @@ public class DisplaySkills implements  CustomStage {
         });
 
     }
+    public void defineSkillViewTable(){
+        //TODO:
+    }
 
     public void createScrollPane(){
         //scrollpane with skills
