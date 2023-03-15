@@ -291,7 +291,6 @@ public class SkillEditor implements CustomStage{
                     String action = questionInput.getText();
                     skillInput += addNamingAction(toUpper(action));
 
-
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                     try {
