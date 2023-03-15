@@ -49,23 +49,8 @@ public class DisplaySkills implements  CustomStage {
             skills.add("Skill "+ i);
         }
     }
-
-    @Override
-    public void design() {
-
-        Text text = new Text("Choose which skill to access");
-        text.setFont(Font.font("Impact",40));
-        text.setStyle("-fx-font-weight: bold");
-        text.setFill(Color.WHITE);
-        text.setTranslateX(340);
-        text.setTranslateY(40);
-        UIpane.getChildren().add(text);
-
-        //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
-
+    public void createButtons(){
+        // displayskills button
         displaySkills = new Button();
         displaySkills.setText("DISPLAY SKILLS");
         displaySkills.setFont(Font.font("Impact", FontWeight.BOLD,30));
@@ -75,7 +60,7 @@ public class DisplaySkills implements  CustomStage {
         displaySkills.setLayoutY(130);
         displaySkills.setTextFill(Color.rgb(42,97,117));
         displaySkills.setCursor(Cursor.CLOSED_HAND);
-
+        UIpane.getChildren().add(displaySkills);
 
         //add actions button
         addActions = new Button();
@@ -89,8 +74,7 @@ public class DisplaySkills implements  CustomStage {
         addActions.setCursor(Cursor.CLOSED_HAND);
         UIpane.getChildren().add(addActions);
 
-        UIpane.getChildren().add(displaySkills);
-
+        //defineSkills button
         defineSkills = new Button();
         defineSkills.setText("DEFINE SKILLS");
         defineSkills.setFont(Font.font("Impact", FontWeight.BOLD,30));
@@ -98,6 +82,45 @@ public class DisplaySkills implements  CustomStage {
         defineSkills.setTextFill(Color.WHITE);
         defineSkills.setLayoutX(20);
         defineSkills.setLayoutY(170);
+        UIpane.getChildren().add(defineSkills);
+
+        //help button
+        help = new Button();
+        help.setText("HELP");
+        help.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        help.setStyle("-fx-background-color: transparent");
+        help.setTextFill(Color.WHITE);
+        help.setLayoutX(20);
+        help.setLayoutY(210);
+        help.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(help);
+
+        //back button
+        back = new Button();
+        back.setText("BACK");
+        back.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        back.setStyle("-fx-background-color: transparent");
+        back.setTextFill(Color.WHITE);
+        back.setLayoutX(20);
+        back.setLayoutY(250);
+        back.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(back);
+
+        //submit button
+        submit = new Button();
+        submit.setText("LOAD");
+        submit.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        submit.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        submit.setTextFill(Color.WHITE);
+        submit.setCursor(Cursor.CLOSED_HAND);
+        submit.setPrefSize(400,50);
+        submit.setLayoutX(386);
+        submit.setLayoutY(520);
+        UIpane.getChildren().add(submit);
+
+    }
+    public void setButtonsAction(){
+        //define skills action
         defineSkills.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -118,16 +141,8 @@ public class DisplaySkills implements  CustomStage {
                 skillEditor.setStage(UIstage,chatStage);
             }
         });
-        UIpane.getChildren().add(defineSkills);
 
-        help = new Button();
-        help.setText("HELP");
-        help.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        help.setStyle("-fx-background-color: transparent");
-        help.setTextFill(Color.WHITE);
-        help.setLayoutX(20);
-        help.setLayoutY(210);
-        help.setCursor(Cursor.CLOSED_HAND);
+        //help actions
         help.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -146,16 +161,8 @@ public class DisplaySkills implements  CustomStage {
                 //TODO : SET HELP WINDOW
             }
         });
-        UIpane.getChildren().add(help);
 
-        back = new Button();
-        back.setText("BACK");
-        back.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        back.setStyle("-fx-background-color: transparent");
-        back.setTextFill(Color.WHITE);
-        back.setLayoutX(20);
-        back.setLayoutY(250);
-        back.setCursor(Cursor.CLOSED_HAND);
+        //back button actions
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -180,10 +187,24 @@ public class DisplaySkills implements  CustomStage {
                 chatWindow.setStage(UIstage,chatStage);
             }
         });
-        UIpane.getChildren().add(back);
 
+        //submit button action
+        submit.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                submit.setStyle("-fx-background-color: rgba(42,97,117,1)");
+            }
+        });
+        submit.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                submit.setStyle("-fx-background-color: rgba(159,182,189,1)");
+            }
+        });
 
+    }
 
+    public void createScrollPane(){
         //scrollpane with skills
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -240,36 +261,30 @@ public class DisplaySkills implements  CustomStage {
         //scrollChat.getChildren().add();
         scrollPane.setContent(scrollChat);
 
-        submit = new Button();
-        submit.setText("LOAD");
-        submit.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        submit.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        submit.setTextFill(Color.WHITE);
-        submit.setCursor(Cursor.CLOSED_HAND);
-        submit.setPrefSize(400,50);
-        submit.setLayoutX(386);
-        submit.setLayoutY(520);
-//        submit.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                if(errorHandling.stringLengthError(questionInput.getText())) {
-//
-//                }else System.out.println("invalid message");
-//            }
-//        });
-        submit.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                submit.setStyle("-fx-background-color: rgba(42,97,117,1)");
-            }
-        });
-        submit.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                submit.setStyle("-fx-background-color: rgba(159,182,189,1)");
-            }
-        });
-        UIpane.getChildren().add(submit);
+    }
+
+    /**
+     * Main method that combines all javafx components
+     */
+    @Override
+    public void design() {
+
+        Text text = new Text("Choose which skill to access");
+        text.setFont(Font.font("Impact",40));
+        text.setStyle("-fx-font-weight: bold");
+        text.setFill(Color.WHITE);
+        text.setTranslateX(340);
+        text.setTranslateY(40);
+        UIpane.getChildren().add(text);
+
+        //side menu
+        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
+        sideMenu.setFill(Color.rgb(159,182,189));
+        UIpane.getChildren().add(sideMenu);
+
+        createButtons();
+        setButtonsAction();
+        createScrollPane();
 
     }
 }
