@@ -11,6 +11,7 @@ public class DastabaseMenager {
     final String password = "Jirka123";
     private Connection connection;
     private Statement statement;
+    //
     public DastabaseMenager() {
         try {
             connection = DriverManager.getConnection(DB_URL, username, password);

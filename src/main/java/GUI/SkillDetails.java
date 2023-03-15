@@ -140,6 +140,7 @@ public class SkillDetails implements CustomStage {
         TableView table = new TableView();
         table.setPrefWidth(470);
         table.setEditable(true);
+        //
 
         TableColumn col1 = new TableColumn(" Name");
         TableColumn col2 = new TableColumn(" Name");

@@ -114,7 +114,7 @@ public class ChatWindow implements CustomStage {
          exitButton.setCursor(Cursor.CLOSED_HAND);
          exitButton.setLayoutY(250);
          UIpane.getChildren().add(exitButton);
-
+        //
          // send button
          sendUserInput = new Button();
          sendUserInput.setText("SEND");

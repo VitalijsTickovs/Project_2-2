@@ -1,6 +1,7 @@
 package GUI;
 
 public class ErrorHandling {
+    //
     public boolean stringLengthError(String string){
         System.out.println(string);
         System.out.println(string.length());

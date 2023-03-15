@@ -174,6 +174,7 @@ public class LoginScreen implements CustomStage {
             }
         });
     }
+    //
     public boolean checkValidLodgin() throws SQLException {
         ArrayList<String> username = databaseMenager.getAllUsernames();
         ArrayList<String> password = databaseMenager.getAllPasswords();

@@ -7,3 +7,4 @@ CREATE TABLE users (
 
 );
 INSERT INTO users VALUES('Natalia','12345');
+//

@@ -23,6 +23,7 @@ public class SkillEditor implements CustomStage{
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
+    //
     private Button displaySkills,back,help,sendUserInput,defineSkills;
     ErrorHandling errorHandling = new ErrorHandling();
     public  SkillEditor(){
