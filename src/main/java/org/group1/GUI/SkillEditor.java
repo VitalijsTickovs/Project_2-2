@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import org.group1.response.FileService;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class SkillEditor implements CustomStage{
@@ -37,7 +38,6 @@ public class SkillEditor implements CustomStage{
 
     private String skillInput="";
     public  SkillEditor(){
-
         try {
             fs = new FileService();
         } catch (IOException e) {
@@ -165,12 +165,12 @@ public class SkillEditor implements CustomStage{
         actionButton.setLayoutX(500);
         actionButton.setLayoutY(380);
     }
-    public void defineButtonActions(){
+    public void defineButtonActions() {
         //displaySkillsAction
         displaySkills.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                displaySkills.setTextFill(Color.rgb(42,97,117));
+                displaySkills.setTextFill(Color.rgb(42, 97, 117));
             }
         });
         displaySkills.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -182,8 +182,8 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DisplaySkills displaySkills = new DisplaySkills();
-                displaySkills.setStage(UIstage,chatStage);
+                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
+                displaySkills.setStage(UIstage, chatStage);
             }
         });
         //define skills action
@@ -198,7 +198,7 @@ public class SkillEditor implements CustomStage{
         help.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                help.setTextFill(Color.rgb(42,97,117));
+                help.setTextFill(Color.rgb(42, 97, 117));
             }
         });
         help.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -218,7 +218,7 @@ public class SkillEditor implements CustomStage{
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                back.setTextFill(Color.rgb(42,97,117));
+                back.setTextFill(Color.rgb(42, 97, 117));
             }
         });
         back.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -231,7 +231,7 @@ public class SkillEditor implements CustomStage{
             @Override
             public void handle(ActionEvent event) {
                 ChatWindow chatWindow = new ChatWindow();
-                chatWindow.setStage(UIstage,chatStage);
+                chatWindow.setStage(UIstage, chatStage);
             }
         });
 
@@ -239,19 +239,16 @@ public class SkillEditor implements CustomStage{
         sendUserInput.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(errorHandling.stringLengthError(questionInput.getText())) {
-                    String question = "Question " + questionInput.getText();
-                    skillInput += question +"\n";
-                    //TODO:
-                    // - clear window
-                    // - show prompt to 'add slots and actions' (cause question was done)
+                if (errorHandling.stringLengthError(questionInput.getText())) {
+                    String question = questionInput.getText();
+                    skillInput += "Question " + toUpper(question);
 
                     UIpane.getChildren().remove(sendUserInput);
                     username.setText("Add the slots");
                     UIpane.getChildren().add(slotButton);
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
-                }  else System.out.println("invalid message");
+                } else System.out.println("invalid message");
                 questionInput.setText("");
                 // TODO: go into this file to define slots and actions...
 
@@ -274,15 +271,14 @@ public class SkillEditor implements CustomStage{
         slotButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(errorHandling.stringLengthError(questionInput.getText())) {
-                    String slot = "Slot" + questionInput.getText();
-                    //TODO for each line add "Slot" before each placeholder
-                    skillInput += slot + "\n";
+                if (errorHandling.stringLengthError(questionInput.getText())) {
+                    String slot = questionInput.getText();
+                    skillInput += addNamingSlot(toUpper(slot));
 
                     UIpane.getChildren().remove(slotButton);
                     username.setText("Add the actions");
-                  //  UIpane.getChildren().add(actionButton);
-                }  else System.out.println("invalid message");
+                    //  UIpane.getChildren().add(actionButton);
+                } else System.out.println("invalid message");
                 questionInput.setText("");
             }
         });
@@ -291,30 +287,23 @@ public class SkillEditor implements CustomStage{
         actionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(errorHandling.stringLengthError(questionInput.getText())) {
-                    String action = "Action " + questionInput.getText();
-                    skillInput += action +"\n";
-                    skillInput += "Action I have no idea.";
-                    //TODO:
-                    // - clear window
-                    // - show prompt to 'add slots and actions' (cause question was done)
-
+                if (errorHandling.stringLengthError(questionInput.getText())) {
+                    String action = questionInput.getText();
+                    skillInput += addNamingAction(toUpper(action));
 
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                     try {
                         fs.write(skillInput);
-                        skillInput="";
+                        skillInput = "";
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                     //transition into slot input, then into action input
                     //each time open the same file id, used in fs
 
-                }  else System.out.println("invalid message");
+                } else System.out.println("invalid message");
                 questionInput.setText("");
-                // TODO: go into this file to define slots and actions...
-
             }
         });
         actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -329,10 +318,40 @@ public class SkillEditor implements CustomStage{
                 actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
-
-
     }
 
+    private String addNamingAction(String string){
+        String[] stringArr = string.split("\n");
+        for(int i=0; i<stringArr.length; i++){
+            stringArr[i] = "Action " + stringArr[i];
+        }
+        string = myArrayToString(stringArr);
+        return string + "/nAction I have no idea";
+    }
+
+    private String addNamingSlot(String string){
+        String[] stringArr = string.split("\n| ");
+        for(int i=0; i<stringArr.length; i++){
+            if(stringArr[i].matches(".*?<.+>.*?")){
+                stringArr[i] = "Slot " + stringArr[i];
+            }
+        }
+        string = myArrayToString(stringArr);
+        return string;
+    }
+
+    private String toUpper(String string){
+        //Make placeholder upper case
+        String[] slotArray = string.split("\n| ");
+
+        for(int i=0; i<slotArray.length; i++){
+            if(slotArray[i].matches(".*?<.+>.*?")){
+                slotArray[i] = slotArray[i].toUpperCase();
+            }
+        }
+        string = myArrayToString(slotArray);
+        return string;
+    }
 
     @Override
     public void design() {
@@ -362,5 +381,21 @@ public class SkillEditor implements CustomStage{
         createButtons();
         defineButtonActions();
     }
+
+    private String myArrayToString(String[] string){
+        String finalString = "";
+        for(String str: string){
+            if(str.contains("Slot") || str.contains("Action")) finalString += "\n";
+            finalString += str + " ";
+        }
+
+        return finalString;
+
+    }
+
+
+    /********* TODO: Remove and Modify skills from GUI *******/
+
+
 
 }

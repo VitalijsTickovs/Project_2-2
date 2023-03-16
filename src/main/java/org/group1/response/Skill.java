@@ -2,6 +2,7 @@ package org.group1.response;
 
 
 
+import org.group1.response.database.SQLtoTxt;
 import org.group1.textprocessing.*;
 import org.group1.utilities.Distances;
 
@@ -37,17 +38,16 @@ public class Skill {
      * @throws IOException
      */
     public void generateSkills() throws Exception {
+        //
+        List<String[]> texts = service.readAll();
 
-        List<String> texts = service.readAll();
-
-        for (String text : texts){
-            SkillProcessor sp = new SkillProcessor(text);
+        for (String[] text : texts){
+            SkillProcessor sp = new SkillProcessor(text[0], text[1]);
             List<String> questions = sp.getQuestions();
             List<String> actions = sp.getActions();
             String deafault = sp.getDeafault();
 
-
-           Set<String> deafaultKey = ComplexProcess
+            Set<String> deafaultKey = ComplexProcess
                     .process(
                             SimpleProcess
                                     .process(sp
@@ -58,7 +58,6 @@ public class Skill {
            for (int i = 0; i < questions.size(); i++) {
 
                INVERT.put(actions.get(i), questions.get(i)); //TODO  not consistent
-
                Set<String> nonProcessKey = new HashSet<>(ComplexProcess
                        .lemmas(
                                SimpleProcess
@@ -213,6 +212,9 @@ public class Skill {
 
     public static void main(String[] args) throws Exception {
         Skill s = new Skill();
+
+
+
 
         System.out.println(s.getSkill("Wich lcturs are here on Monday t 9"));
         System.out.println(s.getSkill("Which lectures MonFay at xiv"));

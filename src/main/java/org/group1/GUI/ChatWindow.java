@@ -264,6 +264,8 @@ public class ChatWindow implements CustomStage {
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
                      //scrollPane.setVvalue(1.0);
+
+                     userInput.setText("");
                  }else System.out.println("invalid message");
              }
          });

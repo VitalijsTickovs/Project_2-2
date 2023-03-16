@@ -1,12 +1,11 @@
 package org.group1.response;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.*;
 
 import static org.group1.enums.Paths.DATA_TXT_SKILLS;
 
@@ -16,19 +15,26 @@ public class FileService {
     private static int id = 0;
     private static String path;
     private final String FILES_NAMES = "Rule_";
-    private final String FILES_EXTENSION = ".txt";
+    private final  String FILES_EXTENSION = ".txt";
 
     public FileService() throws IOException {
         path = new File(".").getCanonicalPath();
     }
 
-    public List<String> readAll() throws IOException {
+    public List<String[]> readAll() throws IOException {
 
         String[] files = getFilesPath();
 
-        List<String> allFiles = new ArrayList<>();
+        List<String[]> allFiles = new ArrayList<>();
 
-        for (String file : files) allFiles.add(read(file));
+        for (String file : files) {
+            String[] readFile = new String[]{read(file),
+                    file
+                            .replace(path + DATA_TXT_SKILLS.path+FILES_NAMES,"")
+                            .replace(FILES_EXTENSION,"")
+                            .trim()};
+            allFiles.add(readFile);
+        }
 
         return allFiles;
     }
@@ -77,15 +83,11 @@ public class FileService {
         System.out.println("File count: " + files.length);
 
         if (id == 0){
-//            id = Integer.parseInt(files[0].substring(
-//                    files[files.length - 1].length() - (FILES_EXTENSION.length() + (files.length + "").length()),
-//                    files[files.length - 1].length() - FILES_EXTENSION.length())
-//            );
             id = files.length;
         }
 
 
-        System.out.println("epic: " + path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION);
+        System.out.println("epic: " + path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION);
         return  path + DATA_TXT_SKILLS.path + FILES_NAMES + (++id) + FILES_EXTENSION;
     }
 
@@ -108,7 +110,7 @@ public class FileService {
      * ESTO ES UNA PUTA LOCURA
      * @return
      */
-    public File[] getFiles(){
+    public static File[] getFiles(){
 
         return new File((path + DATA_TXT_SKILLS.path)).listFiles(); }
 
@@ -136,5 +138,26 @@ public class FileService {
 
         writer.close();
 
+    }
+
+    public void overWrite(String id, String text){
+        String filePath = path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION;
+
+        String line="";
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            line = reader.readLine();
+
+            File file = new File(filePath);
+            FileWriter writer = new FileWriter(file);
+            writer.append(line+"\n"+text);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getId() {
+        return id;
     }
 }
