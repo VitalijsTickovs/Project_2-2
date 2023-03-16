@@ -1,6 +1,9 @@
 package org.group1.response;
 
+import org.bytedeco.opencv.opencv_core.IplROI;
+
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.group1.utilities.RegexUtilities.*;
@@ -11,13 +14,17 @@ public class SkillProcessor {
     private String originalQuestion;
     private String deafault;
     private Set<String> slotSet;
+    private ArrayList<String> slotTypes;
     private List<String> questions;
     private List<String> actions;
+    private HashMap<String, String> slotMapping;
 
     public SkillProcessor(String text) throws Exception {
         this.slotSet = new HashSet<>();
         questions = new LinkedList<>();
         actions = new LinkedList<>();
+        this.slotTypes = new ArrayList<>();
+        this.slotMapping = new HashMap<>();
         processText(text);
 
     }
@@ -28,6 +35,21 @@ public class SkillProcessor {
         processQuestion(text);
         processSlot(text);
         processAction(text);
+        //TODO Link with database
+
+        TxtToSQL ts = new TxtToSQL();
+        String tableName = "rule";
+        ArrayList<String> slot = new ArrayList<>();
+        slot.add("Slot Type"); slot.add("Slot Value");
+        slotTypes.add("Action");
+        ts.createTable(tableName, slotTypes);
+        ts.createTable("Slots" ,slot);
+
+        for(String key: slotMapping.keySet()){
+            ts.insertRecord("Slots",
+                    new String[]{"Slot Type", "Slot Value"},
+                    new String[]{key, slotMapping.get(key)});
+        }
     }
 
 
@@ -37,15 +59,32 @@ public class SkillProcessor {
                 .get(0)
                 .replace("Question", "")
                 .trim();
+
+        // Slot types
+        String pattern = "<([^>]*)>";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(originalQuestion);
+
+        while (m.find()) {
+            slotTypes.add(m.group(1));
+        }
     }
 
     public void processSlot(String text){
 
         // HERE I FILTER THE TEXT IN LINES I ONLY WANT THE LINES THAT START WITH SLOT
         List<String> slotList = filterLineByRegex(text, "Slot");
-
         // HERE I DELETE EVERYTHING AND I LEAVE THE WORD.
         for (int i = 0; i < slotList.size(); i++) {
+            String[] mapping = slotList
+                    .get(i)
+                    .replace("<", "")
+                    .replace(">", "")
+                    .replace("Slot ", "")
+                    .split(" ");
+
+            slotMapping.put(myToString(Arrays.copyOfRange(mapping,1,mapping.length)),mapping[0]);
+
             String temp = slotList
                     .get(i)
                     .replace("Slot", "")
@@ -118,6 +157,25 @@ public class SkillProcessor {
 
     }
 
+    public static String myToString(Object[] a) {
+        if (a == null)
+            return "null";
+
+        int iMax = a.length - 1;
+        if (iMax == -1)
+            return "";
+
+        StringBuilder b = new StringBuilder();
+        if(a.length>1) {
+            for (int i = 0; i < a.length; i++) {
+                b.append(String.valueOf(a[i]));
+                b.append(" ");
+            }
+        }else{
+            b.append(String.valueOf(a[0]));
+        }
+        return b.toString();
+    }
 
     public String getDeafault() {
         return deafault;

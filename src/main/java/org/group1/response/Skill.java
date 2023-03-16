@@ -46,8 +46,7 @@ public class Skill {
             List<String> actions = sp.getActions();
             String deafault = sp.getDeafault();
 
-
-           Set<String> deafaultKey = ComplexProcess
+            Set<String> deafaultKey = ComplexProcess
                     .process(
                             SimpleProcess
                                     .process(sp
@@ -213,6 +212,9 @@ public class Skill {
 
     public static void main(String[] args) throws Exception {
         Skill s = new Skill();
+
+
+
 
         System.out.println(s.getSkill("Wich lcturs are here on Monday t 9"));
         System.out.println(s.getSkill("Which lectures MonFay at xiv"));
