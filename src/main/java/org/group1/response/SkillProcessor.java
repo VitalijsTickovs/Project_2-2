@@ -1,6 +1,7 @@
 package org.group1.response;
 
-import org.bytedeco.opencv.opencv_core.IplROI;
+import org.group1.response.database.Slots;
+import org.group1.response.database.TxtToSQL;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import static org.group1.utilities.RegexUtilities.*;
 
 public class SkillProcessor {
 
+    private String id;
     private String originalQuestion;
     private String deafault;
     private Set<String> slotSet;
@@ -26,8 +28,8 @@ public class SkillProcessor {
         this.slotTypes = new ArrayList<>();
         this.slotMapping = new HashMap<>();
         processText(text);
-
     }
+
 
 
 
@@ -37,19 +39,22 @@ public class SkillProcessor {
         processAction(text);
         //TODO Link with database
 
-        TxtToSQL ts = new TxtToSQL();
-        String tableName = "rule";
-        ArrayList<String> slot = new ArrayList<>();
-        slot.add("Slot Type"); slot.add("Slot Value");
-        slotTypes.add("Action");
-        ts.createTable(tableName, slotTypes);
-        ts.createTable("Slots" ,slot);
+        // TODO - move it later (important how we control this process
+        // • This will be the ActionID table
+        //
 
-        for(String key: slotMapping.keySet()){
-            ts.insertRecord("Slots",
-                    new String[]{"Slot Type", "Slot Value"},
-                    new String[]{key, slotMapping.get(key)});
+
+        TxtToSQL ts = new TxtToSQL();
+
+        for(Set<Slots> key: this.mappedActions.keySet()){
+            ts.insertAction(key, mappedActions.get(key), id);
         }
+        for(String key: slotMapping.keySet()){
+            ts.insertRecord("slot_"+id,
+                    new String[]{"SlotType", "SlotValue"},
+                    new String[]{slotMapping.get(key), key});
+        }
+
     }
 
 

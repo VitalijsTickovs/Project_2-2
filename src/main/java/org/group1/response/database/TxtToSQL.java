@@ -1,8 +1,6 @@
-package org.group1.response;
+package org.group1.response.database;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,10 +8,6 @@ import java.util.HashMap;
 public class TxtToSQL {
 
     private ArrayList<String> slotType = new ArrayList<>();
-
-    // TODO:
-    // - ADD GENERIC ROW ACTION 'I DON'T HAVE AN IDEA'
-
 
     int tableID = 1;                                        // ...
     String tableName = "Rule " + tableID;                   // ...
@@ -57,20 +51,20 @@ public class TxtToSQL {
     }
 
     
-    public void createTableSlot(HashMap<String, String> mapping){
-        try{
-            String sql = "CREATE TABLE Slots" +" (";
-
-            Connection conn = DriverManager.getConnection(url, user, password);
-            Statement stmt = conn.createStatement();
-
-            for(int i=0; i<2; i++){
-
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
+//    public void createTableSlot(HashMap<String, String> mapping){
+//        try{
+//            String sql = "CREATE TABLE Slots" +" (";
+//
+//            Connection conn = DriverManager.getConnection(url, user, password);
+//            Statement stmt = conn.createStatement();
+//
+//            for(int i=0; i<2; i++){
+//
+//            }
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
@@ -98,7 +92,10 @@ public class TxtToSQL {
                 sql += "'" + slotValue[i] + "'";
                 if(i+1<slotType.length) sql += ",";
             }
-            sql += ")";
+            
+            sql += ");";
+            
+
             // SQL query
                 // slotType + ") VALUES ('" + slotValue + "')";
 
@@ -114,6 +111,27 @@ public class TxtToSQL {
         }
     }
 
+
+    // ======================================
+
+    // TODO: here we make
+//    public void makeTablesFromTXT(){
+////        makeSlotIDtable();
+////        makeActionIDtable();
+//    }
+//
+////    public void makeSlotIDtable(String text){
+////
+////
+////
+////    }
+////
+////    public void makeActionIDtable(String text){
+////
+////
+////
+////    }
+//
 
 
     //TODO: extra testing
