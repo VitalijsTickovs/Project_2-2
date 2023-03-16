@@ -46,7 +46,8 @@ public class DisplaySkills implements  CustomStage {
         mainStage.close();
         UIstage.show();
     }
-    //TODO: connect it to the database
+
+    //TODO: connect it to the database (DETERMINES HOW MANY SKILLS WILL BE DISPLAYED ON SCREEN)
     public void loadSkillsFromDatabase(){
         for (int i = 1; i < this.skillSize; i++) {
             skills.add("Skill "+ i);
@@ -194,9 +195,7 @@ public class DisplaySkills implements  CustomStage {
         });
 
     }
-    public void defineSkillViewTable(){
-        //TODO:
-    }
+
 
     public void createScrollPane(){
         //scrollpane with skills
