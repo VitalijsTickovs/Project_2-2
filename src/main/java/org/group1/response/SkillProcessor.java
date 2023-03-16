@@ -22,11 +22,15 @@ public class SkillProcessor {
 
     }
 
+
+
     public void processText(String text) throws Exception {
         processQuestion(text);
         processSlot(text);
         processAction(text);
     }
+
+
 
     public void processQuestion(String text){
         originalQuestion = filterLineByRegex(text, "Question")
