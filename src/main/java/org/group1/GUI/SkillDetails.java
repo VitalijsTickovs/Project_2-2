@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.converter.DefaultStringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +32,9 @@ public class SkillDetails implements CustomStage {
     private Scene UIscene;
     private Stage chatStage;
     private Button back,help;
+    private ScrollPane scrollPane;
     List<String> columnNames;
     String skillName;
-
-
-    private TableView<TestSkill> table = new TableView<TestSkill>();
-    private final ObservableList<TestSkill> data =
-            FXCollections.observableArrayList(
-                    new TestSkill("Jacob", "Smith", "jacob.smith@example.com"),
-                    new TestSkill("Isabella", "Johnson", "isabella.johnson@example.com"),
-                    new TestSkill("Ethan", "Williams", "ethan.williams@example.com"),
-                    new TestSkill("Emma", "Jones", "emma.jones@example.com"),
-                    new TestSkill("Michael", "Brown", "michael.brown@example.com")
-            );
 
     public SkillDetails(String skillName){
         setColumnNames();
@@ -62,30 +53,8 @@ public class SkillDetails implements CustomStage {
         mainStage.close();
         UIstage.show();
     }
-    public void setColumnNames(){
-        columnNames = new ArrayList<>();
-        columnNames.add("hello");
-        columnNames.add("name");
-        columnNames.add("ofjdaisf");
-        columnNames.add("nafaisdjjiofdsme");
-    }
-
-    @Override
-    public void design() {
-
-        Text text = new Text(skillName);
-        text.setFont(Font.font("Impact",40));
-        text.setStyle("-fx-font-weight: bold");
-        text.setFill(Color.WHITE);
-        text.setTranslateX(540);
-        text.setTranslateY(40);
-        UIpane.getChildren().add(text);
-
-        //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
-
+    public void createButtons(){
+        //back button
         back = new Button();
         back.setText("BACK");
         back.setFont(Font.font("Impact", FontWeight.BOLD,30));
@@ -94,6 +63,22 @@ public class SkillDetails implements CustomStage {
         back.setLayoutX(20);
         back.setLayoutY(170);
         back.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(back);
+
+        //help button
+        help = new Button();
+        help.setText("HELP");
+        help.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        help.setStyle("-fx-background-color: transparent");
+        help.setTextFill(Color.WHITE);
+        help.setLayoutX(20);
+        help.setLayoutY(130);
+        help.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(help);
+
+    }
+    public void setButtonActions(){
+        //back button
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -113,16 +98,8 @@ public class SkillDetails implements CustomStage {
                 displaySkills.setStage(UIstage,chatStage);
             }
         });
-        UIpane.getChildren().add(back);
 
-        help = new Button();
-        help.setText("HELP");
-        help.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        help.setStyle("-fx-background-color: transparent");
-        help.setTextFill(Color.WHITE);
-        help.setLayoutX(20);
-        help.setLayoutY(130);
-        help.setCursor(Cursor.CLOSED_HAND);
+        //help button
         help.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -141,13 +118,11 @@ public class SkillDetails implements CustomStage {
                 //TODO : SET HELP WINDOW
             }
         });
-        UIpane.getChildren().add(help);
+    }
+    public void createScrollPane(){
 
-        //Create table
-
-        ScrollPane scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        //scrollChat.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
 
         scrollChat.setStyle("-fx-background-color: transparent");
 
@@ -155,20 +130,25 @@ public class SkillDetails implements CustomStage {
         scrollPane.setTranslateY(50);
         scrollPane.setPrefSize(470,460);
         // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
-        scrollPane.setStyle("-fx-background-color: transparent;"+"-fx-border-color: red" );
+        scrollPane.setStyle("-fx-background-color: transparent;"+"" );
         scrollPane.setContent(scrollChat);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         UIpane.getChildren().add(scrollPane);
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
-        //Display the skills
-        //TODO : MAKE THIS AUTOMATED
-
+    }
+    public void createTable(){
         TableView<ObservableList<String>> table = new TableView<>();
-        table.setPrefWidth(470);
-        table.setEditable(true);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        table.setPrefWidth(480);
+        table.setEditable(true);
+        table.setStyle("-fx-cell-size: 50px;");
+        double width = 480.0/columnNames.size();
+
+        ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
+        //columns
         for (int i = 0; i < columnNames.size(); i++) {
             final int finalIdx = i;
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
@@ -177,39 +157,57 @@ public class SkillDetails implements CustomStage {
             column.setCellValueFactory(param ->
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
             );
+            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
+            column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), cbValues));
             table.getColumns().add(column);
         }
-        //add data
+        //row data
         int N_ROWS=2;
         String Data="arr";
         String Mail="more arr";
+
+        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         for (int i = 0; i < N_ROWS; i++) {
             table.getItems().add(
                     FXCollections.observableArrayList(
-                            Data,Mail,"dsfsd","fdhus"
+                            Data,Mail
                     )
             );
-            Data="chaneg";
+
+            Data="chaneg  dfasfajj jshjfkhajk \n jfdsahjkfdsh fdashjkshd fjadshkfjh";
             Mail="works";
         }
-
-//        TableColumn col1 = new TableColumn(" Name");
-//        TableColumn col2 = new TableColumn(" Name");
-//        TableColumn col3 = new TableColumn(" Name");
-//        col1.setCellValueFactory(
-//                new PropertyValueFactory<TestSkill, String>("firstName"));
-//        col2.setCellValueFactory(
-//                new PropertyValueFactory<TestSkill, String>("lastName"));
-//        col3.setCellValueFactory(
-//                new PropertyValueFactory<TestSkill, String>("email"));
-
-//        col1.setPrefWidth(150);
-//        col2.setPrefWidth(150);
-//        col3.setPrefWidth(150);
-//
-//        table.setItems(data);
-//        table.getColumns().addAll(col1, col2, col3);
+        table.setFixedCellSize(60.0);
         scrollChat.getChildren().add(table);
         scrollPane.setContent(scrollChat);
+    }
+
+    public void setColumnNames(){
+        columnNames = new ArrayList<>();
+        columnNames.add("hello");
+        columnNames.add("name");
+    }
+
+    @Override
+    public void design() {
+
+        Text text = new Text(skillName);
+        text.setFont(Font.font("Impact",40));
+        text.setStyle("-fx-font-weight: bold");
+        text.setFill(Color.WHITE);
+        text.setTranslateX(540);
+        text.setTranslateY(40);
+        UIpane.getChildren().add(text);
+
+        //side menu
+        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
+        sideMenu.setFill(Color.rgb(159,182,189));
+        UIpane.getChildren().add(sideMenu);
+
+        createButtons();
+        setButtonActions();
+        createScrollPane();
+        createTable();
+
     }
 }
