@@ -20,13 +20,16 @@ public class SkillProcessor {
     private List<String> questions;
     private List<String> actions;
     private HashMap<String, String> slotMapping;
+    private HashMap<Set<Slots>, String> mappedActions;
 
-    public SkillProcessor(String text) throws Exception {
+    public SkillProcessor(String text, String id) throws Exception {
+        this.id = id;
         this.slotSet = new HashSet<>();
         questions = new LinkedList<>();
         actions = new LinkedList<>();
         this.slotTypes = new ArrayList<>();
         this.slotMapping = new HashMap<>();
+        mappedActions = new HashMap<>();
         processText(text);
     }
 
@@ -37,7 +40,6 @@ public class SkillProcessor {
         processQuestion(text);
         processSlot(text);
         processAction(text);
-        //TODO Link with database
 
         // TODO - move it later (important how we control this process
         // • This will be the ActionID table
@@ -126,7 +128,6 @@ public class SkillProcessor {
                 String variable = getOriginalFormatFromRegex(
                         line
                         ,"<.*?>");
-
                 String newLine = replaceRegex(line, variable, "");
                 String slot = "";
                 int count = 0;
@@ -141,14 +142,17 @@ public class SkillProcessor {
                 data[j][1] = variable;
                 data[j][0] = slot;
             }
+
             makeDataFrame(data, line);
         }
     }
 
     public void makeDataFrame(String[][] data, String action) throws Exception {
         String question = originalQuestion;
-
+        Set<Slots> usedSlots = new HashSet<>();
         for (int i = 0; i < data.length; i++) {
+
+            usedSlots.add(new Slots(data[i]));
             question = replaceRegex(question, data[i][1], data[i][0]);
         }
 
@@ -156,7 +160,7 @@ public class SkillProcessor {
             String temp = getOriginalFormatFromRegex(question, "<.*?>");
             question = replaceRegex(question, temp, "");
         }
-
+        this.mappedActions.put(usedSlots,action);
         questions.add(question);
         actions.add(action);
 

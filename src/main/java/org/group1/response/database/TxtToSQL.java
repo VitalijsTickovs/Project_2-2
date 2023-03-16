@@ -4,6 +4,7 @@ package org.group1.response.database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class TxtToSQL {
 
@@ -35,8 +36,12 @@ public class TxtToSQL {
             Statement stmt = conn.createStatement();
 
             for(int i=0;i<colNames.size();i++){
-                sql = sql + colNames.get(i) + " VARCHAR(255), ";
+                sql = sql + colNames.get(i) + " VARCHAR(255)";
+                if(i+1<colNames.size()){
+                    sql+= ", ";
+                }
             }
+            sql += ");";
             //
             System.out.println(sql);
 
@@ -85,8 +90,7 @@ public class TxtToSQL {
                 sql += slotType[i];
                 if(i+1<slotType.length) sql += ",";
             }
-
-            sql += " VALUES (";
+            sql += ") VALUES (";
 
             for(int i=0; i<slotValue.length; i++){
                 sql += "'" + slotValue[i] + "'";
@@ -109,6 +113,33 @@ public class TxtToSQL {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void insertAction(Set<Slots> slotSet, String action, String id){
+
+        try {
+            Connection conn = DriverManager.getConnection(url, user, password);
+            String sql = "INSERT INTO action_"+ id +"(";
+            for(Slots slot: slotSet){
+                sql += slot.getSlotType() + ",";
+            }
+            sql += "Action) VALUES(";
+
+            for(Slots slot: slotSet){
+                sql += "'" + slot.getSlotValue() + "'" + ",";
+            }
+            sql += "'" +action + "');";
+
+            // Create a statement and execute the query
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+
+            // Close the database connection
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
