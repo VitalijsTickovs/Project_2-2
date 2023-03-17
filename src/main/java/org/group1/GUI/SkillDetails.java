@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -21,7 +22,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
+import org.group1.response.FileService;
+import org.group1.response.database.SQLGUIConnection;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +35,25 @@ public class SkillDetails implements CustomStage {
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
-    private Button back,help;
+    private Button back,help,addAction;
     private ScrollPane scrollPane;
-    List<String> columnNames;
-    String skillName;
+    private TableView<ObservableList<String>> table;
+    private List<String> tempObservable;
+    private int N_ROWS, ColNum;
+    private SQLGUIConnection sql = new SQLGUIConnection();
+    private ArrayList<ObservableList<String>> comboData = new ArrayList<>();
+    FileService fs;
 
-    public SkillDetails(String skillName){
-        setColumnNames();
-        this.skillName=skillName;
+    List<String> columnNames;
+    String tableName;
+    ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
+    public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable) throws SQLException {
+        columnNames = sql.getColumnNames(tableName);
+        slotData(slotTable);
+        this.tableName=tableName;
+        this.ColNum=ColNum;
+        this.N_ROWS=RowNum;
+        collectDataFromDatabase();
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
@@ -47,6 +62,13 @@ public class SkillDetails implements CustomStage {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
+    }
+    public void collectDataFromDatabase() throws SQLException {
+        List<String> tempColName = new ArrayList<>();
+        tempColName = sql.getColumnNames(tableName);
+        for (int i = 0; i < sql.getColumnNumber(tableName); i++) {
+           dataPerColumn.add(sql.getAllColumnData(tempColName.get(i),tableName));
+        }
     }
     public void setStage(Stage mainStage,Stage chatStage){
         this.chatStage=chatStage;
@@ -76,6 +98,17 @@ public class SkillDetails implements CustomStage {
         help.setCursor(Cursor.CLOSED_HAND);
         UIpane.getChildren().add(help);
 
+        //addAction button
+        addAction = new Button();
+        addAction.setText("ADD ROW");
+        addAction.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        addAction.setStyle("-fx-background-color: transparent");
+        addAction.setTextFill(Color.WHITE);
+        addAction.setLayoutX(380);
+        addAction.setLayoutY(450);
+        addAction.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(addAction);
+
     }
     public void setButtonActions(){
         //back button
@@ -94,7 +127,7 @@ public class SkillDetails implements CustomStage {
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DisplaySkills displaySkills = new DisplaySkills();
+                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
                 displaySkills.setStage(UIstage,chatStage);
             }
         });
@@ -118,7 +151,42 @@ public class SkillDetails implements CustomStage {
                 //TODO : SET HELP WINDOW
             }
         });
+
+        //addColumn
+        addAction.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                addAction.setTextFill(Color.rgb(42,97,117));
+            }
+        });
+        addAction.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                addAction.setTextFill(Color.WHITE);
+            }
+        });
+        addAction.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("click");
+                addRow();
+            }
+        });
     }
+    public void addRow(){
+        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
+        tempObservable = new ArrayList<>();
+            for (int j = 0; j < ColNum; j++) {
+                tempObservable.add("-");
+            }
+            table.getItems().add(
+                    FXCollections.observableArrayList(
+                            tempObservable
+                    )
+            );
+            tempObservable.clear();
+    }
+
     public void createScrollPane(){
 
         scrollPane = new ScrollPane();
@@ -128,9 +196,9 @@ public class SkillDetails implements CustomStage {
 
         scrollPane.setTranslateX(340);
         scrollPane.setTranslateY(50);
-        scrollPane.setPrefSize(470,460);
+        scrollPane.setPrefSize(470,400);
         // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
-        scrollPane.setStyle("-fx-background-color: transparent;"+"" );
+        scrollPane.setStyle("-fx-background-color: transparent;"+"-fx-border-color: red" );
         scrollPane.setContent(scrollChat);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -138,14 +206,25 @@ public class SkillDetails implements CustomStage {
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
     }
+    public int countCharAtLongestLine(String string){
+        int count=0;
+        String[] lines = string.split("\r\n|\r|\n");
+        for (int i = 0; i < lines.length; i++) {
+            if(lines[i].length()>count){
+                count = lines[i].length();
+            }
+        }
+
+        System.out.println("counted chars: "+count);
+        return count;
+    }
     public void createTable(){
-        TableView<ObservableList<String>> table = new TableView<>();
+        table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         table.setPrefWidth(480);
         table.setEditable(true);
         table.setStyle("-fx-cell-size: 50px;");
-        double width = 480.0/columnNames.size();
 
         ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
         //columns
@@ -158,40 +237,54 @@ public class SkillDetails implements CustomStage {
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
             );
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
-            column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), cbValues));
+            if(!columnNames.get(i).toUpperCase().equals("ACTION")) {
+                column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), comboData.get(i)));
+            }else {
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+            }
             table.getColumns().add(column);
         }
         //row data
-        int N_ROWS=2;
-        String Data="arr";
-        String Mail="more arr";
+
 
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
+        tempObservable = new ArrayList<>();
         for (int i = 0; i < N_ROWS; i++) {
+            for (int j = 0; j < ColNum; j++) {
+                tempObservable.add(dataPerColumn.get(j).get(i));
+//                System.out.println(dataPerColumn.get(j).get(i));
+//                System.out.println(tempObservable.get(j));
+            }
             table.getItems().add(
                     FXCollections.observableArrayList(
-                            Data,Mail
+                            tempObservable
                     )
             );
-
-            Data="chaneg  dfasfajj jshjfkhajk \n jfdsahjkfdsh fdashjkshd fjadshkfjh";
-            Mail="works";
+            tempObservable.clear();
         }
         table.setFixedCellSize(60.0);
         scrollChat.getChildren().add(table);
         scrollPane.setContent(scrollChat);
     }
+    public void slotData(String slotTable) throws SQLException {
 
-    public void setColumnNames(){
-        columnNames = new ArrayList<>();
-        columnNames.add("hello");
-        columnNames.add("name");
+        List<String> temp = new ArrayList<>();
+        System.out.println("before loop");
+        for (int i = 0; i < columnNames.size(); i++) {
+            System.out.println("in loop");
+            temp = sql.avaiableDataFromSlot(slotTable,columnNames.get(i));
+            ObservableList<String> values = FXCollections.observableArrayList(temp);
+            comboData.add(values);
+        }
+
+//        System.out.println("combo size: "+temp.size());
     }
+
 
     @Override
     public void design() {
 
-        Text text = new Text(skillName);
+        Text text = new Text(tableName);
         text.setFont(Font.font("Impact",40));
         text.setStyle("-fx-font-weight: bold");
         text.setFill(Color.WHITE);
@@ -210,4 +303,5 @@ public class SkillDetails implements CustomStage {
         createTable();
 
     }
+
 }

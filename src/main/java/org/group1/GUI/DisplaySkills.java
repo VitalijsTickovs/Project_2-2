@@ -14,21 +14,27 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.response.FileService;
+import org.group1.response.database.SQLGUIConnection;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DisplaySkills implements  CustomStage {
-    ArrayList<String> skills =new ArrayList();
+    ArrayList<String> actionNames =new ArrayList();
+    ArrayList<String> slotNames =new ArrayList();
     ArrayList<Button> buttons = new ArrayList<>();
-    ErrorHandling errorHandling = new ErrorHandling();
+
     private AnchorPane UIpane,scrollChat;
     private Stage UIstage;
     private Scene UIscene;
     private Stage chatStage;
     private Button submit,displaySkills,back,help,defineSkills;
+    private SQLGUIConnection sql = new SQLGUIConnection();
     private int skillSize;
 
     public DisplaySkills(int id){
+
         this.skillSize = id;
         loadSkillsFromDatabase();
         UIpane = new AnchorPane();
@@ -41,6 +47,7 @@ public class DisplaySkills implements  CustomStage {
         design();
     }
 
+
     public void setStage(Stage mainStage,Stage chatStage){
         this.chatStage=chatStage;
         mainStage.close();
@@ -49,8 +56,16 @@ public class DisplaySkills implements  CustomStage {
 
     //TODO: connect it to the database (DETERMINES HOW MANY SKILLS WILL BE DISPLAYED ON SCREEN)
     public void loadSkillsFromDatabase(){
-        for (int i = 1; i < this.skillSize; i++) {
-            skills.add("Skill "+ i);
+        //slot not used for now
+        List<String> tempSlot = new ArrayList<>();
+        tempSlot = sql.getSlotTableNames();
+        List<String> tempAction = new ArrayList<>();
+        tempAction = sql.getActionTableNames();
+        for (int i = 0; i < this.skillSize; i++) {
+            actionNames.add(tempAction.get(i));
+            System.out.println("action: ");
+            System.out.println(actionNames.get(i));
+            slotNames.add(tempSlot.get(i));
         }
     }
     public void createButtons(){
@@ -217,11 +232,12 @@ public class DisplaySkills implements  CustomStage {
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
 
-        for (int i = 0,y=20; i < skills.size(); i++) {
-            String temp = skills.get(i);
+        for (int i = 0,y=20; i < actionNames.size(); i++) {
+            String temp = actionNames.get(i);
+            String tempSlot = slotNames.get(i);
             buttons.add(new Button());
             Button button = buttons.get(i);
-            button.setText(skills.get(i));
+            button.setText(actionNames.get(i));
             button.setFont(Font.font("Impact", FontWeight.BOLD,30));
             button.setStyle("-fx-background-color: transparent");
             button.setTextFill(Color.WHITE);
@@ -244,9 +260,16 @@ public class DisplaySkills implements  CustomStage {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    System.out.println("i am click");
-                    SkillDetails skillDetails= new SkillDetails(temp);
+                    try {
+                    int colNum = sql.getColumnNumber(temp);
+                    int rowNum = sql.getRowNumber(temp);
+
+                    SkillDetails skillDetails= new SkillDetails(temp,colNum,rowNum,tempSlot);
                     skillDetails.setStage(UIstage,chatStage);
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             scrollChat.getChildren().add(buttons.get(i));

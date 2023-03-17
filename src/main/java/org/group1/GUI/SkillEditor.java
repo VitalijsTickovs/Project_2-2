@@ -182,6 +182,7 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                System.out.println(fs.getFiles().length);
                 DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
                 displaySkills.setStage(UIstage, chatStage);
             }
