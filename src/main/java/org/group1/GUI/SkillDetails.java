@@ -49,6 +49,7 @@ public class SkillDetails implements CustomStage {
     ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
     public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable) throws SQLException {
         columnNames = sql.getColumnNames(tableName);
+        sql.setEmptyNull(tableName,columnNames);
         slotData(slotTable);
         this.tableName=tableName;
         this.ColNum=ColNum;
@@ -127,6 +128,11 @@ public class SkillDetails implements CustomStage {
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                try {
+                    sql.setEmptyNull(tableName,columnNames);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
                 displaySkills.setStage(UIstage,chatStage);
             }
@@ -169,11 +175,15 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("click");
-                addRow();
+                try {
+                    addRow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
-    public void addRow(){
+    public void addRow() throws SQLException {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
             for (int j = 0; j < ColNum; j++) {
@@ -185,6 +195,7 @@ public class SkillDetails implements CustomStage {
                     )
             );
             tempObservable.clear();
+            sql.addRow(tableName,columnNames);
     }
 
     public void createScrollPane(){
@@ -243,6 +254,22 @@ public class SkillDetails implements CustomStage {
                 column.setCellFactory(TextFieldTableCell.forTableColumn());
             }
             table.getColumns().add(column);
+            //handles editiing cells
+            table.getColumns().forEach(col -> {
+                col.setOnEditCommit(event -> {
+                    int row = event.getTablePosition().getRow();
+                    int colIndex = event.getTablePosition().getColumn();
+                    Object newValue = event.getNewValue();
+                    System.out.println(" i am edit row: "+ row + "col :" + colIndex);
+                    System.out.println(newValue.toString());
+                    // handle the edit
+                    try {
+                        sql.updateDatabase(row,newValue.toString(),columnNames.get(colIndex),tableName);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
         }
         //row data
 

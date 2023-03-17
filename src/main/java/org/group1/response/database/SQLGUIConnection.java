@@ -38,7 +38,9 @@ public class SQLGUIConnection {
 
             // Extract the column names from the result set
             while (rs.next()) {
-                columnNames.add(rs.getString("COLUMN_NAME"));
+                if (!rs.getString("COLUMN_NAME").equals("TableID")) {
+                    columnNames.add(rs.getString("COLUMN_NAME"));
+                }
             }
 
             // Close the database connection
@@ -130,7 +132,7 @@ public class SQLGUIConnection {
 
         // flip the column
         System.out.println("COUNT "+count);
-        return count;
+        return count-1;
     }
 
     public int getRowNumber(String tableName) throws SQLException {
@@ -166,6 +168,61 @@ public class SQLGUIConnection {
             System.out.println("IN METHOD " + resultSet.getString("SlotValue"));
         }
         return temp;
+    }
+
+    public void updateDatabase(int rowID,String newValue, String columnName, String tableName) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+        rowID=rowID+1;
+        System.out.println( "ID ROW " + rowID);
+        System.out.println(newValue);
+        System.out.println(columnName);
+        System.out.println(tableName);
+        String sql ="UPDATE "+ tableName +" SET " + columnName +"='" + newValue+ "' WHERE TableID="+rowID;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+
+        //ResultSet resultSet = statement.executeQuery("UPDATE "+ tableName +" SET " + columnName +"='" + newValue+ "' WHERE TableID="+rowID );
+
+    }
+    public void addRow(String tableName, List<String> columnNames) throws SQLException {
+
+        Connection connection = DriverManager.getConnection(url, user, password);
+        Statement statement = connection.createStatement();
+
+        //restart row cound
+        String sql = "SET  @num := 0";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+
+         sql = "UPDATE "+ tableName +" SET TableID = @num := (@num+1)";
+         preparedStatement = connection.prepareStatement(sql);
+         preparedStatement.executeUpdate();
+
+        sql = "ALTER TABLE "+ tableName +" AUTO_INCREMENT = 1";
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+
+         sql ="INSERT INTO `"+ tableName +"`(" + columnNames.get(0) +") VALUES (NULL)";
+         preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.executeUpdate();
+        int rowIndex = getRowNumber(tableName)-1;
+        for (int i = 1; i < columnNames.size(); i++) {
+            sql = "UPDATE "+ tableName +" SET " + columnNames.get(i) +"='-' WHERE TableID="+rowIndex;
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }
+
+    }
+    public void setEmptyNull(String tableName,List<String> columnNames) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, user, password);
+
+        //restart row cound
+        for (int i = 0; i < columnNames.size(); i++) {
+            String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }
     }
     // testing...
     public static void main(String[] args) throws SQLException {
