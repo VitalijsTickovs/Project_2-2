@@ -24,9 +24,11 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import org.group1.response.FileService;
 import org.group1.response.database.SQLGUIConnection;
+import org.group1.response.database.SQLtoTxt;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SkillDetails implements CustomStage {
@@ -49,7 +51,7 @@ public class SkillDetails implements CustomStage {
     ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
     public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable) throws SQLException {
         columnNames = sql.getColumnNames(tableName);
-        sql.setEmptyNull(tableName,columnNames);
+        //sql.setEmptyNull(tableName,columnNames);
         slotData(slotTable);
         this.tableName=tableName;
         this.ColNum=ColNum;
@@ -129,9 +131,10 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                 try {
+                    SQLtoTxt.overWrite(tableName.replace("action_",""));
                     sql.setEmptyNull(tableName,columnNames);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
                 DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
                 displaySkills.setStage(UIstage,chatStage);
@@ -189,11 +192,13 @@ public class SkillDetails implements CustomStage {
             for (int j = 0; j < ColNum; j++) {
                 tempObservable.add("-");
             }
+        System.out.println(Arrays.toString(tempObservable.toArray()));
             table.getItems().add(
                     FXCollections.observableArrayList(
                             tempObservable
                     )
             );
+
             tempObservable.clear();
             sql.addRow(tableName,columnNames);
     }
@@ -269,6 +274,7 @@ public class SkillDetails implements CustomStage {
                     // handle the edit
                     try {
                         sql.updateDatabase(row,newValue.toString(),columnNames.get(colIndex),tableName);
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

@@ -310,13 +310,13 @@ public class SkillEditor implements CustomStage{
         actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addActions.setStyle("-fx-background-color: rgba(42,97,117,1)");
+                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
             }
         });
         actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addActions.setStyle("-fx-background-color: rgba(159,182,189,1)");
+                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
         actionButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -325,6 +325,8 @@ public class SkillEditor implements CustomStage{
                 if (errorHandling.stringLengthError(questionInput.getText())) {
                     String action = questionInput.getText();
                     skillInput += addNamingAction(toUpper(action));
+
+
 
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
@@ -373,7 +375,7 @@ public class SkillEditor implements CustomStage{
             stringArr[i] = "Action " + stringArr[i];
         }
         string = myArrayToString(stringArr);
-        return string + "/nAction I have no idea";
+        return string + "\nAction I have no idea";
     }
 
     private String addNamingSlot(String string){
