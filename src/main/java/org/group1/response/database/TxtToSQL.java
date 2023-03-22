@@ -55,23 +55,6 @@ public class TxtToSQL {
 
     }
 
-    
-//    public void createTableSlot(HashMap<String, String> mapping){
-//        try{
-//            String sql = "CREATE TABLE Slots" +" (";
-//
-//            Connection conn = DriverManager.getConnection(url, user, password);
-//            Statement stmt = conn.createStatement();
-//
-//            for(int i=0; i<2; i++){
-//
-//            }
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
-
 
     /**
      * Insert record into sql table
