@@ -8,10 +8,6 @@ plugins {
 group 'com.example'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
-
 ext {
     junitVersion = '5.9.1'
 }
@@ -33,14 +29,31 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
 
+    implementation 'org.nd4j:nd4j-native-platform:1.0.0-M1.1'
+    implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7'
+    implementation 'org.deeplearning4j:deeplearning4j-core:1.0.0-beta7'
+    implementation 'org.deeplearning4j:deeplearning4j-modelimport:1.0.0-M1.1'
+    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M1.1'
+    implementation 'org.deeplearning4j:deeplearning4j-core:1.0.0-M1.1'
+
+    implementation 'org.nd4j:nd4j-native:1.0.0-beta7'
+    implementation 'org.deeplearning4j:deeplearning4j-core:1.0.0-beta7'
+    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7'
+
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation 'com.opencsv:opencsv:5.7.1'
     implementation "org.deeplearning4j:deeplearning4j-core:1.0.0-beta6"
-    implementation 'mysql:mysql-connector-java:8.0.26'
+
 
 }
 
