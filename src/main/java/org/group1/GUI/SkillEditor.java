@@ -259,7 +259,7 @@ public class SkillEditor implements CustomStage{
                     prevoiusQuestion.setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
                     prevoiusQuestion.setLayoutX(385);
                     prevoiusQuestion.setWrapText(true);
-                    prevoiusQuestion.setLayoutY(280);
+                    prevoiusQuestion.setLayoutY(440);
                     prevoiusQuestion.setPrefSize(400,70);
                     UIpane.getChildren().add(prevoiusQuestion);
 //                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
