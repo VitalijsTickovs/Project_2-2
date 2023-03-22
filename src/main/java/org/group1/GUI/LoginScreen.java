@@ -17,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.response.database.DatabaseCredentials;
+import org.group1.response.database.SQLGUIConnection;
 
 public class LoginScreen implements CustomStage {
     //VIEW SETTINGS
@@ -28,6 +30,7 @@ public class LoginScreen implements CustomStage {
     static int screenHeight = 700;
     public Button loginButton;
     private Stage chatWindow;
+    DatabaseCredentials databaseCredentials = new DatabaseCredentials();
     public LoginScreen(){
         UIpane = new AnchorPane();
         UIstage = new Stage();
@@ -55,41 +58,7 @@ public class LoginScreen implements CustomStage {
 
         UIpane.getChildren().add(line);
 
-        loginButton = new Button();
-        loginButton.setText("LOGIN");
-        loginButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        loginButton.setPrefWidth(250);
-        loginButton.setTextFill(Color.WHITE);
-        loginButton.setLayoutX(550);
-        loginButton.setLayoutY(400);
-        loginButton.setCursor(Cursor.CLOSED_HAND);
-        loginButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                loginButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
-            }
-        });
-        loginButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-            }
-        });
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("hello");
-                ChatWindow chatWindow= null;
-                try {
-                    chatWindow = new ChatWindow();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                chatWindow.setStage(UIstage);
-            }
-        });
-        UIpane.getChildren().add(loginButton);
+
 
         Text username = new Text("Username: ");
         username.setFont(Font.font("Impact",20));
@@ -144,6 +113,44 @@ public class LoginScreen implements CustomStage {
         passwordTextField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;"+"-fx-font-size: 8");
         UIpane.getChildren().add(loginTextField);
         UIpane.getChildren().add(passwordTextField);
+
+        loginButton = new Button();
+        loginButton.setText("LOGIN");
+        loginButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        loginButton.setStyle("-fx-background-color: rgba(159,182,189,1);");
+        loginButton.setPrefWidth(250);
+        loginButton.setTextFill(Color.WHITE);
+        loginButton.setLayoutX(550);
+        loginButton.setLayoutY(400);
+        loginButton.setCursor(Cursor.CLOSED_HAND);
+        loginButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                loginButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
+            }
+        });
+        loginButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+            }
+        });
+        loginButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("hello");
+                ChatWindow chatWindow= null;
+                try {
+                    chatWindow = new ChatWindow();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                databaseCredentials.password=passwordTextField.getText();
+                databaseCredentials.username=loginTextField.getText();
+                chatWindow.setStage(UIstage);
+            }
+        });
+        UIpane.getChildren().add(loginButton);
 
     }
 

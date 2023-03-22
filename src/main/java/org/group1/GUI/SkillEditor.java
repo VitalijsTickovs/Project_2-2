@@ -17,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.response.FileService;
+import org.group1.response.database.SQLGUIConnection;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -38,6 +39,8 @@ public class SkillEditor implements CustomStage{
 
     private String skillInput="";
     public  SkillEditor(){
+        System.out.println(SQLGUIConnection.user);
+        System.out.println(SQLGUIConnection.password);
         try {
             fs = new FileService();
         } catch (IOException e) {
@@ -76,16 +79,16 @@ public class SkillEditor implements CustomStage{
     }
     public void createButtons(){
         //add actions button
-        addActions = new Button();
-        addActions.setText("ADD ACTIONS");
-        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        addActions.setStyle("-fx-background-color: transparent");
-        addActions.setTextFill(Color.WHITE);
-        addActions.setLayoutX(20);
-        addActions.setLayoutY(400);
-        addActions.setTextFill(Color.rgb(42,97,117));
-        addActions.setCursor(Cursor.CLOSED_HAND);
-        UIpane.getChildren().add(addActions);
+//        addActions = new Button();
+//        addActions.setText("ADD ACTIONS");
+//        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
+//        addActions.setStyle("-fx-background-color: transparent");
+//        addActions.setTextFill(Color.WHITE);
+//        addActions.setLayoutX(20);
+//        addActions.setLayoutY(400);
+//        addActions.setTextFill(Color.rgb(42,97,117));
+//        addActions.setCursor(Cursor.CLOSED_HAND);
+//        UIpane.getChildren().add(addActions);
 
         //displaySkillsButton
         displaySkills = new Button();
@@ -151,13 +154,13 @@ public class SkillEditor implements CustomStage{
         slotButton.setTextFill(Color.WHITE);
         slotButton.setCursor(Cursor.CLOSED_HAND);
         slotButton.setPrefSize(200,50);
-        slotButton.setLayoutX(700);
+        slotButton.setLayoutX(500);
         slotButton.setLayoutY(380);
 
         //action button
         actionButton = new Button();
         actionButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        actionButton.setStyle("-fx-background-color: rgb(159,182,189)");
         actionButton.setText("SUBMIT ACTION");
         actionButton.setTextFill(Color.WHITE);
         actionButton.setCursor(Cursor.CLOSED_HAND);
@@ -285,6 +288,18 @@ public class SkillEditor implements CustomStage{
         });
 
         //action button actions
+        actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                addActions.setStyle("-fx-background-color: rgba(42,97,117,1)");
+            }
+        });
+        actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                addActions.setStyle("-fx-background-color: rgba(159,182,189,1)");
+            }
+        });
         actionButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -307,18 +322,18 @@ public class SkillEditor implements CustomStage{
                 questionInput.setText("");
             }
         });
-        actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
-            }
-        });
-        actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-            }
-        });
+//        actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
+//            }
+//        });
+//        actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+//            }
+//        });
     }
 
     private String addNamingAction(String string){

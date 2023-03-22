@@ -10,7 +10,7 @@ public class SQLGUIConnection {
 
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/Skills"; String user = "root";  String password = "Jirka123";
+    String url = "jdbc:mysql://localhost:3306/Skills"; public static String user;  public static String password;
     String database = "Skills";
 
     /**
@@ -218,11 +218,11 @@ public class SQLGUIConnection {
         Connection connection = DriverManager.getConnection(url, user, password);
 
         //restart row cound
-        for (int i = 0; i < columnNames.size(); i++) {
-            String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        }
+//        for (int i = 0; i < columnNames.size(); i++) {
+//            String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.executeUpdate();
+//        }
     }
     // testing...
     public static void main(String[] args) throws SQLException {

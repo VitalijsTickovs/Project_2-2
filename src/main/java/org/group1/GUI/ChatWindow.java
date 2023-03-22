@@ -241,7 +241,7 @@ public class ChatWindow implements CustomStage {
                      listText.get(listText.size()-1).setLayoutY(y);
                      listText.get(listText.size()-1).setEditable(false);
                      listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
-                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
+                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white; ");
                      y+=listText.get(listText.size()-1).getPrefHeight()+20;
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
@@ -259,7 +259,7 @@ public class ChatWindow implements CustomStage {
                      listText.get(listText.size()-1).setWrapText(true);
                      listText.get(listText.size()-1).setLayoutY(y);
                      listText.get(listText.size()-1).setFont(Font.font("Arial Narrow",15));
-                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);" + "-fx-text-fill: white ");
+                     listText.get(listText.size()-1).setStyle("-fx-control-inner-background: rgb(159,182,189);" + "-fx-text-fill: white; ");
                      y+=listText.get(listText.size()-1).getPrefHeight()+20;
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
@@ -308,7 +308,7 @@ public class ChatWindow implements CustomStage {
             scrollPane.setTranslateY(50);
             scrollPane.setPrefSize(470,460);
             // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
-            scrollPane.setStyle("-fx-background-color: transparent;" );
+            scrollPane.setStyle("-fx-background-color: transparent;");
             scrollPane.setContent(scrollChat);
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

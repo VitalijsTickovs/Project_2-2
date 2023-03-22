@@ -237,9 +237,13 @@ public class SkillDetails implements CustomStage {
         table.setEditable(true);
         table.setStyle("-fx-cell-size: 50px;");
 
+        for (int i = 0; i <columnNames.size()  ;i++) {
+            System.out.println("column: "+columnNames.get(i));
+        }
         ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
         //columns
         for (int i = 0; i < columnNames.size(); i++) {
+
             final int finalIdx = i;
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
                     columnNames.get(i)
