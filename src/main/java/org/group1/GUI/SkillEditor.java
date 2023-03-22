@@ -254,13 +254,13 @@ public class SkillEditor implements CustomStage{
                     username.setText("Add the slots");
                     UIpane.getChildren().add(slotButton);
 
-                    prevoiusQuestion = new TextArea();
-                    prevoiusQuestion.setFont(Font.font("Arial Narrow",25));
-                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
+                    prevoiusQuestion = new TextArea(skillInput);
+                    prevoiusQuestion.setFont(Font.font("Impact", FontWeight.BOLD,20));
+                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgba(18,64,76);"+ "-fx-text-fill: white ;"+"-fx-text-box-border: transparent;"+"-fx-focus-color: rgba(18,64,76);");
                     prevoiusQuestion.setLayoutX(385);
                     prevoiusQuestion.setWrapText(true);
                     prevoiusQuestion.setLayoutY(440);
-                    prevoiusQuestion.setPrefSize(400,70);
+                    prevoiusQuestion.setPrefSize(400,300);
                     UIpane.getChildren().add(prevoiusQuestion);
 //                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //                    alert.setTitle("Defined Question");
@@ -310,13 +310,13 @@ public class SkillEditor implements CustomStage{
         actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addActions.setStyle("-fx-background-color: rgba(42,97,117,1)");
+                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
             }
         });
         actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addActions.setStyle("-fx-background-color: rgba(159,182,189,1)");
+                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
         actionButton.setOnAction(new EventHandler<ActionEvent>() {
