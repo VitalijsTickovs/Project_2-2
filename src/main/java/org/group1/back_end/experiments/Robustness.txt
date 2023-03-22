@@ -1,0 +1,54 @@
+Can you tell me what event I have scheduled for Tuesday at 14:00 in Maastricht? -> You have a swimming lesson.
+What's on my schedule for Tuesday in Maastricht at 14:00? -> You have a swimming lesson.
+At 14:00 on Tuesday in Maastricht, what event do I have planned? -> You have a swimming lesson.
+In Maastricht, what have I planned for Tuesday at 14:00? -> You have a swimming lesson.
+What's the event I'm attending at 14:00 on Tuesday in Maastricht? -> You have a swimming lesson.
+What event have I scheduled for Tuesday at 14:00 PM in Maastricht? -> You have a swimming lesson.
+What do I have planned for 14:00 on Tuesday in Maastricht? -> You have a swimming lesson.
+Could you remind me what event I have scheduled on Tuesday at 14:00 in Maastricht? -> You have a swimming lesson.
+At 14:00 on Tuesday, what event have I planned in Maastricht? -> You have a swimming lesson.
+In Maastricht, what event do I have scheduled for Tuesday at 14:00? -> You have a swimming lesson.
+How challenging is TCS Lab 1? -> Very hard!
+Is Lab 1 for TCS considered difficult? -> Very hard!
+What is the level of difficulty for TCS Lab 1? -> Very hard!
+Can you give me an idea of how hard TCS Lab 1 is? -> Very hard!
+How much effort should I expect to put into TCS Lab 1? -> Very hard!
+Would you say that TCS Lab 1 is a difficult assignment? -> Very hard!
+Is TCS Lab 1 a challenging task? -> Very hard!
+How easy or difficult is TCS Lab 1? -> Very hard!
+What is the difficulty level of TCS Lab 1? -> Very hard!
+What do I have scheduled on Monday at 09:00 in the morning in Amsterdam? -> You have a TCS lecture.
+Can you tell me what event I have planned for 09:00on Monday in Amsterdam? -> You have a TCS lecture.
+What's on my agenda for Monday at 9:00 AM in Amsterdam? -> You have a TCS lecture.
+At 9:00 on Monday in Amsterdam, what event do I have planned? -> You have a TCS lecture.
+What have I scheduled for 9:00 in the morning on Monday in Amsterdam? -> You have a TCS lecture.
+Could you remind me what event I have planned for Monday at 09:00 in Amsterdam? -> You have a TCS lecture.
+In Amsterdam, what event do I have planned for 09:00 on Monday? -> You have a TCS lecture.
+What's the event I'm attending on Monday at exactly 09:00 in the morning in Amsterdam? -> You have a TCS lecture.
+What have I got scheduled for 09:00 on Monday in Amsterdam? -> You have a TCS lecture.
+At 9:00 AM sharp on Monday in Amsterdam, what event do I have planned? -> You have a TCS lecture.
+Is Homework_2 for HCI considered difficult? -> It’s moderately hard.
+How challenging is HCI Homework_2? -> It’s moderately hard.
+What is the level of difficulty for Homework_2 in HCI? -> It’s moderately hard.
+Can you give me an idea of how hard HCI Homework_2 is? -> It’s moderately hard.
+How much effort should I expect to put into HCI Homework_2? -> It’s moderately hard.
+Would you say that Homework_2 for HCI is a difficult assignment? -> It’s moderately hard.
+Is HCI Homework_2 a challenging task? -> It’s moderately hard.
+How easy or difficult is Homework_2 in HCI? -> It’s moderately hard.
+What is the difficulty level of Homework_2 for HCI? -> It’s moderately hard.
+Could you tell me how tough Homework_2 for HCI is? -> It’s moderately hard.
+What is the name of the character represented by the ";" symbol? -> Semicolon.
+Could you provide the written name of the ";" character? -> Semicolon.
+What would you call the character that looks like a ";" in writing? -> Semicolon.
+Do you know the name of the character that is represented by a ";"? -> Semicolon.
+I'm trying to find out the name of this symbol ";". Could you tell me what it's called? -> Semicolon.
+Could you identify the name of the character that is depicted as ";"? -> Semicolon.
+What is the written representation of the character that resembles ";"? -> Semicolon.
+Can you tell me the name of the symbol that looks like a ";" when written? -> Semicolon.
+I'm not sure what this symbol ";" is called. Can you provide the written name for it? -> Semicolon.
+Do you happen to know the name of the character that is used to represent ";" in writing? -> Semicolon.
+Is TCS Homework_2 a difficult task? -> I have no idea
+Would you say that TCS Homework_2 is a tough assignment?-> I have no idea
+How demanding is TCS Homework_2?-> I have no idea
+Does TCS Homework_2 pose a significant challenge?-> I have no idea
+What level of difficulty does TCS Homework_2 present?-> I have no idea
