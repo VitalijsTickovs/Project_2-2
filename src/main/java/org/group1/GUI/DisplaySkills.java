@@ -125,6 +125,7 @@ public class DisplaySkills implements  CustomStage {
         submit.setLayoutY(520);
         UIpane.getChildren().add(submit);
 
+
     }
     public void setButtonsAction(){
         //define skills action

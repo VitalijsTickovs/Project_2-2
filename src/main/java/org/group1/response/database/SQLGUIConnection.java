@@ -216,6 +216,19 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         }
 
     }
+
+    public void deleteRecords(String tableName, List<Boolean> records) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, username, password);
+        Statement statement = connection.createStatement();
+        for(int i=0; i< records.size();i++){
+            if(records.get(i)) {
+                String sql = "DELETE FROM `" + tableName + "`WHERE TableID = "+ i;
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.executeUpdate();
+            }
+        }
+    }
+
     public void setEmptyNull(String tableName,List<String> columnNames) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
 

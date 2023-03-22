@@ -34,10 +34,9 @@ import java.util.List;
 public class SkillDetails implements CustomStage {
     // TODO: YOU WILL HAVE TO DEAL WITH CHAT HISTORY
     private AnchorPane UIpane,scrollChat;
-    private Stage UIstage;
+    private Stage UIstage,chatStage;
     private Scene UIscene;
-    private Stage chatStage;
-    private Button back,help,addAction;
+    private Button back,help,addAction, slots;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table;
     private List<String> tempObservable;
@@ -46,12 +45,19 @@ public class SkillDetails implements CustomStage {
     private ArrayList<ObservableList<String>> comboData = new ArrayList<>();
     FileService fs;
 
-    List<String> columnNames;
-    String tableName;
+    List<String> columnNames,slotColumnNames;
+    String tableName,tableName2;
+    private String id,id2;
     ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
     public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable) throws SQLException {
         columnNames = sql.getColumnNames(tableName);
+        slotColumnNames = sql.getColumnNames("slot_"+id);
+
         //sql.setEmptyNull(tableName,columnNames);
+        id = tableName.replace("action_","");
+
+
+
         slotData(slotTable);
         this.tableName=tableName;
         this.ColNum=ColNum;
@@ -111,6 +117,18 @@ public class SkillDetails implements CustomStage {
         addAction.setLayoutY(450);
         addAction.setCursor(Cursor.CLOSED_HAND);
         UIpane.getChildren().add(addAction);
+
+        //slots button
+        slots = new Button();
+        slots.setText("SLOTS");
+        slots.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        slots.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        slots.setTextFill(Color.WHITE);
+        slots.setCursor(Cursor.CLOSED_HAND);
+        slots.setPrefSize(400,50);
+        slots.setLayoutX(380);
+        slots.setLayoutY(500);
+        UIpane.getChildren().add(slots);
 
     }
     public void setButtonActions(){
