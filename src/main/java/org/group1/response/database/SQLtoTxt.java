@@ -82,11 +82,15 @@ public class SQLtoTxt {
 
         String ACTION_STRING = "";
 
+        int rowCounter=1;
 
         while (rs1.next()) {
 
 
             ACTION_STRING += "Action ";
+
+            int lastColumnIdx = colNames.size();
+
 
             for(int j=1;j<colNames.size();j++){
 
@@ -108,9 +112,13 @@ public class SQLtoTxt {
 
             ACTION_STRING += "\n";
 
+
+            rowCounter++;
+            System.out.println("row count: " + rowCounter);
+            System.out.println("actionstring: " + ACTION_STRING);
         }
 
-        System.out.println(ACTION_STRING);
+        //System.out.println(ACTION_STRING);
 
         return ACTION_STRING;
     }
