@@ -145,8 +145,8 @@ public class LoginScreen implements CustomStage {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                databaseCredentials.password=passwordTextField.getText();
-                databaseCredentials.username=loginTextField.getText();
+                databaseCredentials.setPassword(passwordTextField.getText());
+                databaseCredentials.setUsername(loginTextField.getText());
                 chatWindow.setStage(UIstage);
             }
         });

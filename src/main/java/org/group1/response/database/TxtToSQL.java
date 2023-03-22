@@ -1,13 +1,17 @@
 package org.group1.response.database;
 
 
+import org.apache.ibatis.jdbc.ScriptRunner;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 public class TxtToSQL {
-
     private ArrayList<String> slotType = new ArrayList<>();
 
     int tableID = 1;                                        // ...
@@ -19,6 +23,11 @@ public class TxtToSQL {
     String url = "jdbc:mysql://localhost:3306/skilldb";
     String user = "root";
     String password = "helloSQL";
+
+
+    public TxtToSQL(){
+        importDatabase(user,password);
+    }
 
     /**
      * Build SQL table
@@ -147,6 +156,30 @@ public class TxtToSQL {
 ////    }
 //
 
+
+    public void importDatabase(String user, String password){
+
+        String url = "jdbc:mysql://localhost:3306/";
+        try {
+            // Making connection to the sql server
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+            //Statement to create the database
+            String sql = "CREATE DATABASE IF NOT EXISTS DBName;";
+            stmt.execute(sql);
+            stmt.execute("USE skilldb");
+
+            //Getting the connection
+            ScriptRunner sr = new ScriptRunner(conn);
+            //Creating a reader object
+            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
+            //Running the script
+            sr.runScript(reader);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     //TODO: extra testing
     public static void main(String[] args) {
