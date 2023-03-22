@@ -90,15 +90,16 @@ public class SQLtoTxt {
 
             for(int j=1;j<colNames.size();j++){
 
-                if(rs1.getString(j)!=null){
-
-                    ACTION_STRING += "<" + colNames.get(j-1) + "> " + rs1.getString(j) + " ";
-
+                if(rs1.getString(j) !=null){
+                    String actionEntry = "<" + colNames.get(j-1) + "> " + rs1.getString(j) + " ";
+                    ACTION_STRING += actionEntry;
+                    System.out.println(actionEntry);
+                    System.out.println(rs1.getString(j));
                 }
 
             }
 
-            if(rs1.getString(colNames.size())!=null ){
+            if(rs1.getString(columnCount)!=null){
 
                 // add the action at end
                 ACTION_STRING += rs1.getString(columnCount);

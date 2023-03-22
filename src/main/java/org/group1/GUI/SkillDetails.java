@@ -131,10 +131,10 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    SQLtoTxt.overWrite(tableName.replace("action_",""));
                     sql.setEmptyNull(tableName,columnNames);
+                    SQLtoTxt.overWrite(tableName.replace("action_",""));
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
                 DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
                 displaySkills.setStage(UIstage,chatStage);

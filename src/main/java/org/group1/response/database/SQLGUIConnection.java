@@ -178,6 +178,7 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         System.out.println(columnName);
         System.out.println(tableName);
         String sql ="UPDATE "+ tableName +" SET " + columnName +"='" + newValue+ "' WHERE TableID="+rowID;
+
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.executeUpdate();
 
@@ -203,6 +204,7 @@ public class SQLGUIConnection extends    DatabaseCredentials {
 //        preparedStatement = connection.prepareStatement(sql);
 //        preparedStatement.executeUpdate();
 
+
          String sql ="INSERT INTO `"+ tableName +"`(" + columnNames.get(0) +") VALUES (NULL)";
          PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.executeUpdate();
@@ -218,8 +220,11 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         Connection connection = DriverManager.getConnection(url, username, password);
 
         //restart row cound
-        for (int i = 0; i < columnNames.size(); i++) {
+        for (int i = 0; i < columnNames.size()-1; i++) {
             String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
+
+            sql+= ";";
+            System.out.println("god's word: " + sql);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
         }
