@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -34,7 +36,7 @@ public class SkillEditor implements CustomStage{
     private Stage chatStage;
     private Button displaySkills,back,help,sendUserInput,defineSkills,addActions,actionButton, slotButton;
     ErrorHandling errorHandling = new ErrorHandling();
-    private TextArea questionInput;
+    private TextArea questionInput,prevoiusQuestion;
     private Text username;
 
     private String skillInput="";
@@ -160,7 +162,7 @@ public class SkillEditor implements CustomStage{
         //action button
         actionButton = new Button();
         actionButton.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        actionButton.setStyle("-fx-background-color: rgb(159,182,189)");
+        actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         actionButton.setText("SUBMIT ACTION");
         actionButton.setTextFill(Color.WHITE);
         actionButton.setCursor(Cursor.CLOSED_HAND);
@@ -248,8 +250,24 @@ public class SkillEditor implements CustomStage{
                     skillInput += "Question " + toUpper(question);
 
                     UIpane.getChildren().remove(sendUserInput);
+                    username.setTranslateX(475);
                     username.setText("Add the slots");
                     UIpane.getChildren().add(slotButton);
+
+                    prevoiusQuestion = new TextArea();
+                    prevoiusQuestion.setFont(Font.font("Arial Narrow",25));
+                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgb(159,182,189);"+ "-fx-text-fill: white ");
+                    prevoiusQuestion.setLayoutX(385);
+                    prevoiusQuestion.setWrapText(true);
+                    prevoiusQuestion.setLayoutY(280);
+                    prevoiusQuestion.setPrefSize(400,70);
+                    UIpane.getChildren().add(prevoiusQuestion);
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Defined Question");
+//                    alert.setHeaderText(null);
+//                    alert.setContentText(skillInput);
+//
+//                    alert.showAndWait();
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                 } else System.out.println("invalid message");
@@ -281,7 +299,8 @@ public class SkillEditor implements CustomStage{
 
                     UIpane.getChildren().remove(slotButton);
                     username.setText("Add the actions");
-                    //  UIpane.getChildren().add(actionButton);
+                    username.setTranslateX(460);
+                    UIpane.getChildren().add(actionButton);
                 } else System.out.println("invalid message");
                 questionInput.setText("");
             }
@@ -312,6 +331,18 @@ public class SkillEditor implements CustomStage{
                     try {
                         fs.write(skillInput);
                         skillInput = "";
+
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Skill edited sucessfuly ");
+                        alert.setOnCloseRequest( e ->{
+                                    ChatWindow chatWindow = new ChatWindow();
+                                    chatWindow.setStage(UIstage, chatStage);
+                                }
+                                );
+
+                        alert.showAndWait();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
