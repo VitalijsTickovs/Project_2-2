@@ -6,10 +6,10 @@ public class Calculations {
 
 
         double[] a = {
-                31.0,
-                2.0,
-                3.0,
-                11.0
+                31.0,// tp
+                2.0, // tn
+                3.0, // fp
+                11.0 // fn
         };
 
 
@@ -23,8 +23,8 @@ public class Calculations {
             a[i] = a[i] / total;
         }
 
-        System.out.println("Y: " + (a[0] / a[1]));
-        System.out.println("X: " + (a[2] / a[3]));
+        System.out.println("Y: " + (a[0] / (a[0] + a[3])));
+        System.out.println("X: " + (a[2] / (a[1] + a[2])));
 
 
     }
