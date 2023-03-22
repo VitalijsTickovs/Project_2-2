@@ -31,7 +31,7 @@ public class SQLtoTxt {
         List<String> colNames = getColumnNames(tableName);
         System.out.println("number of colnames: " + colNames.size());
 
-        Connection conn = DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(url, DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
         try {
             //Initialize the script runner
             ScriptRunner sr = new ScriptRunner(conn);
@@ -166,24 +166,30 @@ public class SQLtoTxt {
 
 
 
-    // testing...
-    public static void main(String args[]) throws Exception {
-        String url = "jdbc:mysql://localhost:3306/"; String user = "root";  String password = "helloSQL";
-        //Registering the Driver
-        Connection conn = DriverManager.getConnection(url, user, password);
-        Statement stmt = conn.createStatement();
-        String sql = "IF DB_ID('skilldb') IS NULL CREATE DATABASE skilldb";
-        stmt.execute(sql);
-        stmt.execute("USE skilldb");
 
-        //Getting the connection
-        ScriptRunner sr = new ScriptRunner(conn);
-        //Creating a reader object
-        Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
-        //Running the script
-        sr.runScript(reader);
+    public void importDatabase(String user, String password){
+
+        String url = "jdbc:mysql://localhost:3306/";
+        try {
+            // Making connection to the sql server
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+            //Statement to create the database
+            String sql = "CREATE DATABASE IF NOT EXISTS DBName;";
+            stmt.execute(sql);
+            stmt.execute("USE skilldb");
+
+            //Getting the connection
+            ScriptRunner sr = new ScriptRunner(conn);
+            //Creating a reader object
+            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
+            //Running the script
+            sr.runScript(reader);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
-
 
 
 }
