@@ -214,6 +214,7 @@ public class DisplaySkills implements  CustomStage {
 
 
     public void createScrollPane(){
+
         //scrollpane with skills
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

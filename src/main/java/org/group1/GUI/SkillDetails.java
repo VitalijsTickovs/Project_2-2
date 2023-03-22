@@ -38,7 +38,7 @@ public class SkillDetails implements CustomStage {
     private Scene UIscene;
     private Button back,help,addAction, slots;
     private ScrollPane scrollPane;
-    private TableView<ObservableList<String>> table;
+    private TableView<ObservableList<String>> table,table2;
     private List<String> tempObservable;
     private int N_ROWS, ColNum;
     private SQLGUIConnection sql = new SQLGUIConnection();
@@ -49,6 +49,7 @@ public class SkillDetails implements CustomStage {
     String tableName,tableName2;
     private String id,id2;
     ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
+
     public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable) throws SQLException {
         columnNames = sql.getColumnNames(tableName);
         slotColumnNames = sql.getColumnNames("slot_"+id);
@@ -71,6 +72,42 @@ public class SkillDetails implements CustomStage {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
         design();
+    }
+
+
+    /**
+     * Constructor to make the slots table
+     * @param tableName
+     * @param ColNum
+     * @param RowNum
+     * @param slotTable
+     * @param slots
+     * @throws SQLException
+     */
+    public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable, int slots)throws SQLException{
+
+        columnNames = sql.getColumnNames(tableName);
+        slotColumnNames = sql.getColumnNames("slot_"+id);
+
+        //sql.setEmptyNull(tableName,columnNames);
+        id = tableName.replace("slots_","");
+
+        slotData(slotTable);
+        this.tableName=tableName;
+        this.ColNum=ColNum;
+        this.N_ROWS=RowNum;
+        collectDataFromDatabase();
+        UIpane = new AnchorPane();
+        scrollChat = new AnchorPane();
+        UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
+        UIstage = new Stage();
+        UIscene.setFill(Color.rgb(18,64,76));
+        UIpane.setStyle("-fx-background-color: transparent");
+        UIstage.setScene(UIscene);
+        design();
+
+
+
     }
     public void collectDataFromDatabase() throws SQLException {
         List<String> tempColName = new ArrayList<>();
@@ -203,6 +240,22 @@ public class SkillDetails implements CustomStage {
                 }
             }
         });
+
+        //slotbutton
+        slots.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("YOU ARE NOOB");
+
+                createSlotTable();
+            }
+
+            //TODO:
+            //      0. we need to see on which action ID we are...
+            //      1. generate the table from sql
+            //      2. display in left pane
+
+        });
     }
     public void addRow() throws SQLException {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
@@ -263,6 +316,7 @@ public class SkillDetails implements CustomStage {
         for (int i = 0; i <columnNames.size()  ;i++) {
             System.out.println("column: "+columnNames.get(i));
         }
+
         ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
         //columns
         for (int i = 0; i < columnNames.size(); i++) {
@@ -321,6 +375,78 @@ public class SkillDetails implements CustomStage {
         scrollChat.getChildren().add(table);
         scrollPane.setContent(scrollChat);
     }
+
+    public void createSlotTable(){
+
+        table2 = new TableView<>();
+        table2.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        table2.setPrefWidth(480);
+        table2.setEditable(true);
+        table2.setStyle("-fx-cell-size: 50px;");
+
+        for (int i = 0; i <slotColumnNames.size()  ;i++) {
+            System.out.println("column: "+slotColumnNames.get(i));
+        }
+
+        //columns
+        for (int i = 0; i < slotColumnNames.size(); i++) {
+
+            final int finalIdx = i;
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+                    slotColumnNames.get(i)
+            );
+            column.setCellValueFactory(param ->
+                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
+            );
+            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
+            if(!slotColumnNames.get(i).toUpperCase().equals("SlotValue")) {
+                column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), comboData.get(i)));
+            }else {
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+            }
+            table2.getColumns().add(column);
+            //handles editiing cells
+            table2.getColumns().forEach(col -> {
+                col.setOnEditCommit(event -> {
+                    int row = event.getTablePosition().getRow();
+                    int colIndex = event.getTablePosition().getColumn();
+                    Object newValue = event.getNewValue();
+                    System.out.println(" i am edit row: "+ row + "col :" + colIndex);
+                    System.out.println(newValue.toString());
+                    // handle the edit
+                    try {
+                        sql.updateDatabase(row,newValue.toString(),slotColumnNames.get(colIndex),"slot_"+id);
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
+        }
+        //row data
+
+
+        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
+        tempObservable = new ArrayList<>();
+        for (int i = 0; i < N_ROWS; i++) {
+            for (int j = 0; j < ColNum; j++) {
+                tempObservable.add(dataPerColumn.get(j).get(i));
+//                System.out.println(dataPerColumn.get(j).get(i));
+//                System.out.println(tempObservable.get(j));
+            }
+            table2.getItems().add(
+                    FXCollections.observableArrayList(
+                            tempObservable
+                    )
+            );
+            tempObservable.clear();
+        }
+        table2.setFixedCellSize(60.0);
+        scrollChat.getChildren().add(table2);
+        scrollPane.setContent(scrollChat);
+    }
+
     public void slotData(String slotTable) throws SQLException {
 
         List<String> temp = new ArrayList<>();
