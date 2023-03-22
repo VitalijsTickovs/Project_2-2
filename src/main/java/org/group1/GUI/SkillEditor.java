@@ -41,7 +41,7 @@ public class SkillEditor implements CustomStage{
 
     private String skillInput="";
     public  SkillEditor(){
-        System.out.println(SQLGUIConnection.user);
+        System.out.println(SQLGUIConnection.username);
         System.out.println(SQLGUIConnection.password);
         try {
             fs = new FileService();

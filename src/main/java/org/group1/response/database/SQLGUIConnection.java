@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLGUIConnection {
+public class SQLGUIConnection extends    DatabaseCredentials {
 
 
     // Connect to the database
@@ -187,7 +187,7 @@ public class SQLGUIConnection {
     }
     public void addRow(String tableName, List<String> columnNames) throws SQLException {
 
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
 
 //        //restart row cound
@@ -215,7 +215,7 @@ public class SQLGUIConnection {
 
     }
     public void setEmptyNull(String tableName,List<String> columnNames) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
 
         //restart row cound
         for (int i = 0; i < columnNames.size(); i++) {
