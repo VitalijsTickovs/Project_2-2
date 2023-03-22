@@ -16,9 +16,9 @@ public class TxtToSQL {
 
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/skillbase";
-    String user = "cakeboy";
-    String password = "cake043";
+    String url = "jdbc:mysql://localhost:3306/skilldb";
+    String user = "root";
+    String password = "helloSQL";
 
     /**
      * Build SQL table
