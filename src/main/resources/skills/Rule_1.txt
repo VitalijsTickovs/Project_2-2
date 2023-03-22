@@ -1,0 +1,15 @@
+Question Which lectures are there on <DAY> at <TIME>
+Slot <DAY> Friday
+Slot <DAY> Monday
+Slot <DAY> Saturday
+Slot <DAY> Thursday
+Slot <DAY> Tuesday
+Slot <DAY> Wednesday
+Slot <TIME> 11
+Slot <TIME> 13
+Slot <TIME> 15
+Slot <TIME> 9
+Action I have no idea
+Action <DAY> Monday <TIME> 15 On Monday noon we have Theoretical Computer Science
+Action <DAY> Saturday There are no lectures on Saturday
+Action <DAY> Thursday <TIME> 9 We have mathematical modelling.

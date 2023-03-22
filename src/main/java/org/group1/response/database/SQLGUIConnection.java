@@ -6,12 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLGUIConnection {
+public class SQLGUIConnection extends    DatabaseCredentials {
 
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/Skills"; public static String user;  public static String password;
-    String database = "Skills";
+
 
     /**
      * Slot ID for the format to put into the rule .txt file
@@ -28,7 +27,7 @@ public class SQLGUIConnection {
         List<String> columnNames = new ArrayList<>();
         try {
 
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
 
             // Query the column names for the specified table
             String sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = ? ORDER BY ORDINAL_POSITION";
@@ -58,7 +57,7 @@ public class SQLGUIConnection {
     public List<String> getActionTableNames() {
         List<String> tableNames = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
 
             DatabaseMetaData databaseMetaData = conn.getMetaData();
             String[] types = {"TABLE"};
@@ -81,7 +80,7 @@ public class SQLGUIConnection {
     public List<String> getSlotTableNames() {
         List<String> tableNames = new ArrayList<>();
         try {
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
 
             DatabaseMetaData databaseMetaData = conn.getMetaData();
             String[] types = {"TABLE"};
@@ -112,7 +111,7 @@ public class SQLGUIConnection {
     public int getColumnNumber(String tableName) {
         int count=0;
         try {
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
             // Query the column names for the specified table
             String sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = ? ORDER BY ORDINAL_POSITION";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -136,7 +135,7 @@ public class SQLGUIConnection {
     }
 
     public int getRowNumber(String tableName) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         int count=0;
         ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS countNumber from " + tableName);
@@ -147,7 +146,7 @@ public class SQLGUIConnection {
     }
     public ArrayList<String> getAllColumnData (String columnName, String tableName) throws SQLException {
         ArrayList<String> temp= new ArrayList<>();
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
 
         ResultSet resultSet = statement.executeQuery("SELECT "+ columnName+ " from "+ tableName);
@@ -158,7 +157,7 @@ public class SQLGUIConnection {
     }
     //SELECT DISTINCT Country FROM Customers
     public List<String> avaiableDataFromSlot(String tableName, String slotType) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         ArrayList<String> temp= new ArrayList<>();
         System.out.println("SELECT DISTINCT SlotValue from " + tableName +" WHERE SlotType = " + "'" + slotType + "'");
@@ -171,7 +170,7 @@ public class SQLGUIConnection {
     }
 
     public void updateDatabase(int rowID,String newValue, String columnName, String tableName) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         rowID=rowID+1;
         System.out.println( "ID ROW " + rowID);
@@ -182,32 +181,33 @@ public class SQLGUIConnection {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.executeUpdate();
 
+
         //ResultSet resultSet = statement.executeQuery("UPDATE "+ tableName +" SET " + columnName +"='" + newValue+ "' WHERE TableID="+rowID );
 
     }
     public void addRow(String tableName, List<String> columnNames) throws SQLException {
 
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
 
-        //restart row cound
-        String sql = "SET  @num := 0";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.executeUpdate();
+//        //restart row cound
+//        String sql = "SET  @num := 0";
+//        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.executeUpdate();
+//
+//         sql = "UPDATE "+ tableName +" SET TableID = @num := (@num+1)";
+//         preparedStatement = connection.prepareStatement(sql);
+//         preparedStatement.executeUpdate();
+//
+//        sql = "ALTER TABLE "+ tableName +" AUTO_INCREMENT = 1";
+//        preparedStatement = connection.prepareStatement(sql);
+//        preparedStatement.executeUpdate();
 
-         sql = "UPDATE "+ tableName +" SET TableID = @num := (@num+1)";
-         preparedStatement = connection.prepareStatement(sql);
-         preparedStatement.executeUpdate();
-
-        sql = "ALTER TABLE "+ tableName +" AUTO_INCREMENT = 1";
-        preparedStatement = connection.prepareStatement(sql);
+         String sql ="INSERT INTO `"+ tableName +"`(" + columnNames.get(0) +") VALUES (NULL)";
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.executeUpdate();
-
-         sql ="INSERT INTO `"+ tableName +"`(" + columnNames.get(0) +") VALUES (NULL)";
-         preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.executeUpdate();
-        int rowIndex = getRowNumber(tableName)-1;
-        for (int i = 1; i < columnNames.size(); i++) {
+        int rowIndex = getRowNumber(tableName); // was -1 and i was 1
+        for (int i = 0; i < columnNames.size(); i++) {
             sql = "UPDATE "+ tableName +" SET " + columnNames.get(i) +"='-' WHERE TableID="+rowIndex;
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
@@ -215,14 +215,14 @@ public class SQLGUIConnection {
 
     }
     public void setEmptyNull(String tableName,List<String> columnNames) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, username, password);
 
         //restart row cound
-//        for (int i = 0; i < columnNames.size(); i++) {
-//            String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
-//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//            preparedStatement.executeUpdate();
-//        }
+        for (int i = 0; i < columnNames.size(); i++) {
+            String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
+        }
     }
     // testing...
     public static void main(String[] args) throws SQLException {

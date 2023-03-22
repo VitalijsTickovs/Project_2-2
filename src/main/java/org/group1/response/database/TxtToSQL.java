@@ -1,14 +1,11 @@
 package org.group1.response.database;
 
 
-import org.apache.ibatis.jdbc.ScriptRunner;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Set;
+
+import static org.group1.response.database.GenerateDB.createDatabase;
 
 public class TxtToSQL {
     private ArrayList<String> slotType = new ArrayList<>();
@@ -25,7 +22,7 @@ public class TxtToSQL {
 
 
     public TxtToSQL(){
-        importDatabase(user,password);
+        createDatabase(user,password);
     }
 
     /**
@@ -34,9 +31,7 @@ public class TxtToSQL {
      * @param colNames
      */
     public void createTable(String tableName, ArrayList<String> colNames){
-
         try {
-
             // SQL query
             String sql = "CREATE TABLE " + tableName + " (";
 
@@ -62,6 +57,35 @@ public class TxtToSQL {
         }
 
     }
+
+    public void createActionTable(String id, ArrayList<String> colNames){
+        try {
+            // SQL query
+            String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
+
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+
+            for(int i=0;i<colNames.size();i++){
+                sql = sql + colNames.get(i) + " VARCHAR(255)";
+                if(i+1<colNames.size()){
+                    sql+= ", ";
+                }
+            }
+            sql += ", PRIMARY KEY (TABLEID));";
+            //
+            System.out.println(sql);
+
+            stmt.executeUpdate(sql);
+
+            // Close the database connection
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
     /**
@@ -133,48 +157,16 @@ public class TxtToSQL {
 
     }
 
-
-    // ======================================
-
-    // TODO: here we make
-//    public void makeTablesFromTXT(){
-////        makeSlotIDtable();
-////        makeActionIDtable();
-//    }
-//
-////    public void makeSlotIDtable(String text){
-////
-////
-////
-////    }
-////
-////    public void makeActionIDtable(String text){
-////
-////
-////
-////    }
-//
-
-
-    public void importDatabase(String user, String password){
-
-        String url = "jdbc:mysql://localhost:3306/";
-        try {
-            // Making connection to the sql server
+    public void removeTables(String id){
+        try{
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
             //Statement to create the database
-            String sql = "CREATE DATABASE IF NOT EXISTS DBName;";
+            String sql = "DROP TABLE IF EXISTS action_"+id+";";
             stmt.execute(sql);
-            stmt.execute("USE skilldb");
 
-            //Getting the connection
-            ScriptRunner sr = new ScriptRunner(conn);
-            //Creating a reader object
-            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
-            //Running the script
-            sr.runScript(reader);
-
+            sql = "DROP TABLE IF EXISTS slot_"+id+";";
+            stmt.execute(sql);
         }catch(Exception e){
             e.printStackTrace();
         }

@@ -41,7 +41,7 @@ public class SkillEditor implements CustomStage{
 
     private String skillInput="";
     public  SkillEditor(){
-        System.out.println(SQLGUIConnection.user);
+        System.out.println(SQLGUIConnection.username);
         System.out.println(SQLGUIConnection.password);
         try {
             fs = new FileService();
@@ -326,6 +326,8 @@ public class SkillEditor implements CustomStage{
                     String action = questionInput.getText();
                     skillInput += addNamingAction(toUpper(action));
 
+
+
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                     try {
@@ -373,7 +375,7 @@ public class SkillEditor implements CustomStage{
             stringArr[i] = "Action " + stringArr[i];
         }
         string = myArrayToString(stringArr);
-        return string + "/nAction I have no idea";
+        return string + "\nAction I have no idea";
     }
 
     private String addNamingSlot(String string){

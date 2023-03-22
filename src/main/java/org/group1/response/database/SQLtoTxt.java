@@ -12,11 +12,9 @@ import java.util.List;
 
 public class SQLtoTxt {
 
-    // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/skilldb"; String user = "root";  String password = "helloSQL";
 
     String question = "";
-    String defaultAction = "Action I have no idea";
+    private static String defaultAction = "Action I have no idea";
     int numberOfCols = 0;
 
     /**
@@ -25,28 +23,18 @@ public class SQLtoTxt {
      * @return
      * @throws SQLException
      */
-    public String slotIDtoString(String id) throws SQLException {
+    public static String slotIDtoString(String id) throws SQLException {
         String tableName = "slot_" + id;
 
         List<String> colNames = getColumnNames(tableName);
         System.out.println("number of colnames: " + colNames.size());
 
-        Connection conn = DriverManager.getConnection(url, DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
-        try {
-            //Initialize the script runner
-            ScriptRunner sr = new ScriptRunner(conn);
-            //Creating a reader object
-            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
-            //Running the script
-            sr.runScript(reader);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
         String sql="";
         Statement stmt = conn.createStatement();
 
-        sql = "SELECT DISTINCT " + "*" + " FROM skillbase.slot_" + id + " ORDER BY SlotType;";
+        sql = "SELECT DISTINCT " + "*" + " FROM slot_" + id + " ORDER BY SlotType;";
 
         System.out.println(sql);
         ResultSet rs = stmt.executeQuery(sql);
@@ -71,47 +59,49 @@ public class SQLtoTxt {
 
 
     // TODO: if null, don't build the string
-    public String actionIDtoString(String id) throws SQLException{
+    public static String actionIDtoString(String id) throws SQLException{
 
         // sql magic
-        Connection conn = DriverManager.getConnection(url, user, password);
-        String sql = "SELECT DISTINCT " + "*" + " FROM skillbase.action_" + id + " ;";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
+        Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(),
+                DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
         // column names, reverse
 
         List<String> colNames = getColumnNames("action_" + id);
+        colNames.remove(0);
         System.out.println("ColNames: " + colNames);
-       // Collections.reverse(colNames);
 
+        String sql = "SELECT DISTINCT "+convertToString(colNames)+" FROM action_"+id+";";
+        Statement stmt_1 = conn.createStatement();
+        ResultSet rs1 = stmt_1.executeQuery(sql);
         // number of columns
-        ResultSetMetaData rsmd = rs.getMetaData();
+        ResultSetMetaData rsmd = rs1.getMetaData();
         int numColumns = rsmd.getColumnCount();
         int columnCount = numColumns;
 
 
         String ACTION_STRING = "";
 
-        while (rs.next()) {
+
+        while (rs1.next()) {
 
 
             ACTION_STRING += "Action ";
 
-            for(int j=1;j<columnCount;j++){
+            for(int j=1;j<colNames.size();j++){
 
-                if(rs.getString(j)!=null){
+                if(rs1.getString(j)!=null){
 
-                    ACTION_STRING += "<" + colNames.get(j-1) + "> " + rs.getString(j) + " ";
+                    ACTION_STRING += "<" + colNames.get(j-1) + "> " + rs1.getString(j) + " ";
 
                 }
 
             }
 
-            if(rs.getString(columnCount)!=null ){
+            if(rs1.getString(colNames.size())!=null ){
 
                 // add the action at end
-                ACTION_STRING += rs.getString(columnCount);
+                ACTION_STRING += rs1.getString(columnCount);
             }
 
 
@@ -121,13 +111,13 @@ public class SQLtoTxt {
 
         System.out.println(ACTION_STRING);
 
-        return ACTION_STRING+"Action "+defaultAction;
+        return ACTION_STRING;
     }
 
-    public void overWrite(String id){
+    public static void overWrite(String id){
         try {
             FileService fs = new FileService();
-            fs.overWrite(id,actionIDtoString(id));
+            fs.overWrite(id,slotIDtoString(id)+actionIDtoString(id));
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -135,11 +125,11 @@ public class SQLtoTxt {
 
 
     /**  AUXILIARY */
-    public List<String> getColumnNames(String tableName) {
+    public static List<String> getColumnNames(String tableName) {
         List<String> columnNames = new ArrayList<>();
         try {
 
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
             // Query the column names for the specified table
             String sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = ? ORDER BY ORDINAL_POSITION";
@@ -164,31 +154,12 @@ public class SQLtoTxt {
     }
 
 
-
-
-
-    public void importDatabase(String user, String password){
-
-        String url = "jdbc:mysql://localhost:3306/";
-        try {
-            // Making connection to the sql server
-            Connection conn = DriverManager.getConnection(url, user, password);
-            Statement stmt = conn.createStatement();
-            //Statement to create the database
-            String sql = "CREATE DATABASE IF NOT EXISTS DBName;";
-            stmt.execute(sql);
-            stmt.execute("USE skilldb");
-
-            //Getting the connection
-            ScriptRunner sr = new ScriptRunner(conn);
-            //Creating a reader object
-            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
-            //Running the script
-            sr.runScript(reader);
-
-        }catch(Exception e){
-            e.printStackTrace();
+    public static String convertToString(List<String> columns){
+        String converted = "";
+        for(String column: columns){
+            converted += column +=",";
         }
+        return converted.substring(0,converted.length()-1);
     }
 
 

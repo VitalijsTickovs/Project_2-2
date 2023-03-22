@@ -44,7 +44,7 @@ public class ChatWindow implements CustomStage {
 
 
     public ChatWindow(){
-        responseGenerator = new GenerateResponse();
+        responseGenerator = new GenerateResponse(false);
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);

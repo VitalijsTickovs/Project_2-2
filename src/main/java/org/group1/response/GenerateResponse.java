@@ -11,7 +11,7 @@ public class GenerateResponse {
     private Skill loadedSkills;
 
 
-    public GenerateResponse() {
+    public GenerateResponse(Boolean loadSQL) {
         //Loads all skills from directory(for now)
 
         //TODO: loading from database

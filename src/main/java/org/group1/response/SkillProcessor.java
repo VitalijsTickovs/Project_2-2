@@ -41,15 +41,30 @@ public class SkillProcessor {
         processSlot(text);
         processAction(text);
 
-        // TODO - move it later (important how we control this process
-        // • This will be the ActionID table
-        //
-
-
         TxtToSQL ts = new TxtToSQL();
+        //remove all the tables
+        ts.removeTables(id);
+
+
+
+        //Creating action table
+
+        //TODO: primary key named table_id
+
+        ArrayList<String> copy = (ArrayList<String>) slotTypes.clone();
+
+        copy.add("Action");
+        ts.createActionTable(id, copy);
+        //Inserting records to action_id
         for(Set<Slots> key: this.mappedActions.keySet()){
             ts.insertAction(key, mappedActions.get(key), id);
         }
+
+        //Creating slot_id table
+        ArrayList<String> slots = new ArrayList<>();
+        slots.add("SlotType"); slots.add("SlotValue");
+        ts.createTable("slot_"+id, slots);
+        //Inserting slot_id records
         for(String key: slotMapping.keySet()){
             ts.insertRecord("slot_"+id,
                     new String[]{"SlotType", "SlotValue"},
