@@ -1,7 +1,11 @@
 package org.group1.response.database;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.group1.response.FileService;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +13,7 @@ import java.util.List;
 public class SQLtoTxt {
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/skillbase"; String user = "cakeboy";  String password = "cake043";
+    String url = "jdbc:mysql://localhost:3306/skilldb"; String user = "root";  String password = "helloSQL";
 
     String question = "";
     String defaultAction = "Action I have no idea";
@@ -28,6 +32,16 @@ public class SQLtoTxt {
         System.out.println("number of colnames: " + colNames.size());
 
         Connection conn = DriverManager.getConnection(url, user, password);
+        try {
+            //Initialize the script runner
+            ScriptRunner sr = new ScriptRunner(conn);
+            //Creating a reader object
+            Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
+            //Running the script
+            sr.runScript(reader);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         String sql="";
         Statement stmt = conn.createStatement();
@@ -153,14 +167,21 @@ public class SQLtoTxt {
 
 
     // testing...
-    public static void main(String[] args) throws SQLException {
+    public static void main(String args[]) throws Exception {
+        String url = "jdbc:mysql://localhost:3306/"; String user = "root";  String password = "helloSQL";
+        //Registering the Driver
+        Connection conn = DriverManager.getConnection(url, user, password);
+        Statement stmt = conn.createStatement();
+        String sql = "IF DB_ID('skilldb') IS NULL CREATE DATABASE skilldb";
+        stmt.execute(sql);
+        stmt.execute("USE skilldb");
 
-        SQLtoTxt s = new SQLtoTxt();
-        String id = "3";
-
-        s.slotIDtoString(id);
-        s.actionIDtoString(id);
-
+        //Getting the connection
+        ScriptRunner sr = new ScriptRunner(conn);
+        //Creating a reader object
+        Reader reader = new BufferedReader(new FileReader("src/main/resources/database/skilldb.sql"));
+        //Running the script
+        sr.runScript(reader);
     }
 
 

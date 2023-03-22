@@ -211,6 +211,9 @@ public class Skill {
 
 
     public static void main(String[] args) throws Exception {
+        String sql = "Hello";
+        sql = sql.substring(0,sql.length()-1);
+        System.out.println(sql);
         Skill s = new Skill();
 
 

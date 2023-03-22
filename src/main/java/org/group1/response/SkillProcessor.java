@@ -47,6 +47,10 @@ public class SkillProcessor {
 
 
         TxtToSQL ts = new TxtToSQL();
+        ArrayList<String> forAction = (ArrayList<String>) slotTypes.clone();
+        forAction.add("Action");
+        ts.createTable("action_"+id, forAction);
+        ts.createTable("slot_"+id, slotTypes);
 
         for(Set<Slots> key: this.mappedActions.keySet()){
             ts.insertAction(key, mappedActions.get(key), id);

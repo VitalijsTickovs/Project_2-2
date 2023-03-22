@@ -10,7 +10,7 @@ public class SQLGUIConnection {
 
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/Skills"; String user = "root";  String password = "Jirka123";
+    String url = "jdbc:mysql://localhost:3306/Skills"; String user = "root";  String password = "helloSQL";
     String database = "Skills";
 
     /**

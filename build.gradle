@@ -41,6 +41,9 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation "org.deeplearning4j:deeplearning4j-core:1.0.0-beta6"
     implementation 'mysql:mysql-connector-java:8.0.26'
+    // https://mvnrepository.com/artifact/org.mybatis/mybatis
+    implementation 'org.mybatis:mybatis:3.5.13'
+
 
 }
 
