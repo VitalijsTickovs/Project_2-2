@@ -1,16 +1,15 @@
 package org.group1.GUI;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
@@ -37,11 +36,11 @@ public class SkillDetails implements CustomStage {
     private AnchorPane UIpane,scrollChat;
     private Stage UIstage,chatStage;
     private Scene UIscene;
-    private Button back,help,addAction, slots;
+    private Button back,help,addAction, slots,delete;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table,table2;
     private List<String> tempObservable;
-    private int N_ROWS, ColNum;
+    private int N_ROWS, ColNum,currentRow;
     private SQLGUIConnection sql = new SQLGUIConnection();
     private ArrayList<ObservableList<String>> comboData = new ArrayList<>();
     private ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
@@ -183,6 +182,17 @@ public class SkillDetails implements CustomStage {
         slots.setLayoutY(500);
         UIpane.getChildren().add(slots);
 
+        //help button
+        delete = new Button();
+        delete.setText("DELETE");
+        delete.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        delete.setStyle("-fx-background-color: transparent");
+        delete.setTextFill(Color.WHITE);
+        delete.setLayoutX(650);
+        delete.setLayoutY(450);
+        delete.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(delete);
+
     }
     public void setButtonActions(){
         //back button
@@ -254,6 +264,28 @@ public class SkillDetails implements CustomStage {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        delete.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                delete.setTextFill(Color.rgb(42,97,117));
+            }
+        });
+        delete.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                delete.setTextFill(Color.WHITE);
+            }
+        });
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (isSlot) {
+                    table2.getItems().remove(currentRow);
+                }else table.getItems().remove(currentRow);
+
             }
         });
 
@@ -394,6 +426,19 @@ public class SkillDetails implements CustomStage {
             );
             tempObservable.clear();
         }
+
+        //selection listener
+        table.getFocusModel().focusedCellProperty().addListener(
+                new ChangeListener<TablePosition>() {
+                    @Override
+                    public void changed(ObservableValue<? extends TablePosition> observable,
+                                        TablePosition oldPos, TablePosition pos) {
+                        currentRow = pos.getRow();
+                        System.out.println("deleted row: "+currentRow);
+
+                    }
+                });
+
         table.setFixedCellSize(60.0);
         scrollChat.getChildren().add(table);
         scrollPane.setContent(scrollChat);
@@ -469,6 +514,19 @@ public class SkillDetails implements CustomStage {
             );
             tempObservable.clear();
         }
+
+        //selection listener
+        table2.getFocusModel().focusedCellProperty().addListener(
+                new ChangeListener<TablePosition>() {
+                    @Override
+                    public void changed(ObservableValue<? extends TablePosition> observable,
+                                        TablePosition oldPos, TablePosition pos) {
+                        currentRow = pos.getRow();
+                        System.out.println("deleted row: "+currentRow);
+
+                    }
+                });
+
         table2.setFixedCellSize(60.0);
         scrollChat.getChildren().add(table2);
         scrollPane.setContent(scrollChat);
