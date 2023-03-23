@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.database.SQLGUIConnection;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +124,7 @@ public class DisplaySkills implements  CustomStage {
         submit.setLayoutY(520);
         UIpane.getChildren().add(submit);
 
+
     }
     public void setButtonsAction(){
         //define skills action
@@ -211,6 +213,7 @@ public class DisplaySkills implements  CustomStage {
 
 
     public void createScrollPane(){
+
         //scrollpane with skills
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

@@ -3,8 +3,9 @@ package org.group1.database;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
+
+import static org.group1.database.GenerateDB.createDatabase;
 
 public class TxtToSQL {
 
@@ -16,9 +17,14 @@ public class TxtToSQL {
 
 
     // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/skillbase";
-    String user = "cakeboy";
-    String password = "cake043";
+    String url = "jdbc:mysql://localhost:3306/skilldb";
+    String user = "root";
+    String password = "helloSQL";
+
+
+    public TxtToSQL(){
+        createDatabase(user,password);
+    }
 
     /**
      * Build SQL table
@@ -26,11 +32,9 @@ public class TxtToSQL {
      * @param colNames
      */
     public void createTable(String tableName, ArrayList<String> colNames){
-
         try {
-
             // SQL query
-            String sql = "CREATE TABLE " + tableName + " (";
+            String sql = "CREATE TABLE "+ tableName + " (TableID int NOT NULL AUTO_INCREMENT, ";
 
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
@@ -41,7 +45,7 @@ public class TxtToSQL {
                     sql+= ", ";
                 }
             }
-            sql += ");";
+            sql+=", PRIMARY KEY(TableID));";
             //
             System.out.println(sql);
 
@@ -54,6 +58,54 @@ public class TxtToSQL {
         }
 
     }
+
+
+
+
+    public void createActionTable(String id, ArrayList<String> colNames){
+        try {
+            // SQL query
+            String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
+
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+
+            for(int i=0;i<colNames.size();i++){
+                sql = sql + colNames.get(i) + " VARCHAR(255)";
+                if(i+1<colNames.size()){
+                    sql+= ", ";
+                }
+            }
+            sql+=", PRIMARY KEY(TableID));";
+//            sql += ", PRIMARY KEY (TABLEID));";
+//            sql += ", PRIMARY KEY (";
+//            //
+//
+//            // BUILD COMBINED PRIMARY KEY BASED ON COMBINED
+//            for(int i=0;i<colNames.size()-1;i++){
+//                sql += colNames.get(i)+",";
+//
+//            }
+//            sql = sql.substring(0,sql.length()-1)+") ,INDEX idx_table_id (TableID));";
+//            sql +=
+
+            // TODO: default value
+
+            System.out.println(sql);
+
+            stmt.executeUpdate(sql);
+
+            // Close the database connection
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
 
 
     /**
@@ -98,6 +150,12 @@ public class TxtToSQL {
         }
     }
 
+    /**
+     *
+     * @param slotSet
+     * @param action
+     * @param id
+     */
     public void insertAction(Set<Slots> slotSet, String action, String id){
 
         try {
@@ -125,28 +183,24 @@ public class TxtToSQL {
 
     }
 
+    /**
+     * Remove table
+     * @param id
+     */
+    public void removeTables(String id){
+        try{
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+            //Statement to create the database
+            String sql = "DROP TABLE IF EXISTS action_"+id+";";
+            stmt.execute(sql);
 
-    // ======================================
-
-    // TODO: here we make
-//    public void makeTablesFromTXT(){
-////        makeSlotIDtable();
-////        makeActionIDtable();
-//    }
-//
-////    public void makeSlotIDtable(String text){
-////
-////
-////
-////    }
-////
-////    public void makeActionIDtable(String text){
-////
-////
-////
-////    }
-//
-
+            sql = "DROP TABLE IF EXISTS slot_"+id+";";
+            stmt.execute(sql);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
     //TODO: extra testing
     public static void main(String[] args) {

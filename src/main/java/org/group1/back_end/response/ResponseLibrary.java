@@ -26,11 +26,15 @@ public class ResponseLibrary {
         VECTOR_SIF.createFrequencyTable();
     }
 
-    private final Skill skills;
+    private Skill skills;
 
     public ResponseLibrary() throws Exception {
         this.skills = new Skill();
         WORD2VEC = new VectorWord2Vec().getWord2Vec();
+    }
+
+    public void reload() throws Exception{
+        this.skills = new Skill();
     }
 
     public String getResponseSkills(String words){

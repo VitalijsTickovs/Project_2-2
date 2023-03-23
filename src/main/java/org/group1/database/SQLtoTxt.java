@@ -1,6 +1,5 @@
 package org.group1.database;
 
-
 import org.group1.back_end.response.skills.SkillFileService;
 
 import java.sql.*;
@@ -9,11 +8,9 @@ import java.util.List;
 
 public class SQLtoTxt {
 
-    // Connect to the database
-    String url = "jdbc:mysql://localhost:3306/skillbase"; String user = "cakeboy";  String password = "cake043";
 
     String question = "";
-    String defaultAction = "Action I have no idea";
+    private static String defaultAction = "Action I have no idea";
     int numberOfCols = 0;
 
     /**
@@ -22,18 +19,18 @@ public class SQLtoTxt {
      * @return
      * @throws SQLException
      */
-    public String slotIDtoString(String id) throws SQLException {
+    public static String slotIDtoString(String id) throws SQLException {
         String tableName = "slot_" + id;
 
         List<String> colNames = getColumnNames(tableName);
         System.out.println("number of colnames: " + colNames.size());
 
-        Connection conn = DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
         String sql="";
         Statement stmt = conn.createStatement();
 
-        sql = "SELECT DISTINCT " + "*" + " FROM skillbase.slot_" + id + " ORDER BY SlotType;";
+        sql = "SELECT DISTINCT " + "SlotType, SlotValue" + " FROM slot_" + id + " ORDER BY SlotType;";
 
         System.out.println(sql);
         ResultSet rs = stmt.executeQuery(sql);
@@ -58,66 +55,87 @@ public class SQLtoTxt {
 
 
     // TODO: if null, don't build the string
-    public String actionIDtoString(String id) throws SQLException{
+    public static String actionIDtoString(String id) throws SQLException{
 
         // sql magic
-        Connection conn = DriverManager.getConnection(url, user, password);
-        String sql = "SELECT DISTINCT " + "*" + " FROM skillbase.action_" + id + " ;";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
+        Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(),
+                DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
         // column names, reverse
 
         List<String> colNames = getColumnNames("action_" + id);
+        colNames.remove(0);
         System.out.println("ColNames: " + colNames);
-       // Collections.reverse(colNames);
 
+        String sql = "SELECT DISTINCT "+convertToString(colNames)+" FROM action_"+id+";";
+        Statement stmt_1 = conn.createStatement();
+        ResultSet rs1 = stmt_1.executeQuery(sql);
         // number of columns
-        ResultSetMetaData rsmd = rs.getMetaData();
+        ResultSetMetaData rsmd = rs1.getMetaData();
         int numColumns = rsmd.getColumnCount();
         int columnCount = numColumns;
 
 
         String ACTION_STRING = "";
 
-        while (rs.next()) {
+        int rowCounter=1;
+
+        while (rs1.next()) {
 
 
             ACTION_STRING += "Action ";
 
-            for(int j=1;j<columnCount;j++){
+            int lastColumnIdx = colNames.size();
 
-                if(rs.getString(j)!=null){
 
-                    ACTION_STRING += "<" + colNames.get(j-1) + "> " + rs.getString(j) + " ";
+            for(int j=1;j<colNames.size();j++){
 
+                if(rs1.getString(j) !=null){
+                    String actionEntry = "<" + colNames.get(j-1) + "> " + rs1.getString(j) + " ";
+                    ACTION_STRING += actionEntry;
+                    System.out.println(actionEntry);
+                    System.out.println(rs1.getString(j));
                 }
 
             }
 
-            if(rs.getString(columnCount)!=null ){
+            if(rs1.getString(columnCount)!=null){
 
                 // add the action at end
-                ACTION_STRING += rs.getString(columnCount);
+                ACTION_STRING += rs1.getString(columnCount);
             }
 
 
             ACTION_STRING += "\n";
 
+
+            rowCounter++;
+            System.out.println("row count: " + rowCounter);
+            System.out.println("actionstring: " + ACTION_STRING);
         }
 
-        System.out.println(ACTION_STRING);
+        //System.out.println(ACTION_STRING);
 
-        return ACTION_STRING+"Action "+defaultAction;
+        return ACTION_STRING;
+    }
+
+    public static void overWrite(String id){
+        try {
+            //todo: will probably give error
+            SkillFileService fs = new SkillFileService();
+            fs.write(slotIDtoString(id)+actionIDtoString(id), id);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
     /**  AUXILIARY */
-    public List<String> getColumnNames(String tableName) {
+    public static List<String> getColumnNames(String tableName) {
         List<String> columnNames = new ArrayList<>();
         try {
 
-            Connection conn = DriverManager.getConnection(url, user, password);
+            Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
             // Query the column names for the specified table
             String sql = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_name = ? ORDER BY ORDINAL_POSITION";
@@ -142,19 +160,13 @@ public class SQLtoTxt {
     }
 
 
-
-
-    // testing...
-    public static void main(String[] args) throws SQLException {
-
-        SQLtoTxt s = new SQLtoTxt();
-        String id = "3";
-
-        s.slotIDtoString(id);
-        s.actionIDtoString(id);
-
+    public static String convertToString(List<String> columns){
+        String converted = "";
+        for(String column: columns){
+            converted += column +=",";
+        }
+        return converted.substring(0,converted.length()-1);
     }
-
 
 
 }

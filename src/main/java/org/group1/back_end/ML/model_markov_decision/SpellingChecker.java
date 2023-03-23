@@ -1,5 +1,7 @@
 package org.group1.back_end.ML.model_markov_decision;
 
+import org.group1.back_end.response.skills.Skill;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +46,7 @@ public class SpellingChecker {
         return bestWord;
     }
     public double getScore(String word) {
-        if(word.length() <= shortestWord) {
-            return shortNGrams.computeNGramScore(word);
-        } else if(word.length() <= mediumWord) {
-            return mediumNGrams.computeNGramScore(word);
-        } else if(word.length() > mediumWord) {
-            return longNGrams.computeNGramScore(word);
-        } else {
-            return 0.0;
-        }
+       return getMediumScore(word);
     }
 
     private double getShortScore(String word) {
@@ -109,12 +103,44 @@ public class SpellingChecker {
         return rand.nextInt(end - start) + start;
     }
 
-    public static void main(String[] args) {
-        int n = 10; // the upper bound of the random integer
-        Random rand = new Random();
-        String totest = "Monday";
-        SpellingChecker sc = new SpellingChecker();
-        System.out.println(sc.getCorrected("Mfunoday"));
+
+    public static List<String> generateCandidates(String word, int maxDistance, List<String> dictionary) {
+        List<String> candidates = new ArrayList<>();
+        for (String candidate : dictionary) {
+            int distance = levenshteinDistance(word, candidate);
+            if (distance <= maxDistance) {
+                candidates.add(candidate);
+            }
+        }
+        return candidates;
+    }
+
+    private static int levenshteinDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1]));
+                }
+            }
+        }
+        return dp[m][n];
+    }
+    public static void main(String[] args) throws Exception{
+        SpellingChecker spellingChecker = new SpellingChecker();
+        Skill test = new Skill();
+        test.generateSkills();
+        spellingChecker.getScore("Miobnaday");
     }
 
 

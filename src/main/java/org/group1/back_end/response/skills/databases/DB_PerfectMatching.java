@@ -24,17 +24,17 @@ public class DB_PerfectMatching implements iDataBase, iProcess<String>{
         double closestKey = 0;
         String tempKey = process(key);
 
-        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
-
-            String keySet = entry.getKey();
-            double distance = Distances.jaccard(keySet, tempKey);
-
-            if (distance > closestKey) {
-                closestKey = distance;
-                tempKey = keySet;
-            }
-        }
-        return QUERY_PERFECT_MATCHING.getOrDefault(tempKey, "NULL");
+//        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
+//
+//            String keySet = entry.getKey();
+//            double distance = Distances.jaccard(keySet, tempKey);
+//
+//            if (distance > closestKey) {
+//                closestKey = distance;
+//                tempKey = keySet;
+//            }
+//        }
+        return QUERY_PERFECT_MATCHING.getOrDefault(tempKey, "Sorry I dont understand what you are trying to say");
     }
 
     @Override
@@ -59,6 +59,8 @@ public class DB_PerfectMatching implements iDataBase, iProcess<String>{
     public String process(String sentence) {
 
         List<String> a = SimpleProcess.process(sentence);
+        a = ComplexProcess.lemmas(a);
+
         String b = a.toString();
         return b;
     }

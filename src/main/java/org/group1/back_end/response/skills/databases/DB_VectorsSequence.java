@@ -54,7 +54,7 @@ public class DB_VectorsSequence implements iDataBase{
 
             double distance = otra(tempKey, keySet);
 
-            System.out.println(tempKey + "|||||" + keySet + "|||||" + distance);
+//            System.out.println(tempKey + "|||||" + keySet + "|||||" + distance);
             double setDistance = Distances.jaccard(new HashSet<>(tempKey), new HashSet<>(keySet));
 
             if (distance < closestKey) {

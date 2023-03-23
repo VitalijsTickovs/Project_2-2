@@ -28,7 +28,6 @@ public class SimpleProcess {
         while (tokens.hasMoreTokens()){
             temp.add(tokens.nextToken().toLowerCase());
         }
-        softRemoveStopWords(temp);
         return temp;
     }
 

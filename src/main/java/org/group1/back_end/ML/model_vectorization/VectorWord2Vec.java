@@ -38,6 +38,10 @@ public class VectorWord2Vec {
         ;
     }
 
+    public void test(){
+
+    }
+
     public void train(String data,
                       int layers,
                       int seed,
@@ -83,9 +87,9 @@ public class VectorWord2Vec {
 
     public static void main(String[] args) throws IOException {
 
-        Word2Vec model = WordVectorSerializer.readWord2VecModel(new File("/Users/aaronmulvey/Desktop/Project_2-2/src/main/resources/models/bin/Word2Vec.bin"));
+        Word2Vec model = WordVectorSerializer.readWord2VecModel(new File("src/main/resources/models/bin/Word2Vec.bin"));
 
-        SentenceIterator iter = new BasicLineIterator("/Users/aaronmulvey/Desktop/Project_2-2/src/main/resources/models/data/14 Million sentences.txt");
+        SentenceIterator iter = new BasicLineIterator("src/main/resources/models/data/14 Million sentences.txt");
 
         TokenizerFactory tokenizer = new DefaultTokenizerFactory();
         tokenizer.setTokenPreProcessor(new CommonPreprocessor());
@@ -95,7 +99,7 @@ public class VectorWord2Vec {
         model.setSentenceIterator(iter);
         model.fit();
 
-        WordVectorSerializer.writeWord2VecModel(model, "/Users/aaronmulvey/Desktop/Project_2-2/src/main/resources/models/bin/Word2Vec.bin");
+        WordVectorSerializer.writeWord2VecModel(model, "src/main/resources/models/bin/Word2Vec.bin");
 
         String frase1 = "My cat is beautiful";
         String frase2 = "My cat is good";

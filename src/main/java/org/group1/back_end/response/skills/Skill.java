@@ -59,7 +59,9 @@ public class Skill {
 
             for (String comb : combinations) {
 
+                DATABASE_MANAGER.add(comb, sp.getDeafault(), DB.DB_PERFECT_MATCHING);
                 DATABASE_MANAGER.add(comb, sp.getDeafault(), DB.DB_VECTORS_SEQ);
+
             }
 
            for (int i = 0; i < questions.size(); i++) {
@@ -74,6 +76,7 @@ public class Skill {
         for (String[] pair : pairSet) {
             DATABASE_MANAGER.add(pair[0], pair[1]);
         }
+        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
     }
 
     public void addVocabulary(String words){

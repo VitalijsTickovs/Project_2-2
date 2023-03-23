@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -17,6 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.database.SQLGUIConnection;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +27,8 @@ import java.util.Arrays;
 
 public class SkillEditor implements CustomStage{
 
-    private SkillFileService fs;
+
+    SkillFileService fs;
 
     private AnchorPane UIpane;
     private Stage UIstage;
@@ -32,11 +36,13 @@ public class SkillEditor implements CustomStage{
     private Stage chatStage;
     private Button displaySkills,back,help,sendUserInput,defineSkills,addActions,actionButton, slotButton;
     ErrorHandling errorHandling = new ErrorHandling();
-    private TextArea questionInput;
+    private TextArea questionInput,prevoiusQuestion;
     private Text username;
 
     private String skillInput="";
     public  SkillEditor(){
+        System.out.println(SQLGUIConnection.username);
+        System.out.println(SQLGUIConnection.password);
         try {
             fs = new SkillFileService();
         } catch (IOException e) {
@@ -75,16 +81,16 @@ public class SkillEditor implements CustomStage{
     }
     public void createButtons(){
         //add actions button
-        addActions = new Button();
-        addActions.setText("ADD ACTIONS");
-        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        addActions.setStyle("-fx-background-color: transparent");
-        addActions.setTextFill(Color.WHITE);
-        addActions.setLayoutX(20);
-        addActions.setLayoutY(400);
-        addActions.setTextFill(Color.rgb(42,97,117));
-        addActions.setCursor(Cursor.CLOSED_HAND);
-        UIpane.getChildren().add(addActions);
+//        addActions = new Button();
+//        addActions.setText("ADD ACTIONS");
+//        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
+//        addActions.setStyle("-fx-background-color: transparent");
+//        addActions.setTextFill(Color.WHITE);
+//        addActions.setLayoutX(20);
+//        addActions.setLayoutY(400);
+//        addActions.setTextFill(Color.rgb(42,97,117));
+//        addActions.setCursor(Cursor.CLOSED_HAND);
+//        UIpane.getChildren().add(addActions);
 
         //displaySkillsButton
         displaySkills = new Button();
@@ -150,7 +156,7 @@ public class SkillEditor implements CustomStage{
         slotButton.setTextFill(Color.WHITE);
         slotButton.setCursor(Cursor.CLOSED_HAND);
         slotButton.setPrefSize(200,50);
-        slotButton.setLayoutX(700);
+        slotButton.setLayoutX(500);
         slotButton.setLayoutY(380);
 
         //action button
@@ -244,8 +250,24 @@ public class SkillEditor implements CustomStage{
                     skillInput += "Question " + toUpper(question);
 
                     UIpane.getChildren().remove(sendUserInput);
+                    username.setTranslateX(475);
                     username.setText("Add the slots");
                     UIpane.getChildren().add(slotButton);
+
+                    prevoiusQuestion = new TextArea(skillInput);
+                    prevoiusQuestion.setFont(Font.font("Impact", FontWeight.BOLD,20));
+                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgba(18,64,76);"+ "-fx-text-fill: white ;"+"-fx-text-box-border: transparent;"+"-fx-focus-color: transparent;" +"");
+                    prevoiusQuestion.setLayoutX(385);
+                    prevoiusQuestion.setWrapText(true);
+                    prevoiusQuestion.setLayoutY(450);
+                    prevoiusQuestion.setPrefSize(400,300);
+                    UIpane.getChildren().add(prevoiusQuestion);
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Defined Question");
+//                    alert.setHeaderText(null);
+//                    alert.setContentText(skillInput);
+//
+//                    alert.showAndWait();
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                 } else System.out.println("invalid message");
@@ -277,35 +299,14 @@ public class SkillEditor implements CustomStage{
 
                     UIpane.getChildren().remove(slotButton);
                     username.setText("Add the actions");
-                    //  UIpane.getChildren().add(actionButton);
+                    username.setTranslateX(460);
+                    UIpane.getChildren().add(actionButton);
                 } else System.out.println("invalid message");
                 questionInput.setText("");
             }
         });
 
         //action button actions
-        actionButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (errorHandling.stringLengthError(questionInput.getText())) {
-                    String action = questionInput.getText();
-                    skillInput += addNamingAction(toUpper(action));
-
-                    // this makes the next available rule .txt
-                    // in which we will add the actions & slots
-                    try {
-                        fs.write(skillInput);
-                        skillInput = "";
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    //transition into slot input, then into action input
-                    //each time open the same file id, used in fs
-
-                } else System.out.println("invalid message");
-                questionInput.setText("");
-            }
-        });
         actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -318,6 +319,54 @@ public class SkillEditor implements CustomStage{
                 actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
             }
         });
+        actionButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (errorHandling.stringLengthError(questionInput.getText())) {
+                    String action = questionInput.getText();
+                    skillInput += addNamingAction(toUpper(action));
+
+
+
+                    // this makes the next available rule .txt
+                    // in which we will add the actions & slots
+                    try {
+                        fs.write(skillInput);
+                        skillInput = "";
+
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Information Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Skill edited sucessfuly ");
+                        alert.setOnCloseRequest( e ->{
+                                    ChatWindow chatWindow = new ChatWindow();
+                                    chatWindow.setStage(UIstage, chatStage);
+                                }
+                                );
+
+                        alert.showAndWait();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    //transition into slot input, then into action input
+                    //each time open the same file id, used in fs
+
+                } else System.out.println("invalid message");
+                questionInput.setText("");
+            }
+        });
+//        actionButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
+//            }
+//        });
+//        actionButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
+//            }
+//        });
     }
 
     private String addNamingAction(String string){
@@ -326,7 +375,7 @@ public class SkillEditor implements CustomStage{
             stringArr[i] = "Action " + stringArr[i];
         }
         string = myArrayToString(stringArr);
-        return string + "/nAction I have no idea";
+        return string + "\nAction I have no idea";
     }
 
     private String addNamingSlot(String string){

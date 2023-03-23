@@ -18,21 +18,24 @@ public class Response {
     }
 
     public String getResponse(String word){
-        word = process(word);
-        String toret = "exact matching response: ... \n";
+       word = process(word);
         return responseLibrary.getResponseSkills(word);
+    }
+
+    public void reload() throws Exception{
+        responseLibrary.reload();
     }
 
     public String process(String word){
 
         List<String> words = SimpleProcess.process(word);
-        for (String w : words) {
-            if(!ComplexProcess.isCorrect(w)){
-                //NGRAM
-
-            }
-        }
-
+//        for (String w : words) {
+//            if(!ComplexProcess.isCorrect(w)){
+//                //NGRAM
+//
+//            }
+//        }
+//
         String result = "";
         for (String w: words) {
             result += " " + w + " ";

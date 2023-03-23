@@ -13,10 +13,13 @@ public class NGrams implements iDecision, iProcess<List<String>> {
     private static final File FILE_OANC = new File(PATH_OANC);
     private static final int pageLimit = 8808; //--> is the total number of pages in the corpus
     Map<String, Integer> occurenceMap;
+
+    HashMap<double[], String> existingWords;
     int n;
     public NGrams(int n) {
         this.occurenceMap = new HashMap<>();
         this.n = n;
+        this.existingWords = new HashMap<>();
     }
     @Override
     public String getNext(String sequence) { // return a list of the most probable answers/correction
@@ -91,6 +94,7 @@ public class NGrams implements iDecision, iProcess<List<String>> {
         List<String> sequences = process(sequence);
         for(int i = 0; i < sequences.size(); i++) {
             insertCharSequence(sequences.get(i));
+            this.existingWords.put(createNgramVector(sequences.get(i)), sequences.get(i));
         }
     }
 
@@ -130,6 +134,61 @@ public class NGrams implements iDecision, iProcess<List<String>> {
             }
         }
         return score;
+    }
+
+
+    public double[] createNgramVector(String word){
+        List<String> toscore = process(word);
+        double[] vector = new double[toscore.size()];
+        for(String s : toscore){
+            if(occurenceMap.containsKey(s)){
+                System.out.println(s + " ---> " + occurenceMap.get(s));
+                vector[toscore.indexOf(s)] = occurenceMap.get(s);
+            }
+        }
+        return vector;
+    }
+
+    public static boolean containsSubset(double[] array, double[] subset) {
+        for (int i = 0; i <= array.length - subset.length; i++) {
+            if (Arrays.equals(Arrays.copyOfRange(array, i, i + subset.length), subset)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static List<double[]> generateSubsets(double[] array, int minSize) {
+        List<List<Double>> result = new ArrayList<>();
+        generateSubsetsHelper(array, 0, new ArrayList<>(), result, minSize);
+        List<double[]> result2 = new ArrayList<>();
+        for(List<Double> l : result){
+            result2.add(l.stream().mapToDouble(Double::doubleValue).toArray());
+            System.out.println(Arrays.toString(l.stream().mapToDouble(Double::doubleValue).toArray()));
+        }
+        return result2;
+    }
+
+    private static void generateSubsetsHelper(double[] array, int index, List<Double> currentSubset,
+                                              List<List<Double>> result, int minSize) {
+        if (currentSubset.size() >= minSize) {
+            result.add(new ArrayList<>(currentSubset));
+        }
+
+        for (int i = index; i < array.length; i++) {
+            currentSubset.add(array[i]);
+            generateSubsetsHelper(array, i + 1, currentSubset, result, minSize);
+            currentSubset.remove(currentSubset.size() - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+//        NGrams nGrams = new NGrams(3);
+//        nGrams.load();
+//        System.out.println(Arrays.toString(nGrams.createNgramVector("Monkey")));
+//        System.out.println(Arrays.toString(nGrams.createNgramVector("Minkey")));
+//        System.out.println(Arrays.toString(nGrams.createNgramVector("Monkei")));
+        generateSubsets(new double[]{1,2,3,4,5,6,7,8,9,10}, 3);
     }
 
 }
