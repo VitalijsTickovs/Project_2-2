@@ -118,6 +118,12 @@ public class RegexUtilities {
                 .trim();
     }
 
+    public static String replaceRegexAll(String text, String oldWord, String newWord){
+        return text
+                .replaceAll(oldWord, newWord)
+                .trim();
+    }
+
     public static String replaceFirstRegex(String text, String oldWord, String newWord){
         return text
                 .replaceFirst(oldWord, newWord)

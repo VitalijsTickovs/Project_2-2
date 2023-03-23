@@ -84,7 +84,7 @@ public class SkillGenerator {
                 variables[i] = variables[i].replace(temp, "");
                 a = a.replace(temp, variables[i]);
             }
-            //combinations.add(a);
+            combinations.add(a);
         }
 
         // HERE I DELETE EVERYTHING AND I LEAVE THE WORD.

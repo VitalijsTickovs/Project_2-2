@@ -10,7 +10,6 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.api.ops.impl.layers.recurrent.GRU;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.learning.config.IUpdater;
@@ -19,6 +18,9 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class is used to create a simple RNN model of 1 layer using LSTM
+ */
 public class RNN {
     static final double learningRate = 0.001;
     static final int seed = 69;
@@ -34,10 +36,10 @@ public class RNN {
     DataSet dataSet;
     int inputSize, outputSize;
 
-    public RNN(DataSet datset) {
-        this.dataSet = datset;
-        this.inputSize = (int) datset.getFeatures().shape()[1];
-        this.outputSize = (int) datset.getLabels().shape()[1];
+    public RNN(DataSet dataset) {
+        this.dataSet = dataset;
+        this.inputSize = (int) dataset.getFeatures().shape()[1];
+        this.outputSize = (int) dataset.getLabels().shape()[1];
         configureLSTM();
         configureRNNOutput();
         conf = new NeuralNetConfiguration.Builder()

@@ -1,10 +1,15 @@
 package org.group1.back_end.response;
 
 import org.group1.back_end.ML.model_markov_decision.Markov;
+import org.group1.back_end.response.skills.Skill;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import java.util.*;
+
+import org.group1.back_end.textprocessing.SpellingCorrectProcess;
+import org.group1.back_end.utilities.algebra.Distances;
 import org.group1.back_end.utilities.enums.DB;
+import org.nd4j.common.primitives.Pair;
 
 public class Response {
 
@@ -29,12 +34,11 @@ public class Response {
     public String process(String word){
 
         List<String> words = SimpleProcess.process(word);
-//        for (String w : words) {
-//            if(!ComplexProcess.isCorrect(w)){
-//                //NGRAM
-//
-//            }
-//        }
+        for (int i = 0; i < words.size(); i++) {
+            if(!ComplexProcess.isCorrect(words.get(i))){
+                words.set(i, SpellingCorrectProcess.correct(words.get(i)));
+            }
+        }
 //
         String result = "";
         for (String w: words) {
@@ -44,6 +48,12 @@ public class Response {
         return result.trim();
     }
 
+    public static void main(String[] args) throws Exception {
+        Skill test = new Skill();
+        Response response = new Response();
+        System.out.println(response.getResponse("What is yuor approximately age?"));
+
+    }
 
     public static DB getDatabase() {
         return database;

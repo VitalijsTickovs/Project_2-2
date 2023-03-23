@@ -73,9 +73,10 @@ public class DB_Keywords implements iDataBase{
     public void printKeys() {
 
         System.out.println("\n---------------------------------- KEYS KEYWORDS -----------------------------------");
-
+        int count = 0;
         for (Set<String> key : QUERY_KEYWORD_MATCHING.keySet()) {
-            System.out.println("KEY = " + key + " ----> " + QUERY_KEYWORD_MATCHING.get(key));
+            count++;
+            System.out.println("KEY"+count+" = " + key + " ----> " + QUERY_KEYWORD_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
     }

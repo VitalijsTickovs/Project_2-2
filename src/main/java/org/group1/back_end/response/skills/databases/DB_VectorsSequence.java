@@ -450,9 +450,10 @@ public class DB_VectorsSequence implements iDataBase{
     public void printKeys() {
 
         System.out.println("\n---------------------------------- KEYS VECTORS SEQUENCE -----------------------------------");
-
+        int count = 0;
         for (List<String> key : QUERY_VECTOR_MATCHING.keySet()) {
-            System.out.println("KEY = " + key + " ----> " + QUERY_VECTOR_MATCHING.get(key));
+            count++;
+            System.out.println("KEY"+count+" = " + key + " ----> " + QUERY_VECTOR_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
     }

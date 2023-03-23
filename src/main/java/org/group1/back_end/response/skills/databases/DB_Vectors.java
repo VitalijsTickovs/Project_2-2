@@ -101,9 +101,10 @@ public class DB_Vectors implements iDataBase{
     public void printKeys() {
 
         System.out.println("\n---------------------------------- KEYS VECTORS -----------------------------------");
-
+        int count = 0;
         for (double[] key : QUERY_VECTOR_MATCHING.keySet()) {
-            System.out.println("KEY = " + RETRIEVE_QUERY.get(key) + " ----> " + QUERY_VECTOR_MATCHING.get(key));
+            count++;
+            System.out.println("KEY"+count+" = " + RETRIEVE_QUERY.get(key) + " ----> " + QUERY_VECTOR_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
     }

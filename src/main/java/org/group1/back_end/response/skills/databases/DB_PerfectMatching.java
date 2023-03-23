@@ -48,9 +48,11 @@ public class DB_PerfectMatching implements iDataBase, iProcess<String>{
 
     @Override
     public void printKeys() {
+        int count = 0;
         System.out.println("\n---------------------------------- KEYS PERFECT MATCHING --------------------------");
         for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()) {
-            System.out.println("KEY = " + entry.getKey() + " ----> " + QUERY_PERFECT_MATCHING.get(entry.getKey()));
+            count++;
+            System.out.println("KEY "+count+" = " + entry.getKey() + " ----> " + QUERY_PERFECT_MATCHING.get(entry.getKey()));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
     }
