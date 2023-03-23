@@ -3,9 +3,8 @@ package org.group1.response.database;
 public class DatabaseCredentials {
 
 
-    public static String username;
+    public static String username,password;
     public static String database = "skilldb";
-    public static String password;
 
     public final static String url = "jdbc:mysql://localhost:3306/skilldb";
 

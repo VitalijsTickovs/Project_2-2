@@ -8,6 +8,7 @@ import java.util.Set;
 import static org.group1.response.database.GenerateDB.createDatabase;
 
 public class TxtToSQL {
+
     private ArrayList<String> slotType = new ArrayList<>();
 
     int tableID = 1;                                        // ...
@@ -58,61 +59,7 @@ public class TxtToSQL {
 
     }
 
-    public void createTablePK(String tableName, ArrayList<String> colNames){
-        try {
-            // SQL query
-            String sql = "CREATE TABLE " + tableName + " (";
 
-            Connection conn = DriverManager.getConnection(url, user, password);
-            Statement stmt = conn.createStatement();
-
-            for(int i=0;i<colNames.size();i++){
-                sql = sql + colNames.get(i) + " VARCHAR(255)";
-                if(i+1<colNames.size()){
-                    sql+= ", ";
-                }
-            }
-            sql += ");";
-            //
-            System.out.println(sql);
-
-            stmt.executeUpdate(sql);
-
-            // Close the database connection
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-//    public void createActionTable(String id, ArrayList<String> colNames){
-//        try {
-//            // SQL query
-//            String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
-//
-//            Connection conn = DriverManager.getConnection(url, user, password);
-//            Statement stmt = conn.createStatement();
-//
-//            for(int i=0;i<colNames.size();i++){
-//                sql = sql + colNames.get(i) + " VARCHAR(255)";
-//                if(i+1<colNames.size()){
-//                    sql+= ", ";
-//                }
-//            }
-//            sql += ", PRIMARY KEY (TABLEID));";
-//            //
-//            System.out.println(sql);
-//
-//            stmt.executeUpdate(sql);
-//
-//            // Close the database connection
-//            conn.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
 
     public void createActionTable(String id, ArrayList<String> colNames){
@@ -203,6 +150,12 @@ public class TxtToSQL {
         }
     }
 
+    /**
+     *
+     * @param slotSet
+     * @param action
+     * @param id
+     */
     public void insertAction(Set<Slots> slotSet, String action, String id){
 
         try {
@@ -230,6 +183,10 @@ public class TxtToSQL {
 
     }
 
+    /**
+     * Remove table
+     * @param id
+     */
     public void removeTables(String id){
         try{
             Connection conn = DriverManager.getConnection(url, user, password);

@@ -1,11 +1,6 @@
 package org.group1.response.database;
 
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.group1.response.FileService;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

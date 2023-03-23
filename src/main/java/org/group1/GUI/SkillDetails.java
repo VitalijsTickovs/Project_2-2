@@ -81,41 +81,6 @@ public class SkillDetails implements CustomStage {
         design();
     }
 
-
-    /**
-     * Constructor to make the slots table
-     * @param tableName
-     * @param ColNum
-     * @param RowNum
-     * @param slotTable
-     * @param slots
-     * @throws SQLException
-     */
-    public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable, int slots)throws SQLException{
-
-        columnNames = sql.getColumnNames(tableName);
-        slotColumnNames = sql.getColumnNames("slot_"+id);
-
-        //sql.setEmptyNull(tableName,columnNames);
-        id = tableName.replace("slots_","");
-
-        slotData(slotTable);
-        this.tableName=tableName;
-        this.ColNum=ColNum;
-        this.N_ROWS=RowNum;
-        collectDataFromDatabase();
-        UIpane = new AnchorPane();
-        scrollChat = new AnchorPane();
-        UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
-        UIstage = new Stage();
-        UIscene.setFill(Color.rgb(18,64,76));
-        UIpane.setStyle("-fx-background-color: transparent");
-        UIstage.setScene(UIscene);
-        design();
-
-
-
-    }
     public void collectDataFromDatabase() throws SQLException {
         List<String> tempColName = new ArrayList<>();
         tempColName = sql.getColumnNames(tableName);
@@ -136,6 +101,7 @@ public class SkillDetails implements CustomStage {
         mainStage.close();
         UIstage.show();
     }
+
     public void createButtons(){
         //back button
         back = new Button();
@@ -194,6 +160,7 @@ public class SkillDetails implements CustomStage {
         UIpane.getChildren().add(delete);
 
     }
+
     public void setButtonActions(){
         //back button
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -304,21 +271,35 @@ public class SkillDetails implements CustomStage {
                 table.setVisible(!isSlot);
                 table2.setVisible(isSlot);
             }
-
-            //TODO:
-            //      0. we need to see on which action ID we are...
-            //      1. generate the table from sql
-            //      2. display in left pane
-
         });
     }
     public void addRow() throws SQLException {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
-        tempObservable = new ArrayList<>();
+
+
+        if(isSlot){     // slot
+
+            tempObservable = new ArrayList<>();
+
             for (int j = 0; j < ColNum; j++) {
                 tempObservable.add("-");
             }
-        System.out.println(Arrays.toString(tempObservable.toArray()));
+
+            System.out.println(Arrays.toString(tempObservable.toArray()));
+            table2.getItems().add(
+                    FXCollections.observableArrayList(
+                            tempObservable
+                    )
+            );
+
+            tempObservable.clear();
+            sql.addRow("slot_"+id,slotColumnNames);
+        } else {        // we are in action
+            tempObservable = new ArrayList<>();
+            for (int j = 0; j < ColNum; j++) {
+                tempObservable.add("-");
+            }
+            System.out.println(Arrays.toString(tempObservable.toArray()));
             table.getItems().add(
                     FXCollections.observableArrayList(
                             tempObservable
@@ -327,6 +308,11 @@ public class SkillDetails implements CustomStage {
 
             tempObservable.clear();
             sql.addRow(tableName,columnNames);
+        }
+
+
+
+
     }
 
     public void createScrollPane(){
@@ -483,13 +469,15 @@ public class SkillDetails implements CustomStage {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
                     Object newValue = event.getNewValue();
-                    System.out.println(" i am edit row: "+ row + "col :" + colIndex);
-                    System.out.println(newValue.toString());
+                    System.out.println(" i am edit row: " + row + "col : " + colIndex);
+                    System.out.println("newvalue: " + newValue.toString());
                     // handle the edit
                     try {
                         sql.updateDatabase(row,newValue.toString(),slotColumnNames.get(colIndex),"slot_"+id);
 
                     } catch (SQLException e) {
+                        //TODO: use label or pane... with warning or not?
+                        System.out.println("error");
                         e.printStackTrace();
                     }
                 });
