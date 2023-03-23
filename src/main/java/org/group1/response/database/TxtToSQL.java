@@ -33,7 +33,7 @@ public class TxtToSQL {
     public void createTable(String tableName, ArrayList<String> colNames){
         try {
             // SQL query
-            String sql = "CREATE TABLE " + tableName + " (";
+            String sql = "CREATE TABLE "+ tableName + " (TableID int NOT NULL AUTO_INCREMENT, ";
 
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
@@ -44,7 +44,7 @@ public class TxtToSQL {
                     sql+= ", ";
                 }
             }
-            sql += ");";
+            sql+=", PRIMARY KEY(TableID));";
             //
             System.out.println(sql);
 

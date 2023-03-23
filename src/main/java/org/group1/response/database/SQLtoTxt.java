@@ -34,7 +34,7 @@ public class SQLtoTxt {
         String sql="";
         Statement stmt = conn.createStatement();
 
-        sql = "SELECT DISTINCT " + "*" + " FROM slot_" + id + " ORDER BY SlotType;";
+        sql = "SELECT DISTINCT " + "SlotType, SlotValue" + " FROM slot_" + id + " ORDER BY SlotType;";
 
         System.out.println(sql);
         ResultSet rs = stmt.executeQuery(sql);

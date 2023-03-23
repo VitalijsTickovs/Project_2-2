@@ -169,6 +169,19 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         return temp;
     }
 
+    public List<String> getSlotType(String tableName) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, username, password);
+        Statement statement = connection.createStatement();
+        ArrayList<String> temp= new ArrayList<>();
+        System.out.println("SELECT DISTINCT SlotType from " + tableName);
+        ResultSet resultSet = statement.executeQuery("SELECT DISTINCT SlotType from " + tableName);
+        while (resultSet.next()) {
+            temp.add(resultSet.getString("SlotType"));
+            System.out.println("IN METHOD " + resultSet.getString("SlotType"));
+        }
+        return temp;
+    }
+
     public void updateDatabase(int rowID,String newValue, String columnName, String tableName) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
