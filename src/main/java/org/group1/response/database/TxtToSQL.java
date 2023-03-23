@@ -58,6 +58,63 @@ public class TxtToSQL {
 
     }
 
+    public void createTablePK(String tableName, ArrayList<String> colNames){
+        try {
+            // SQL query
+            String sql = "CREATE TABLE " + tableName + " (";
+
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement stmt = conn.createStatement();
+
+            for(int i=0;i<colNames.size();i++){
+                sql = sql + colNames.get(i) + " VARCHAR(255)";
+                if(i+1<colNames.size()){
+                    sql+= ", ";
+                }
+            }
+            sql += ");";
+            //
+            System.out.println(sql);
+
+            stmt.executeUpdate(sql);
+
+            // Close the database connection
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+//    public void createActionTable(String id, ArrayList<String> colNames){
+//        try {
+//            // SQL query
+//            String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
+//
+//            Connection conn = DriverManager.getConnection(url, user, password);
+//            Statement stmt = conn.createStatement();
+//
+//            for(int i=0;i<colNames.size();i++){
+//                sql = sql + colNames.get(i) + " VARCHAR(255)";
+//                if(i+1<colNames.size()){
+//                    sql+= ", ";
+//                }
+//            }
+//            sql += ", PRIMARY KEY (TABLEID));";
+//            //
+//            System.out.println(sql);
+//
+//            stmt.executeUpdate(sql);
+//
+//            // Close the database connection
+//            conn.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+
+
     public void createActionTable(String id, ArrayList<String> colNames){
         try {
             // SQL query
@@ -72,8 +129,21 @@ public class TxtToSQL {
                     sql+= ", ";
                 }
             }
-            sql += ", PRIMARY KEY (TABLEID));";
-            //
+            sql+=", PRIMARY KEY(TableID));";
+//            sql += ", PRIMARY KEY (TABLEID));";
+//            sql += ", PRIMARY KEY (";
+//            //
+//
+//            // BUILD COMBINED PRIMARY KEY BASED ON COMBINED
+//            for(int i=0;i<colNames.size()-1;i++){
+//                sql += colNames.get(i)+",";
+//
+//            }
+//            sql = sql.substring(0,sql.length()-1)+") ,INDEX idx_table_id (TableID));";
+//            sql +=
+
+            // TODO: default value
+
             System.out.println(sql);
 
             stmt.executeUpdate(sql);
@@ -85,6 +155,9 @@ public class TxtToSQL {
         }
 
     }
+
+
+
 
 
 
