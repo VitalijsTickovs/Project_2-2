@@ -256,10 +256,10 @@ public class SkillEditor implements CustomStage{
 
                     prevoiusQuestion = new TextArea(skillInput);
                     prevoiusQuestion.setFont(Font.font("Impact", FontWeight.BOLD,20));
-                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgba(18,64,76);"+ "-fx-text-fill: white ;"+"-fx-text-box-border: transparent;"+"-fx-focus-color: rgba(18,64,76);");
+                    prevoiusQuestion.setStyle("-fx-control-inner-background: rgba(18,64,76);"+ "-fx-text-fill: white ;"+"-fx-text-box-border: transparent;"+"-fx-focus-color: transparent;" +"");
                     prevoiusQuestion.setLayoutX(385);
                     prevoiusQuestion.setWrapText(true);
-                    prevoiusQuestion.setLayoutY(440);
+                    prevoiusQuestion.setLayoutY(450);
                     prevoiusQuestion.setPrefSize(400,300);
                     UIpane.getChildren().add(prevoiusQuestion);
 //                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
