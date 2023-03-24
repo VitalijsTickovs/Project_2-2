@@ -14,6 +14,8 @@ public class SkillGenerator {
     private String deafault;
     private Set<String> slotSet;
     private List<String> questions;
+    private List<List<String>> SQL_Formating;
+    private Set<String> vitalySlot;
 
     List<String> combinations = new ArrayList<>();
 
@@ -36,6 +38,8 @@ public class SkillGenerator {
         this.slotSet = new HashSet<>();
         questions = new LinkedList<>();
         actions = new LinkedList<>();
+        this.vitalySlot = new HashSet<>();
+        this.SQL_Formating = new LinkedList<>();
     }
 
 
@@ -61,12 +65,13 @@ public class SkillGenerator {
         List<String> slotList = filterLineByRegex(text, "Slot");
         List<String> comb = new ArrayList<>();
 
+
         for (String s : slotList) {
             comb.add(s
                     .replaceAll(" ", "").
                     replaceAll("Slot", ""));
         }
-
+        vitalySlot.addAll(comb);
         comb = RegexUtilities.concatenate(
                         comb
                         ,RegexUtilities.countRegexOccurrences(
@@ -145,6 +150,7 @@ public class SkillGenerator {
                 data[j][0] = slot;
             }
             makeDataFrame(data, line);
+            vitalyMethod(data,line);
         }
 
         format.setProblem_action(false);
@@ -171,6 +177,27 @@ public class SkillGenerator {
         actions.add(action);
     }
 
+    public void vitalyMethod(String[][] data, String action) {
+
+        String question = originalQuestion;
+
+        List<String> solution = new ArrayList<>();
+
+        for (int i = 0; i < data.length; i++) {
+            solution.add(data[i][1]);
+            solution.add(data[i][0]);
+        }
+        solution.add(action);
+        SQL_Formating.add(solution);
+    }
+
+    public List<List<String>> getSQL_Formating() {
+        return SQL_Formating;
+    }
+
+    public Set<String> getVitalySlot(){
+        return this.vitalySlot;
+    }
 
     public String getDeafault() {
         return deafault;
@@ -182,6 +209,10 @@ public class SkillGenerator {
 
     public List<String> getQuestions() {
         return questions;
+    }
+
+    public String getOriginalQuestion(){
+        return originalQuestion;
     }
 
     public List<String> getActions() {

@@ -139,13 +139,13 @@ public class LoginScreen implements CustomStage {
             public void handle(ActionEvent actionEvent) {
                 System.out.println("hello");
                 ChatWindow chatWindow= null;
+                databaseCredentials.setPassword(passwordTextField.getText());
+                databaseCredentials.setUsername(loginTextField.getText());
                 try {
                     chatWindow = new ChatWindow();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                databaseCredentials.setPassword(passwordTextField.getText());
-                databaseCredentials.setUsername(loginTextField.getText());
                 chatWindow.setStage(UIstage);
             }
         });

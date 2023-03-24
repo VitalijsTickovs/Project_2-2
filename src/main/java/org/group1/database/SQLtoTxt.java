@@ -1,6 +1,7 @@
 package org.group1.database;
 
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.utilities.GeneralFileService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class SQLtoTxt {
 
             System.out.println(rs.getString(1));
 
-            RULE_SLOT += "Slot " + "<" + rs.getString(1) + "> " + rs.getString(2) + "\n";
+            RULE_SLOT += "Slot " + rs.getString(1)+ " " + rs.getString(2) + "\n";
 
         }
 
@@ -121,9 +122,7 @@ public class SQLtoTxt {
 
     public static void overWrite(String id){
         try {
-            //todo: will probably give error
-            SkillFileService fs = new SkillFileService();
-            fs.write(slotIDtoString(id)+actionIDtoString(id), id);
+            GeneralFileService.overWrite(slotIDtoString(id)+actionIDtoString(id), id);
         }catch(Exception e){
             e.printStackTrace();
         }

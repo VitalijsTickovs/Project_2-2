@@ -62,4 +62,13 @@ public class Response {
     public static void setDatabase(DB s) {
         database = s;
     }
+    public List<List<List<String>>> getSQL(){
+        return responseLibrary.getSQL();
+    }
+    public List<String> getQuestion(){
+        return responseLibrary.getQuestions();
+    }
+    public List<Set<String>> getSlots(){
+        return responseLibrary.getSets();
+    }
 }

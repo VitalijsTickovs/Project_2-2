@@ -1,9 +1,9 @@
 package org.group1.database;
 
 
+import javax.xml.crypto.Data;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 import static org.group1.database.GenerateDB.createDatabase;
 
@@ -18,12 +18,13 @@ public class TxtToSQL {
 
     // Connect to the database
     String url = "jdbc:mysql://localhost:3306/skilldb";
-    String user = "root";
-    String password = "helloSQL";
-
+    String user;
+    String password;
 
     public TxtToSQL(){
-        createDatabase(user,password);
+        user = DatabaseCredentials.getUsername();
+        password = DatabaseCredentials.getPassword();
+        createDatabase(user, password);
     }
 
     /**
@@ -31,7 +32,7 @@ public class TxtToSQL {
      * @param tableName
      * @param colNames
      */
-    public void createTable(String tableName, ArrayList<String> colNames){
+    public void createTable(String tableName, List<String> colNames){
         try {
             // SQL query
             String sql = "CREATE TABLE "+ tableName + " (TableID int NOT NULL AUTO_INCREMENT, ";
@@ -62,7 +63,7 @@ public class TxtToSQL {
 
 
 
-    public void createActionTable(String id, ArrayList<String> colNames){
+    public void createActionTable(String id, Object[] colNames){
         try {
             // SQL query
             String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
@@ -70,13 +71,13 @@ public class TxtToSQL {
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
 
-            for(int i=0;i<colNames.size();i++){
-                sql = sql + colNames.get(i) + " VARCHAR(255)";
-                if(i+1<colNames.size()){
+            for(int i=0;i<colNames.length;i++){
+                sql = sql + colNames[i] + " VARCHAR(255)";
+                if(i+1<colNames.length){
                     sql+= ", ";
                 }
             }
-            sql+=", PRIMARY KEY(TableID));";
+            sql+=",Action VARCHAR(255), PRIMARY KEY(TableID));";
 //            sql += ", PRIMARY KEY (TABLEID));";
 //            sql += ", PRIMARY KEY (";
 //            //
@@ -111,28 +112,27 @@ public class TxtToSQL {
     /**
      * Insert record into sql table
      * @param tableName
-     * @param slotType
-     * @param slotValue
      */
-    public void insertRecord(String tableName, String[] slotType, String[] slotValue) {
+    public void insertSlots(String tableName, List<String[]> slots) {
 
         try {
 
             Connection conn = DriverManager.getConnection(url, user, password);
-            String sql = "INSERT INTO " + tableName + "(";
+            String sql = "INSERT INTO " + tableName + "(SlotType, SlotValue) VALUES(";
 
-            for(int i=0; i<slotType.length; i++){
-                sql += slotType[i];
-                if(i+1<slotType.length) sql += ",";
+            for(int i=0; i<slots.size()-1; i++){
+                for(int j=0; j<slots.get(i).length;j++){
+                    sql += "('" + slots.get(i)+ "','";
+                    if(slots.get(i+1).equals("")){
+                        sql+=" '";
+                    }else{
+                        sql+=slots.get(i+1)+"')";
+                    }
+                }
+                sql+=",(";
             }
-            sql += ") VALUES (";
-
-            for(int i=0; i<slotValue.length; i++){
-                sql += "'" + slotValue[i] + "'";
-                if(i+1<slotType.length) sql += ",";
-            }
-            
-            sql += ");";
+            sql = sql.substring(0,sql.length()-2);
+            sql += ";";
             
 
             // SQL query
@@ -151,27 +151,31 @@ public class TxtToSQL {
     }
 
     /**
-     *
-     * @param slotSet
-     * @param action
-     * @param id
+     * Insert record into sql table
+     * @param columns, row
+     * @param row, columns
+     * @param id, table id
      */
-    public void insertAction(Set<Slots> slotSet, String action, String id){
+    public void insertAction(Set<String> columns, List<String[]> row, String id){
 
         try {
-            Connection conn = DriverManager.getConnection(url, user, password);
+
             String sql = "INSERT INTO action_"+ id +"(";
-            for(Slots slot: slotSet){
-                sql += slot.getSlotType() + ",";
+            for(String column: columns){
+                sql += column + ",";
             }
             sql += "Action) VALUES(";
-
-            for(Slots slot: slotSet){
-                sql += "'" + slot.getSlotValue() + "'" + ",";
+            for(int i=0; i<row.size();i++){
+                for(int j=0; j<row.get(i).length-1;j++){
+                    sql += "'" + row.get(i)[j] + "',";
+                }
+                sql+="'"+row.get(i)[row.get(i).length-1]+"'),(";
             }
-            sql += "'" +action + "');";
+            sql = sql.substring(0,sql.length()-2);
+            sql += ";";
 
             // Create a statement and execute the query
+            Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
 

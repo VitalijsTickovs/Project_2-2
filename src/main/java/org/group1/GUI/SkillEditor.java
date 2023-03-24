@@ -18,9 +18,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.database.DatabaseCredentials;
 import org.group1.database.SQLGUIConnection;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -38,11 +41,11 @@ public class SkillEditor implements CustomStage{
     ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput,prevoiusQuestion;
     private Text username;
+    private final Response response;
 
     private String skillInput="";
-    public  SkillEditor(){
-        System.out.println(SQLGUIConnection.username);
-        System.out.println(SQLGUIConnection.password);
+    public  SkillEditor(Response response){
+        this.response = response;
         try {
             fs = new SkillFileService();
         } catch (IOException e) {
@@ -188,7 +191,7 @@ public class SkillEditor implements CustomStage{
             @Override
             public void handle(ActionEvent event) {
                 System.out.println(fs.getFiles().length);
-                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length);
+                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length,response);
                 displaySkills.setStage(UIstage, chatStage);
             }
         });

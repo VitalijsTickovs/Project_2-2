@@ -13,7 +13,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.back_end.response.Response;
+import org.group1.database.DatabaseCredentials;
 import org.group1.database.SQLGUIConnection;
+import org.group1.database.TxtToSQL;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,10 +34,12 @@ public class DisplaySkills implements  CustomStage {
     private Button submit,displaySkills,back,help,defineSkills;
     private SQLGUIConnection sql = new SQLGUIConnection();
     private int skillSize;
+    private final Response response;
+    private DatabaseCredentials credentials;
 
-    public DisplaySkills(int id){
-
+    public DisplaySkills(int id, Response response){
         this.skillSize = id;
+        this.response = response;
         loadSkillsFromDatabase();
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
@@ -67,6 +72,7 @@ public class DisplaySkills implements  CustomStage {
             slotNames.add(tempSlot.get(i));
         }
     }
+
     public void createButtons(){
         // displayskills button
         displaySkills = new Button();
@@ -144,7 +150,7 @@ public class DisplaySkills implements  CustomStage {
         defineSkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SkillEditor skillEditor = new SkillEditor();
+                SkillEditor skillEditor = new SkillEditor(response);
                 skillEditor.setStage(UIstage,chatStage);
             }
         });
@@ -265,7 +271,7 @@ public class DisplaySkills implements  CustomStage {
                     int colNum = sql.getColumnNumber(temp);
                     int rowNum = sql.getRowNumber(temp);
 
-                    SkillDetails skillDetails= new SkillDetails(temp,colNum,rowNum,tempSlot);
+                    SkillDetails skillDetails= new SkillDetails(temp,colNum,rowNum,tempSlot, response);
                     skillDetails.setStage(UIstage,chatStage);
 
                     } catch (SQLException e) {

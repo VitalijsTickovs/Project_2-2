@@ -1,5 +1,6 @@
 package org.group1.back_end.response.skills;
 
+import org.apache.ibatis.jdbc.SQL;
 import org.group1.back_end.response.ResponseLibrary;
 import org.group1.back_end.response.skills.databases.DB_Manager;
 import org.group1.back_end.textprocessing.SimpleProcess;
@@ -17,6 +18,9 @@ public class Skill {
     public static Set<String> VOCABULARY = new HashSet<>();
     public static List<List<String>> COMPLETE_QUERY = new LinkedList<>();
     public static DB_Manager DATABASE_MANAGER;
+    public List<List<List<String>>> SQL_Fromatting;
+    public List<String> questions;
+    public List<Set<String>> slots;
 
     /**
      * Build a file SERVICE and list for skills.
@@ -26,6 +30,9 @@ public class Skill {
     public Skill() throws Exception {
         DATABASE_MANAGER = new DB_Manager();
         SERVICE = new SkillFileService();
+        SQL_Fromatting = new ArrayList<>();
+        questions= new ArrayList<>();
+        slots= new ArrayList<>();
         generateSkills();
     }
 
@@ -71,6 +78,9 @@ public class Skill {
                pairs1[1] = actions.get(i);
                pairSet.add(pairs1);
            }
+           SQL_Fromatting.add(sp.getSQL_Formating());
+           this.questions.add(sp.getOriginalQuestion());
+
         }
 
         for (String[] pair : pairSet) {
@@ -90,6 +100,16 @@ public class Skill {
        return DATABASE_MANAGER.getFirst(text, dataBase);
     }
 
+    public List<List<List<String>>> getSQL_Fromatting(){
+        return this.SQL_Fromatting;
+    }
+
+    public List<Set<String>> getSlots(){
+        return this.slots;
+    }
+    public List<String> getQuestions(){
+        return questions;
+    }
 
     public static void main(String[] args) throws Exception {
         Skill s = new Skill();
@@ -112,7 +132,6 @@ public class Skill {
 
         //Print.printKeys();
         //Print.printVocabulary();
-
 
     }
 

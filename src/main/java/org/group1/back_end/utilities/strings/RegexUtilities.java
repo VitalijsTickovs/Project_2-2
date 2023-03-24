@@ -108,7 +108,7 @@ public class RegexUtilities {
         if (matcher.find()) {
             return matcher.group();
         } else {
-            return null;
+            return "";
         }
     }
 

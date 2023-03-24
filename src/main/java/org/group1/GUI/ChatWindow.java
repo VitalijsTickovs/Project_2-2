@@ -17,9 +17,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.util.ArrayList;
+
+import java.util.*;
+
+import org.group1.back_end.utilities.strings.RegexUtilities;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.group1.back_end.response.Response;
+import org.group1.database.DatabaseCredentials;
+import org.group1.database.TxtToSQL;
+
+import javax.xml.crypto.Data;
 
 
 public class ChatWindow implements CustomStage {
@@ -44,8 +52,10 @@ public class ChatWindow implements CustomStage {
 
 
     public ChatWindow(){
+        System.out.println(DatabaseCredentials.getUsername());
         try{
             responseGenerator = new Response();
+            generateSQL();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,6 +68,81 @@ public class ChatWindow implements CustomStage {
         UIstage.setScene(UIscene);
         design();
         keyboardHandler();
+    }
+    private void generateSQL(){
+        TxtToSQL sql = new TxtToSQL();
+        List<List<List<String>>> rules = responseGenerator.getSQL();
+        List<String> questions = responseGenerator.getQuestion();
+        int maxColumns=0;
+        System.out.println("Rules: " + rules);
+        //Go through all rules
+        for(int i=0; i<rules.size();i++){
+            int numberOfPlaceholders = RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");
+            String id = Integer.toString(i+1);
+            List<List<String>> actions = rules.get(i);
+            Set<String> columnActions = new LinkedHashSet<>();
+            String questionq = questions.get(i);
+            for(int z=0;z<RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");z++) {
+                String temp = RegexUtilities.getOriginalFormatFromRegex(questionq, "<.*?>");
+                columnActions.add(temp.replace("<","").replace(">",""));
+                questionq = RegexUtilities.replaceRegex(questionq, temp, "");
+            }
+            List<String[]> slots = new ArrayList<>();
+            //Going through actions in rule_i
+            System.out.println("Actions: " + actions);
+            System.out.println();
+            for(int j=0; j < actions.size(); j++){
+                //Get the action
+                List<String> action = actions.get(j);
+                String[] remapped = new String[numberOfPlaceholders+1];
+                String text = action.toString();
+//                //Count number of occurences of <>(placeholders)
+//                int counter = RegexUtilities.countRegexOccurrences(text,"<.*?>");
+                //Adds the <> if not in Set
+
+
+                //Get used slots and action only
+                //Filter out commas
+                String[] bla = text.split(",");
+                //Filtering of "[","]" and ""
+                int counter =0;
+                for(int z=0;z<bla.length-1;z++){
+                    bla[z] = bla[z]
+                            .replaceAll("\\[","")
+                            .replaceAll("\\]","")
+                            .trim();
+                    System.out.println("bla: " + bla[z]);
+                    //add the word only if it doesn't contain placeholder
+                    if(RegexUtilities.countRegexOccurrences(bla[z],"<.*?>") == 0){
+                        remapped[counter]=bla[z];
+                        counter++;
+                    }
+                }
+                remapped[remapped.length-1]=bla[bla.length-1];
+                slots.add(remapped);
+            }
+
+            Set<String> updatedSet = new LinkedHashSet<>();
+            for(String action: columnActions){
+                updatedSet.add(action.replace("<","").replace(">",""));
+            }
+
+            columnActions = updatedSet;
+            //remove ""
+            columnActions.remove("");
+            sql.removeTables(id);
+            //Create a table slot_id with columnActions
+            sql.createTable("slot_"+id,new ArrayList<>(columnActions));
+
+            //Create a table action_id with columnActions
+            sql.createActionTable(Integer.toString(i+1),columnActions.toArray());
+            //Inserting data in to action_id
+            sql.insertAction(columnActions,slots,id);
+
+            //Inserting all slots in to slot_id
+            slots.remove(slots.size()-1);
+            sql.insertSlots("slot_"+id, slots);
+        }
     }
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
@@ -181,7 +266,7 @@ public class ChatWindow implements CustomStage {
          skillsButton.setOnAction(new EventHandler<ActionEvent>() {
              @Override
              public void handle(ActionEvent event) {
-                 SkillEditor skillEditor = new SkillEditor();
+                 SkillEditor skillEditor = new SkillEditor(responseGenerator);
                  skillEditor.setStage(UIstage);
              }
          });

@@ -48,4 +48,13 @@ public class ResponseLibrary {
         return null;
     }
 
+    public List<List<List<String>>> getSQL(){
+        return skills.getSQL_Fromatting();
+    }
+    public List<String> getQuestions(){
+        return skills.getQuestions();
+    }
+    public List<Set<String>> getSets(){
+        return skills.getSlots();
+    }
 }
