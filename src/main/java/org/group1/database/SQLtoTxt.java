@@ -40,9 +40,8 @@ public class SQLtoTxt {
 
         while (rs.next()) {
 
-            System.out.println(rs.getString(1));
-
-            RULE_SLOT += "Slot " + rs.getString(1)+ " " + rs.getString(2) + "\n";
+            if(!rs.getString(2).equals(""))
+                RULE_SLOT += "Slot <" + rs.getString(1).toUpperCase() + "> " + rs.getString(2) + "\n";
 
         }
 
@@ -91,16 +90,16 @@ public class SQLtoTxt {
 
             for(int j=1;j<colNames.size();j++){
 
-                if(rs1.getString(j) !=null){
-                    String actionEntry = "<" + colNames.get(j-1) + "> " + rs1.getString(j) + " ";
+                if(rs1.getString(j) !=null && rs1.getString(j).length()>1){
+                    String actionEntry = "<" + colNames.get(j-1).toUpperCase() + "> " + rs1.getString(j) + " ";
                     ACTION_STRING += actionEntry;
                     System.out.println(actionEntry);
-                    System.out.println(rs1.getString(j));
+                    System.out.println(rs1.getString(j).length());
                 }
 
             }
 
-            if(rs1.getString(columnCount)!=null){
+            if(rs1.getString(columnCount)!=null || rs1.getString(columnCount).equals("")){
 
                 // add the action at end
                 ACTION_STRING += rs1.getString(columnCount);
@@ -122,7 +121,7 @@ public class SQLtoTxt {
 
     public static void overWrite(String id){
         try {
-            GeneralFileService.overWrite(slotIDtoString(id)+actionIDtoString(id), id);
+            GeneralFileService.overWrite(id,slotIDtoString(id)+actionIDtoString(id));
         }catch(Exception e){
             e.printStackTrace();
         }

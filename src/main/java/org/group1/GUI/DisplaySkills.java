@@ -35,7 +35,6 @@ public class DisplaySkills implements  CustomStage {
     private SQLGUIConnection sql = new SQLGUIConnection();
     private int skillSize;
     private final Response response;
-    private DatabaseCredentials credentials;
 
     public DisplaySkills(int id, Response response){
         this.skillSize = id;

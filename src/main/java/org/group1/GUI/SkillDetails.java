@@ -64,7 +64,11 @@ public class SkillDetails implements CustomStage {
         id = tableName.replace("action_","");
         slotColumnNames = sql.getColumnNames("slot_"+id);
         //sql.setEmptyNull(tableName,columnNames);
-
+        try{
+            fs = new SkillFileService();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         slotData(slotTable);

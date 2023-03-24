@@ -19,6 +19,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.database.DatabaseCredentials;
 
+import static org.group1.database.DatabaseCredentials.setPassword;
+import static org.group1.database.DatabaseCredentials.setUsername;
+
 public class LoginScreen implements CustomStage {
     //VIEW SETTINGS
     private AnchorPane UIpane;
@@ -29,7 +32,6 @@ public class LoginScreen implements CustomStage {
     static int screenHeight = 700;
     public Button loginButton;
     private Stage chatWindow;
-    DatabaseCredentials databaseCredentials = new DatabaseCredentials();
     public LoginScreen(){
         UIpane = new AnchorPane();
         UIstage = new Stage();
@@ -139,8 +141,8 @@ public class LoginScreen implements CustomStage {
             public void handle(ActionEvent actionEvent) {
                 System.out.println("hello");
                 ChatWindow chatWindow= null;
-                databaseCredentials.setPassword(passwordTextField.getText());
-                databaseCredentials.setUsername(loginTextField.getText());
+                setPassword(passwordTextField.getText());
+                setUsername(loginTextField.getText());
                 try {
                     chatWindow = new ChatWindow();
                 } catch (Exception e) {

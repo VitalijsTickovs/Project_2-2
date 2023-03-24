@@ -74,32 +74,38 @@ public class ChatWindow implements CustomStage {
         List<List<List<String>>> rules = responseGenerator.getSQL();
         List<String> questions = responseGenerator.getQuestion();
         int maxColumns=0;
-        System.out.println("Rules: " + rules);
         //Go through all rules
         for(int i=0; i<rules.size();i++){
             int numberOfPlaceholders = RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");
             String id = Integer.toString(i+1);
             List<List<String>> actions = rules.get(i);
-            Set<String> columnActions = new LinkedHashSet<>();
+            ArrayList<String> columnActions = new ArrayList<>();
             String questionq = questions.get(i);
+            //Count number of occurences of <>(placeholders)
             for(int z=0;z<RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");z++) {
                 String temp = RegexUtilities.getOriginalFormatFromRegex(questionq, "<.*?>");
-                columnActions.add(temp.replace("<","").replace(">",""));
                 questionq = RegexUtilities.replaceRegex(questionq, temp, "");
+                temp = temp.replace("<","").replace(">","");
+                //check if columns repeat
+                int repeats =0;
+                for(String column: columnActions){
+                    if(column.equals(temp)){
+                        repeats++;
+                    }
+                }
+                if(repeats>0){
+
+                    temp+="_"+(++repeats);
+                }
+                columnActions.add(temp);
             }
             List<String[]> slots = new ArrayList<>();
             //Going through actions in rule_i
-            System.out.println("Actions: " + actions);
-            System.out.println();
             for(int j=0; j < actions.size(); j++){
                 //Get the action
                 List<String> action = actions.get(j);
                 String[] remapped = new String[numberOfPlaceholders+1];
                 String text = action.toString();
-//                //Count number of occurences of <>(placeholders)
-//                int counter = RegexUtilities.countRegexOccurrences(text,"<.*?>");
-                //Adds the <> if not in Set
-
 
                 //Get used slots and action only
                 //Filter out commas
@@ -109,9 +115,8 @@ public class ChatWindow implements CustomStage {
                 for(int z=0;z<bla.length-1;z++){
                     bla[z] = bla[z]
                             .replaceAll("\\[","")
-                            .replaceAll("\\]","")
+                            .replaceAll("]","")
                             .trim();
-                    System.out.println("bla: " + bla[z]);
                     //add the word only if it doesn't contain placeholder
                     if(RegexUtilities.countRegexOccurrences(bla[z],"<.*?>") == 0){
                         remapped[counter]=bla[z];
@@ -122,26 +127,19 @@ public class ChatWindow implements CustomStage {
                 slots.add(remapped);
             }
 
-            Set<String> updatedSet = new LinkedHashSet<>();
-            for(String action: columnActions){
-                updatedSet.add(action.replace("<","").replace(">",""));
-            }
-
-            columnActions = updatedSet;
             //remove ""
             columnActions.remove("");
             sql.removeTables(id);
             //Create a table slot_id with columnActions
-            sql.createTable("slot_"+id,new ArrayList<>(columnActions));
 
             //Create a table action_id with columnActions
-            sql.createActionTable(Integer.toString(i+1),columnActions.toArray());
+            sql.createActionTable(Integer.toString(i+1),columnActions);
             //Inserting data in to action_id
             sql.insertAction(columnActions,slots,id);
 
             //Inserting all slots in to slot_id
-            slots.remove(slots.size()-1);
-            sql.insertSlots("slot_"+id, slots);
+            sql.createTable("slot_"+id);
+            sql.insertSlots("slot_"+id, slots, columnActions);
         }
     }
     public void setStage(Stage mainStage){

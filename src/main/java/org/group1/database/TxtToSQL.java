@@ -24,32 +24,23 @@ public class TxtToSQL {
     public TxtToSQL(){
         user = DatabaseCredentials.getUsername();
         password = DatabaseCredentials.getPassword();
-        createDatabase(user, password);
+        createDatabase();
     }
 
     /**
      * Build SQL table
      * @param tableName
-     * @param colNames
      */
-    public void createTable(String tableName, List<String> colNames){
+    public void createTable(String tableName){
         try {
             // SQL query
-            String sql = "CREATE TABLE "+ tableName + " (TableID int NOT NULL AUTO_INCREMENT, ";
+            String sql = "CREATE TABLE "+ tableName +
+                    " (TableID int NOT NULL AUTO_INCREMENT, " +
+                    "SlotType VARCHAR(255), SlotValue VARCHAR(255)";
+            sql+=", PRIMARY KEY(TableID));";
 
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
-
-            for(int i=0;i<colNames.size();i++){
-                sql = sql + colNames.get(i) + " VARCHAR(255)";
-                if(i+1<colNames.size()){
-                    sql+= ", ";
-                }
-            }
-            sql+=", PRIMARY KEY(TableID));";
-            //
-            System.out.println(sql);
-
             stmt.executeUpdate(sql);
 
             // Close the database connection
@@ -63,7 +54,7 @@ public class TxtToSQL {
 
 
 
-    public void createActionTable(String id, Object[] colNames){
+    public void createActionTable(String id, ArrayList<String> colNames){
         try {
             // SQL query
             String sql = "CREATE TABLE action_" + id + " (TableID int NOT NULL AUTO_INCREMENT, ";
@@ -71,26 +62,13 @@ public class TxtToSQL {
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
 
-            for(int i=0;i<colNames.length;i++){
-                sql = sql + colNames[i] + " VARCHAR(255)";
-                if(i+1<colNames.length){
+            for(int i=0;i<colNames.size();i++){
+                sql = sql +colNames.get(i).toLowerCase() + " VARCHAR(255)";
+                if(i+1<colNames.size()){
                     sql+= ", ";
                 }
             }
-            sql+=",Action VARCHAR(255), PRIMARY KEY(TableID));";
-//            sql += ", PRIMARY KEY (TABLEID));";
-//            sql += ", PRIMARY KEY (";
-//            //
-//
-//            // BUILD COMBINED PRIMARY KEY BASED ON COMBINED
-//            for(int i=0;i<colNames.size()-1;i++){
-//                sql += colNames.get(i)+",";
-//
-//            }
-//            sql = sql.substring(0,sql.length()-1)+") ,INDEX idx_table_id (TableID));";
-//            sql +=
-
-            // TODO: default value
+            sql+=", Action VARCHAR(255), PRIMARY KEY(TableID));";
 
             System.out.println(sql);
 
@@ -113,30 +91,25 @@ public class TxtToSQL {
      * Insert record into sql table
      * @param tableName
      */
-    public void insertSlots(String tableName, List<String[]> slots) {
+    public void insertSlots(String tableName, List<String[]> slotValues, List<String> slotTypes) {
 
         try {
 
             Connection conn = DriverManager.getConnection(url, user, password);
-            String sql = "INSERT INTO " + tableName + "(SlotType, SlotValue) VALUES(";
-
-            for(int i=0; i<slots.size()-1; i++){
-                for(int j=0; j<slots.get(i).length;j++){
-                    sql += "('" + slots.get(i)+ "','";
-                    if(slots.get(i+1).equals("")){
-                        sql+=" '";
+            String sql = "INSERT INTO " + tableName + "(SlotType, SlotValue) VALUES";
+            for(int i=0; i<slotValues.size(); i++){
+                String[] values = slotValues.get(i);
+                for(int j=0; j<values.length-1;j++) {
+                    sql +="('"+ slotTypes.get(j) + "',";
+                    if(values[j]==null || values[j].equals("")){
+                        sql+= "''),";
                     }else{
-                        sql+=slots.get(i+1)+"')";
+                        sql+= "'"+values[j] + "'),";
                     }
                 }
-                sql+=",(";
             }
-            sql = sql.substring(0,sql.length()-2);
+            sql = sql.substring(0,sql.length()-1);
             sql += ";";
-            
-
-            // SQL query
-                // slotType + ") VALUES ('" + slotValue + "')";
 
             // Create a statement and execute the query
             Statement stmt = conn.createStatement();
@@ -156,23 +129,28 @@ public class TxtToSQL {
      * @param row, columns
      * @param id, table id
      */
-    public void insertAction(Set<String> columns, List<String[]> row, String id){
+    public void insertAction(List<String> columns, List<String[]> row, String id){
 
         try {
 
             String sql = "INSERT INTO action_"+ id +"(";
             for(String column: columns){
-                sql += column + ",";
+                sql += column.toLowerCase() + ",";
             }
             sql += "Action) VALUES(";
             for(int i=0; i<row.size();i++){
-                for(int j=0; j<row.get(i).length-1;j++){
-                    sql += "'" + row.get(i)[j] + "',";
+                String[] action = row.get(i);
+                for(int j=0; j<action.length;j++){
+                    if(action[j]==null || action[j].equals("")){
+                        sql+= "'',";
+                    }else{
+                        sql+= "'"+action[j].replace("[","").replace("]","")+"',";
+                    }
                 }
-                sql+="'"+row.get(i)[row.get(i).length-1]+"'),(";
+                sql = sql.substring(0,sql.length()-1)+"),(";
             }
-            sql = sql.substring(0,sql.length()-2);
-            sql += ";";
+            sql= sql.substring(0,sql.length()-2);
+            System.out.println(sql);
 
             // Create a statement and execute the query
             Connection conn = DriverManager.getConnection(url, user, password);
@@ -209,7 +187,6 @@ public class TxtToSQL {
     //TODO: extra testing
     public static void main(String[] args) {
         TxtToSQL t = new TxtToSQL();
-       // t.insertRecord("rule", "Action","I have no idea");
     }
 
 
