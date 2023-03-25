@@ -50,7 +50,6 @@ public class SkillGenerator {
     }
 
     public void processQuestion(String text){
-
         originalQuestion = filterLineByRegex(text, "Question")
                 .get(0)
                 .replace("Question", "")

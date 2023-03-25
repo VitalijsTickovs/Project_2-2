@@ -20,12 +20,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
-import org.group1.database.DatabaseCredentials;
-import org.group1.database.SQLGUIConnection;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.util.Arrays;
+
+import static org.group1.back_end.utilities.GeneralFileService.*;
 
 
 public class SkillEditor implements CustomStage{
@@ -333,8 +331,7 @@ public class SkillEditor implements CustomStage{
 
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
-                    try {
-                        fs.write(skillInput);
+                        write(skillInput);
                         skillInput = "";
 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -348,9 +345,6 @@ public class SkillEditor implements CustomStage{
                                 );
 
                         alert.showAndWait();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
                     //transition into slot input, then into action input
                     //each time open the same file id, used in fs
 

@@ -17,6 +17,22 @@ public class GeneralFileService {
         }
     }
 
+    public static void write(String text){
+        String id = Integer.toString(new File((path + DATA_TXT_SKILLS.path)).listFiles().length);
+        String filePath = path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION;
+
+        try{
+            File file = new File(filePath);
+
+            FileWriter writer = new FileWriter(file);
+
+            writer.append(text);
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void overWrite(String id, String text){
         String filePath = path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION;
 

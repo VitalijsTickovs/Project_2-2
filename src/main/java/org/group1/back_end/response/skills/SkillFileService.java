@@ -24,7 +24,9 @@ public class SkillFileService {
 
         List<String> allFiles = new ArrayList<>();
 
-        for (String file : files) allFiles.add(read(file));
+        for (String file : files) {
+            if(file!=null) allFiles.add(read(file));
+        }
 
         return allFiles;
     }
@@ -102,7 +104,11 @@ public class SkillFileService {
 
         String[] paths = new String[files.length];
 
-        for (int i = 0; i < files.length; i++) paths[i] = files[i].getCanonicalPath() ;
+        for (int i = 0; i < files.length; i++) {
+            String path = files[i].getCanonicalPath();
+            if(!path.contains("DS_Store"))
+                paths[i] = path;
+        }
 
         return paths;
     }
