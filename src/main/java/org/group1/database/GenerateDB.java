@@ -12,7 +12,7 @@ public class GenerateDB {
 
     public static void createDatabase(){
 
-        String url = "jdbc:mysql://localhost:3306/skilldb";
+        String url = "jdbc:mysql://localhost:3306/";
         try {
             // Making connection to the sql server
             Connection conn = DriverManager.getConnection(url,

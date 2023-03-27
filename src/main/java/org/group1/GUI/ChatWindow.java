@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import org.group1.back_end.utilities.GeneralFileService;
 import org.group1.back_end.utilities.strings.RegexUtilities;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -52,7 +53,6 @@ public class ChatWindow implements CustomStage {
 
 
     public ChatWindow(){
-        System.out.println(DatabaseCredentials.getUsername());
         try{
             responseGenerator = new Response();
             generateSQL();
@@ -73,11 +73,11 @@ public class ChatWindow implements CustomStage {
         TxtToSQL sql = new TxtToSQL();
         List<List<List<String>>> rules = responseGenerator.getSQL();
         List<String> questions = responseGenerator.getQuestion();
-        int maxColumns=0;
+        GeneralFileService.setSize(rules.size());
         //Go through all rules
         for(int i=0; i<rules.size();i++){
             int numberOfPlaceholders = RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");
-            String id = Integer.toString(i+1);
+            String id = Integer.toString(rules.size()-(i));
             List<List<String>> actions = rules.get(i);
             ArrayList<String> columnActions = new ArrayList<>();
             String questionq = questions.get(i);
@@ -94,7 +94,6 @@ public class ChatWindow implements CustomStage {
                     }
                 }
                 if(repeats>0){
-
                     temp+="_"+(++repeats);
                 }
                 columnActions.add(temp);
@@ -133,7 +132,7 @@ public class ChatWindow implements CustomStage {
             //Create a table slot_id with columnActions
 
             //Create a table action_id with columnActions
-            sql.createActionTable(Integer.toString(i+1),columnActions);
+            sql.createActionTable(id,columnActions);
             //Inserting data in to action_id
             sql.insertAction(columnActions,slots,id);
 
@@ -333,7 +332,6 @@ public class ChatWindow implements CustomStage {
                      scrollChat.getChildren().add(listText.get(listText.size()-1));
 
                      //Getting response from the bot
-                     System.out.println("User input: " + userInput.getText() + " \nResponse: " + responseGenerator.getResponse(userInput.getText()));
                      setBotChatText(responseGenerator.getResponse(userInput.getText()));
 
                      listText.add(new TextArea(currentBotInput));
@@ -435,12 +433,10 @@ public class ChatWindow implements CustomStage {
 
         public int countLines(String string){
             String[] lines = string.split("\r\n|\r|\n");
-            System.out.println("counde lines: "+lines.length);
             int count=lines.length;
             for (int i = 0; i < lines.length; i++) {
                 count=count+18;
             }
-            System.out.println("height "+count);
             return count;
         }
         public int countCharAtLongestLine(String string){
@@ -452,7 +448,6 @@ public class ChatWindow implements CustomStage {
                 }
             }
 
-            System.out.println("counted chars: "+count);
             return count;
         }
     private int y=0;

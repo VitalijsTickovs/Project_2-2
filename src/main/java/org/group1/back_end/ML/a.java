@@ -35,8 +35,6 @@ public class a {
             }
         }
 
-        //
-
         double[] weightA = new double[vectorsA.get(0).length];
         for (int i = 0; i < vectorsA.size(); i++) {
             for (int j = 0; j < vectorsA.get(0).length; j++) {

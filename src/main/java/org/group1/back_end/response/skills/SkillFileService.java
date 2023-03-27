@@ -10,6 +10,7 @@ import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_SKILLS;
 public class SkillFileService {
 
     private static int id = 0;
+    private static int size;
     private static String path;
     private final String FILES_NAMES = "Rule_";
     private final String FILES_EXTENSION = ".txt";
@@ -182,5 +183,9 @@ public class SkillFileService {
 
         writer.close();
 
+    }
+
+    public static int getSize() {
+        return size;
     }
 }

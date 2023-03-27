@@ -1,15 +1,12 @@
 package org.group1.back_end.response;
 
-import org.group1.back_end.ML.model_markov_decision.Markov;
 import org.group1.back_end.response.skills.Skill;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import java.util.*;
 
 import org.group1.back_end.textprocessing.SpellingCorrectProcess;
-import org.group1.back_end.utilities.algebra.Distances;
 import org.group1.back_end.utilities.enums.DB;
-import org.nd4j.common.primitives.Pair;
 
 public class Response {
 

@@ -24,7 +24,6 @@ public class SQLtoTxt {
         String tableName = "slot_" + id;
 
         List<String> colNames = getColumnNames(tableName);
-        System.out.println("number of colnames: " + colNames.size());
 
         Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
@@ -33,7 +32,6 @@ public class SQLtoTxt {
 
         sql = "SELECT DISTINCT " + "SlotType, SlotValue" + " FROM slot_" + id + " ORDER BY SlotType;";
 
-        System.out.println(sql);
         ResultSet rs = stmt.executeQuery(sql);
 
         String RULE_SLOT = "";
@@ -45,7 +43,6 @@ public class SQLtoTxt {
 
         }
 
-        System.out.println(RULE_SLOT);
 
         // Close the database connection
         conn.close();
@@ -65,7 +62,6 @@ public class SQLtoTxt {
 
         List<String> colNames = getColumnNames("action_" + id);
         colNames.remove(0);
-        System.out.println("ColNames: " + colNames);
 
         String sql = "SELECT DISTINCT "+convertToString(colNames)+" FROM action_"+id+";";
         Statement stmt_1 = conn.createStatement();
@@ -90,16 +86,14 @@ public class SQLtoTxt {
 
             for(int j=1;j<colNames.size();j++){
 
-                if(rs1.getString(j) !=null && rs1.getString(j).length()>1){
+                if(rs1.getString(j) !=null && !rs1.getString(j).equals("")){
                     String actionEntry = "<" + colNames.get(j-1).toUpperCase() + "> " + rs1.getString(j) + " ";
                     ACTION_STRING += actionEntry;
-                    System.out.println(actionEntry);
-                    System.out.println(rs1.getString(j).length());
                 }
 
             }
 
-            if(rs1.getString(columnCount)!=null || rs1.getString(columnCount).equals("")){
+            if(rs1.getString(columnCount)!=null && !rs1.getString(columnCount).equals("")){
 
                 // add the action at end
                 ACTION_STRING += rs1.getString(columnCount);

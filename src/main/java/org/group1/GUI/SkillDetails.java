@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.utilities.GeneralFileService;
 import org.group1.database.SQLGUIConnection;
 import org.group1.database.SQLtoTxt;
 
@@ -51,7 +52,7 @@ public class SkillDetails implements CustomStage {
     SkillFileService fs;
 
     List<String> columnNames,slotColumnNames;
-    String tableName,tableName2;
+    String tableName;
     private String id;
     private ArrayList<ArrayList<String>> dataPerColumn = new ArrayList<>();
     private ArrayList<ArrayList<String>> dataPerColumnSlot = new ArrayList<>();
@@ -187,14 +188,14 @@ public class SkillDetails implements CustomStage {
             public void handle(ActionEvent event) {
                 try {
                     sql.setEmptyNull(tableName,columnNames);
-                    SQLtoTxt.overWrite(tableName.replace("action_",""));
+                    SQLtoTxt.overWrite(id);
                     response.reload();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length,response);
+                DisplaySkills displaySkills = new DisplaySkills(GeneralFileService.getSize(),response);
                 displaySkills.setStage(UIstage,chatStage);
             }
         });
@@ -235,7 +236,6 @@ public class SkillDetails implements CustomStage {
         addAction.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("click");
                 try {
                     addRow();
                 } catch (SQLException e) {
@@ -295,7 +295,6 @@ public class SkillDetails implements CustomStage {
                 tempObservable.add("-");
             }
 
-            System.out.println(Arrays.toString(tempObservable.toArray()));
             table2.getItems().add(
                     FXCollections.observableArrayList(
                             tempObservable
@@ -309,7 +308,6 @@ public class SkillDetails implements CustomStage {
             for (int j = 0; j < ColNum; j++) {
                 tempObservable.add("-");
             }
-            System.out.println(Arrays.toString(tempObservable.toArray()));
             table.getItems().add(
                     FXCollections.observableArrayList(
                             tempObservable
@@ -353,7 +351,6 @@ public class SkillDetails implements CustomStage {
             }
         }
 
-        System.out.println("counted chars: "+count);
         return count;
     }
     public void createTable(){
@@ -363,10 +360,6 @@ public class SkillDetails implements CustomStage {
         table.setPrefWidth(480);
         table.setEditable(true);
         table.setStyle("-fx-cell-size: 50px;");
-
-        for (int i = 0; i <columnNames.size()  ;i++) {
-            System.out.println("column: "+columnNames.get(i));
-        }
 
         ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
         //columns
@@ -394,8 +387,6 @@ public class SkillDetails implements CustomStage {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
                     Object newValue = event.getNewValue();
-                    System.out.println(" i am edit row: "+ row + "col :" + colIndex);
-                    System.out.println(newValue.toString());
                     // handle the edit
                     try {
                         sql.updateDatabase(row,newValue.toString(),columnNames.get(colIndex),tableName);
@@ -430,7 +421,6 @@ public class SkillDetails implements CustomStage {
                     public void changed(ObservableValue<? extends TablePosition> observable,
                                         TablePosition oldPos, TablePosition pos) {
                         currentRow = pos.getRow();
-                        System.out.println("deleted row: "+currentRow);
 
                     }
                 });
@@ -449,9 +439,6 @@ public class SkillDetails implements CustomStage {
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
 
-        for (int i = 0; i <slotColumnNames.size()  ;i++) {
-            System.out.println("column: "+slotColumnNames.get(i));
-        }
 
         //columns
         for (int i = 0; i < slotColumnNames.size(); i++) {
@@ -473,21 +460,17 @@ public class SkillDetails implements CustomStage {
 
             //handles editing cells
             //TODO: change it to support same keys
-            System.out.println("cols size: " + table2.getColumns().size());
             table2.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
                     Object newValue = event.getNewValue();
-                    System.out.println(" i am edit row: " + row + "col : " + colIndex);
-                    System.out.println("newvalue: " + newValue.toString());
                     // handle the edit
                     try {
                         sql.updateDatabase(row,newValue.toString(),slotColumnNames.get(colIndex),"slot_"+id);
 
                     } catch (SQLException e) {
                         //TODO: use label or pane... with warning or not?
-                        System.out.println("error");
                         e.printStackTrace();
                     }
                 });
@@ -500,7 +483,6 @@ public class SkillDetails implements CustomStage {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
 
-        System.out.println("size: " + dataPerColumnSlot.size());
         for (int j = 0; j < dataPerColumnSlot.get(0).size(); j++) {
             for (int i = 0; i < 2; i++) {
                 tempObservable.add(dataPerColumnSlot.get(i).get(j));
@@ -520,7 +502,6 @@ public class SkillDetails implements CustomStage {
                     public void changed(ObservableValue<? extends TablePosition> observable,
                                         TablePosition oldPos, TablePosition pos) {
                         currentRow = pos.getRow();
-                        System.out.println("deleted row: "+currentRow);
 
                     }
                 });
@@ -533,11 +514,8 @@ public class SkillDetails implements CustomStage {
     public void slotData(String slotTable) throws SQLException {
 
         List<String> temp = new ArrayList<>();
-        System.out.println("before loop");
         for (int i = 0; i < columnNames.size(); i++) {
-            System.out.println("in loop");
             temp = sql.avaiableDataFromSlot(slotTable,columnNames.get(i));
-            System.out.println(Arrays.toString(temp.toArray()));
             ObservableList<String> values = FXCollections.observableArrayList(temp);
             comboData.add(values);
         }
@@ -545,9 +523,7 @@ public class SkillDetails implements CustomStage {
 
     public void typeData(String slotTable) throws SQLException {
         List<String> temp = new ArrayList<>();
-        System.out.println("in loop");
         temp = sql.getSlotType(slotTable);
-        System.out.println(Arrays.toString(temp.toArray()));
         ObservableList<String> values = FXCollections.observableArrayList(temp);
         slotComboData.add(values);
     }

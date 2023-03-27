@@ -9,6 +9,8 @@ public class GeneralFileService {
     private static final String FILES_NAMES = "Rule_";
     private static final  String FILES_EXTENSION = ".txt";
 
+    private static int size;
+
     static{
         try {
             path = new File(".").getCanonicalPath();
@@ -48,5 +50,13 @@ public class GeneralFileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int getSize() {
+        return size;
+    }
+
+    public static void setSize(int size1){
+        size = size1;
     }
 }

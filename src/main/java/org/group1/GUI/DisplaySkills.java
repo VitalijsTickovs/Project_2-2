@@ -66,8 +66,6 @@ public class DisplaySkills implements  CustomStage {
         tempAction = sql.getActionTableNames();
         for (int i = 0; i < this.skillSize; i++) {
             actionNames.add(tempAction.get(i));
-            System.out.println("action: ");
-            System.out.println(actionNames.get(i));
             slotNames.add(tempSlot.get(i));
         }
     }

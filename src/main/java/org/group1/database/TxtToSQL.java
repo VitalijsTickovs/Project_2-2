@@ -70,7 +70,6 @@ public class TxtToSQL {
             }
             sql+=", Action VARCHAR(255), PRIMARY KEY(TableID));";
 
-            System.out.println(sql);
 
             stmt.executeUpdate(sql);
 
@@ -100,17 +99,13 @@ public class TxtToSQL {
             for(int i=0; i<slotValues.size(); i++){
                 String[] values = slotValues.get(i);
                 for(int j=0; j<values.length-1;j++) {
-                    sql +="('"+ slotTypes.get(j) + "',";
-                    if(values[j]==null || values[j].equals("")){
-                        sql+= "''),";
-                    }else{
-                        sql+= "'"+values[j] + "'),";
+                    if(values[j]!=null && !values[j].equals("")){
+                        sql +="('"+ slotTypes.get(j) + "','"+values[j]+"'),";
                     }
                 }
             }
             sql = sql.substring(0,sql.length()-1);
             sql += ";";
-
             // Create a statement and execute the query
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
@@ -150,7 +145,6 @@ public class TxtToSQL {
                 sql = sql.substring(0,sql.length()-1)+"),(";
             }
             sql= sql.substring(0,sql.length()-2);
-            System.out.println(sql);
 
             // Create a statement and execute the query
             Connection conn = DriverManager.getConnection(url, user, password);

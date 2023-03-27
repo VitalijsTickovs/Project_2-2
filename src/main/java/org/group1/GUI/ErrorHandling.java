@@ -2,8 +2,6 @@ package org.group1.GUI;
 
 public class ErrorHandling {
     public boolean stringLengthError(String string){
-        System.out.println(string);
-        System.out.println(string.length());
      if(string.length()>0){
          return true;
      }return false;

@@ -139,7 +139,6 @@ public class LoginScreen implements CustomStage {
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("hello");
                 ChatWindow chatWindow= null;
                 setPassword(passwordTextField.getText());
                 setUsername(loginTextField.getText());

@@ -130,7 +130,6 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         }
 
         // flip the column
-        System.out.println("COUNT "+count);
         return count-1;
     }
 
@@ -160,11 +159,9 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         ArrayList<String> temp= new ArrayList<>();
-        System.out.println("SELECT DISTINCT SlotValue from " + tableName +" WHERE SlotType = " + "'" + slotType + "'");
         ResultSet resultSet = statement.executeQuery("SELECT DISTINCT SlotValue from " + tableName +" WHERE SlotType = " + "'" + slotType + "'");
         while (resultSet.next()) {
             temp.add(resultSet.getString("SlotValue"));
-            System.out.println("IN METHOD " + resultSet.getString("SlotValue"));
         }
         return temp;
     }
@@ -173,11 +170,9 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         ArrayList<String> temp= new ArrayList<>();
-        System.out.println("SELECT DISTINCT SlotType from " + tableName);
         ResultSet resultSet = statement.executeQuery("SELECT DISTINCT SlotType from " + tableName);
         while (resultSet.next()) {
             temp.add(resultSet.getString("SlotType"));
-            System.out.println("IN METHOD " + resultSet.getString("SlotType"));
         }
         return temp;
     }
@@ -186,10 +181,6 @@ public class SQLGUIConnection extends    DatabaseCredentials {
         Connection connection = DriverManager.getConnection(url, username, password);
         Statement statement = connection.createStatement();
         rowID=rowID+1;
-        System.out.println( "ID ROW " + rowID);
-        System.out.println(newValue);
-        System.out.println(columnName);
-        System.out.println(tableName);
         String sql ="UPDATE "+ tableName +" SET " + columnName +"='" + newValue+ "' WHERE TableID="+rowID;
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -250,7 +241,6 @@ public class SQLGUIConnection extends    DatabaseCredentials {
             String sql = "UPDATE " + tableName + " SET " + columnNames.get(i) + "= NULL WHERE " + columnNames.get(i) + "='-'";
 
             sql+= ";";
-            System.out.println("god's word: " + sql);
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
         }

@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.utilities.GeneralFileService;
 
 import java.io.IOException;
 
@@ -188,8 +189,7 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(fs.getFiles().length);
-                DisplaySkills displaySkills = new DisplaySkills(fs.getFiles().length,response);
+                DisplaySkills displaySkills = new DisplaySkills(GeneralFileService.getSize(),response);
                 displaySkills.setStage(UIstage, chatStage);
             }
         });
