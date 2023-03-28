@@ -10,10 +10,6 @@ import java.util.List;
 public class SQLtoTxt {
 
 
-    String question = "";
-    private static String defaultAction = "Action I have no idea";
-    int numberOfCols = 0;
-
     /**
      * Slot ID for the format to put into the rule .txt file
      * @param id
@@ -23,14 +19,12 @@ public class SQLtoTxt {
     public static String slotIDtoString(String id) throws SQLException {
         String tableName = "slot_" + id;
 
-        List<String> colNames = getColumnNames(tableName);
-
         Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(), DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
 
         String sql="";
         Statement stmt = conn.createStatement();
 
-        sql = "SELECT DISTINCT " + "SlotType, SlotValue" + " FROM slot_" + id + " ORDER BY SlotType;";
+        sql = "SELECT DISTINCT " + "SlotType, SlotValue" + " FROM " + tableName + " ORDER BY SlotType;";
 
         ResultSet rs = stmt.executeQuery(sql);
 
@@ -53,7 +47,7 @@ public class SQLtoTxt {
 
     // TODO: if null, don't build the string
     public static String actionIDtoString(String id) throws SQLException{
-
+        String tablename = "action_" + id;
         // sql magic
         Connection conn = DriverManager.getConnection(DatabaseCredentials.getURL(),
                 DatabaseCredentials.getUsername(), DatabaseCredentials.getPassword());
@@ -63,7 +57,7 @@ public class SQLtoTxt {
         List<String> colNames = getColumnNames("action_" + id);
         colNames.remove(0);
 
-        String sql = "SELECT DISTINCT "+convertToString(colNames)+" FROM action_"+id+";";
+        String sql = "SELECT DISTINCT "+convertToString(colNames)+" FROM "+tablename+";";
         Statement stmt_1 = conn.createStatement();
         ResultSet rs1 = stmt_1.executeQuery(sql);
         // number of columns
@@ -78,11 +72,7 @@ public class SQLtoTxt {
 
         while (rs1.next()) {
 
-
             ACTION_STRING += "Action ";
-
-            int lastColumnIdx = colNames.size();
-
 
             for(int j=1;j<colNames.size();j++){
 
@@ -94,21 +84,14 @@ public class SQLtoTxt {
             }
 
             if(rs1.getString(columnCount)!=null && !rs1.getString(columnCount).equals("")){
-
                 // add the action at end
                 ACTION_STRING += rs1.getString(columnCount);
             }
 
 
             ACTION_STRING += "\n";
-
-
             rowCounter++;
-            System.out.println("row count: " + rowCounter);
-            System.out.println("actionstring: " + ACTION_STRING);
         }
-
-        //System.out.println(ACTION_STRING);
 
         return ACTION_STRING;
     }

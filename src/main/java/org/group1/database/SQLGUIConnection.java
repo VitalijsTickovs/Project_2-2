@@ -65,7 +65,6 @@ public class SQLGUIConnection extends    DatabaseCredentials {
             while (rs.next()) {
                 if(rs.getString("TABLE_NAME").charAt(0)=='a') {
                     tableNames.add(rs.getString("TABLE_NAME"));
-                    System.out.println(rs.getString("TABLE_NAME"));
                 }
             }
             conn.close();
@@ -88,7 +87,6 @@ public class SQLGUIConnection extends    DatabaseCredentials {
             while (rs.next()) {
                 if(rs.getString("TABLE_NAME").charAt(0)=='s') {
                     tableNames.add(rs.getString("TABLE_NAME"));
-                    System.out.println(rs.getString("TABLE_NAME"));
                 }
             }
             conn.close();

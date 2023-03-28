@@ -8,14 +8,6 @@ import java.util.*;
 import static org.group1.database.GenerateDB.createDatabase;
 
 public class TxtToSQL {
-
-    private ArrayList<String> slotType = new ArrayList<>();
-
-    int tableID = 1;                                        // ...
-    String tableName = "Rule " + tableID;                   // ...
-    ArrayList<String> colNames = new ArrayList<>();         // this is the slotNames
-
-
     // Connect to the database
     String url = "jdbc:mysql://localhost:3306/skilldb";
     String user;
