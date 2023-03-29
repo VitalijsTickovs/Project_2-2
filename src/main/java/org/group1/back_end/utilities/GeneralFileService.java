@@ -20,7 +20,7 @@ public class GeneralFileService {
     }
 
     public static void write(String text){
-        String id = Integer.toString(new File((path + DATA_TXT_SKILLS.path)).listFiles().length);
+        String id = Integer.toString(new File((path + DATA_TXT_SKILLS.path)).listFiles().length+1);
         String filePath = path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION;
 
         try{

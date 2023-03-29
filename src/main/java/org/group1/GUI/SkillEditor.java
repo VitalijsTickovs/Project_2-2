@@ -82,18 +82,6 @@ public class SkillEditor implements CustomStage{
         });
     }
     public void createButtons(){
-        //add actions button
-//        addActions = new Button();
-//        addActions.setText("ADD ACTIONS");
-//        addActions.setFont(Font.font("Impact", FontWeight.BOLD,30));
-//        addActions.setStyle("-fx-background-color: transparent");
-//        addActions.setTextFill(Color.WHITE);
-//        addActions.setLayoutX(20);
-//        addActions.setLayoutY(400);
-//        addActions.setTextFill(Color.rgb(42,97,117));
-//        addActions.setCursor(Cursor.CLOSED_HAND);
-//        UIpane.getChildren().add(addActions);
-
         //displaySkillsButton
         displaySkills = new Button();
         displaySkills.setText("DISPLAY SKILLS");
@@ -263,12 +251,6 @@ public class SkillEditor implements CustomStage{
                     prevoiusQuestion.setLayoutY(450);
                     prevoiusQuestion.setPrefSize(400,300);
                     UIpane.getChildren().add(prevoiusQuestion);
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Defined Question");
-//                    alert.setHeaderText(null);
-//                    alert.setContentText(skillInput);
-//
-//                    alert.showAndWait();
                     // this makes the next available rule .txt
                     // in which we will add the actions & slots
                 } else System.out.println("invalid message");
