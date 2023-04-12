@@ -8,7 +8,7 @@ import java.util.*;
 
 import static org.group1.back_end.utilities.algebra.Distances.cosine;
 
-public class DB_Vectors implements iDataBase{
+public class DB_Vectors extends DB_Manager implements iDataBase<String, String>{
 
     public static Map<double[], String> QUERY_VECTOR_MATCHING;
     public static Map<double[], String> RETRIEVE_QUERY;
@@ -46,16 +46,6 @@ public class DB_Vectors implements iDataBase{
         List<String> newKey = Arrays.stream(process(key).split(" ")).toList();
         double[] tempKey = ResponseLibrary.VECTOR_SIF.getVector(newKey);
 
-        /*
-        double[] tempKey = ResponseLibrary.WORD2VEC
-                .getWordVectorsMean(Arrays
-                        .stream(key
-                                .toLowerCase()
-                                .trim()
-                                .split(" "))
-                        .toList())
-                .toDoubleVector();
-         */
         double[] keySet = null;
 
         for (Map.Entry<double[], String> entry : QUERY_VECTOR_MATCHING.entrySet()){
@@ -78,24 +68,6 @@ public class DB_Vectors implements iDataBase{
         return QUERY_VECTOR_MATCHING.getOrDefault(tempKey, "NULL");
     }
 
-    @Override
-    public void printDistances(String key) {
-
-        double[] tempKey = ResponseLibrary.WORD2VEC
-                .getWordVectorsMean(Arrays
-                        .stream(key
-                                .toLowerCase()
-                                .trim()
-                                .split(" "))
-                        .toList())
-                .toDoubleVector();
-
-        System.out.println("\n-------------------------- DISTANCES KEYS (JACCARD) --------------------------");
-        for (double[] keys : QUERY_VECTOR_MATCHING.keySet()) {
-            System.out.println(RETRIEVE_QUERY.get(keys) + " ----> " + cosine(tempKey, keys));
-        }
-        System.out.println("------------------------------------------------------------------------------------\n");
-    }
 
     @Override
     public void printKeys() {

@@ -49,6 +49,8 @@ public class VectorWord2Vec {
                       String save
     ) throws IOException {
 
+
+
         SentenceIterator iterable = new LineSentenceIterator(
                 new File(
                         new File(".")

@@ -6,9 +6,18 @@ import org.group1.back_end.utilities.algebra.Distances;
 
 import java.util.*;
 
-public class DB_PerfectMatching implements iDataBase, iProcess<String>{
+public class DB_PerfectMatching
+        extends DB_Manager
+        implements
+        iDataBase<String, String>,
+        iProcess<String, String>,
+        iOrdenable<String, String, Direction>
+{
 
+
+    // DATA
     public static Map<String, String> QUERY_PERFECT_MATCHING;
+
     public DB_PerfectMatching() {
         QUERY_PERFECT_MATCHING = new HashMap<>();
     }
@@ -38,15 +47,6 @@ public class DB_PerfectMatching implements iDataBase, iProcess<String>{
     }
 
     @Override
-    public void printDistances(String key) {
-        System.out.println("\n-------------------------- DISTANCES KEYS (JACCARD) -----------------------------------");
-        for (String keys : QUERY_PERFECT_MATCHING.keySet()) {
-            System.out.println(keys + " ----> " + Distances.jaccard(keys, key));
-        }
-        System.out.println("------------------------------------------------------------------------------------\n");
-    }
-
-    @Override
     public void printKeys() {
         int count = 0;
         System.out.println("\n---------------------------------- KEYS PERFECT MATCHING --------------------------");
@@ -65,5 +65,15 @@ public class DB_PerfectMatching implements iDataBase, iProcess<String>{
 
         String b = a.toString();
         return b;
+    }
+
+    @Override
+    public String order(String s, String object, Direction upDown) {
+        return null;
+    }
+
+    @Override
+    public String getFirst(String s, String object, Direction upDown, double threshold) {
+        return null;
     }
 }

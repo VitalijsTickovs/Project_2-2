@@ -85,4 +85,9 @@ public class RNN {
                 .build();
         return RNNOutput;
     }
+
+    public static void main(String[] args) {
+
+
+    }
 }

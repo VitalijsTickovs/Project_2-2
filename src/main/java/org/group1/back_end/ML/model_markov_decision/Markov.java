@@ -11,7 +11,7 @@ import java.io.ObjectInputStream;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class Markov implements iProcess<List<String>> {
+public class Markov {
 
     private Map<String, List<String>> model;
     private Map<List<String>, Double> probabilities;

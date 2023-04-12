@@ -1,11 +1,9 @@
 package org.group1.back_end.response;
 
 import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.group1.back_end.MAIN;
 import org.group1.back_end.ML.model_vectorization.VectorSIF;
 import org.group1.back_end.ML.model_vectorization.VectorWord2Vec;
 import org.group1.back_end.response.skills.Skill;
-import org.group1.back_end.utilities.enums.DB;
 
 import java.io.IOException;
 import java.util.*;
@@ -56,5 +54,8 @@ public class ResponseLibrary {
     }
     public List<Set<String>> getSets(){
         return skills.getSlots();
+    }
+
+    public static class Manager {
     }
 }

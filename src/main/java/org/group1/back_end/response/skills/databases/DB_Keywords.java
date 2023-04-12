@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class DB_Keywords implements iDataBase{
+public class DB_Keywords extends DB_Manager implements iDataBase<String, String>{
 
     public static Map<Set<String>, String> QUERY_KEYWORD_MATCHING;
 
@@ -54,20 +54,6 @@ public class DB_Keywords implements iDataBase{
 
     }
 
-    @Override
-    public void printDistances(String key) {
-
-        Set<String> tempKey = ComplexProcess
-                .process(
-                        SimpleProcess
-                                .process(key));
-
-        System.out.println("\n-------------------------- DISTANCES KEYS (JACCARD) --------------------------");
-        for (Set<String> keys : QUERY_KEYWORD_MATCHING.keySet()) {
-            System.out.println(tempKey + " ----> " + Distances.jaccard(keys, tempKey));
-        }
-        System.out.println("------------------------------------------------------------------------------------\n");
-    }
 
     @Override
     public void printKeys() {
