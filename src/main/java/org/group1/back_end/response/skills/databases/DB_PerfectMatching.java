@@ -1,13 +1,14 @@
 package org.group1.back_end.response.skills.databases;
 
+import org.group1.back_end.response.skills.dataframe.Cell;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
+import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
-import org.group1.back_end.utilities.algebra.Distances;
 
 import java.util.*;
 
 public class DB_PerfectMatching
-        extends DB_Manager
         implements
         iDataBase<String, String>,
         iProcess<String, String>,
@@ -17,14 +18,18 @@ public class DB_PerfectMatching
 
     // DATA
     public static Map<String, String> QUERY_PERFECT_MATCHING;
+    public static DataFrame data;
 
     public DB_PerfectMatching() {
         QUERY_PERFECT_MATCHING = new HashMap<>();
+        data = new DataFrame(Arrays.asList("PERFECT MATCH", "RESPONSE"));
+        data.isSet(true);
     }
     @Override
     public void add(String key, String value) {
         String newKey = process(key);
         QUERY_PERFECT_MATCHING.put(newKey, value);
+        data.insert(new Rows(Arrays.asList(new Cell<>(newKey), new Cell<>(value))));
     }
 
     @Override
@@ -55,6 +60,8 @@ public class DB_PerfectMatching
             System.out.println("KEY "+count+" = " + entry.getKey() + " ----> " + QUERY_PERFECT_MATCHING.get(entry.getKey()));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
+
+        System.out.println(data);
     }
 
     @Override

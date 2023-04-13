@@ -1,8 +1,12 @@
 package org.group1.back_end.response.skills;
 
+import org.group1.back_end.response.skills.dataframe.Cell;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
+import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.strings.RegexUtilities;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.group1.back_end.utilities.strings.RegexUtilities.*;
@@ -23,6 +27,9 @@ public class SkillGenerator {
     SkillFormat format;
     boolean problem = false;
     String problemCause;
+
+
+    SkillData skillData = new SkillData();
 
     public SkillGenerator(String text) throws Exception {
         this();
@@ -47,6 +54,9 @@ public class SkillGenerator {
         processQuestion(text);
         processSlot(text);
         processAction(text);
+        System.out.println(this.skillData);
+        this.skillData.actions.display();
+        System.out.println(this.skillData);
     }
 
     public void processQuestion(String text){
@@ -54,6 +64,52 @@ public class SkillGenerator {
                 .get(0)
                 .replace("Question", "")
                 .trim();
+
+        System.out.println("Original Question: " + originalQuestion);
+        this.skillData.setQuestion(originalQuestion);
+    }
+
+
+    private void insertSkillSlot(List<String> slotlist){
+        List<String> temp = new ArrayList<>();
+        for (String s : slotlist) {
+            temp.add(s
+                    .trim().
+                    replaceAll("^(?!.*\\bSlot\\b).*$\n", ""));
+        }
+
+
+        //splitting the string to take a set of the placeholders
+        List<String> placeholders = new ArrayList<>();
+        Pattern pattern = Pattern.compile("<(.*?)>");
+        for (String str : slotlist) {
+            Matcher matcher = pattern.matcher(str);
+            while (matcher.find()) {
+                placeholders.add(matcher.group());
+            }
+        }
+        Set<String> tableHeads = new HashSet<>(placeholders);
+
+        //Creating individual dataframes form the sets
+        List<DataFrame> dataFrames = new ArrayList<>();
+        for (String s : tableHeads) {
+            DataFrame toadd = new DataFrame(Arrays.asList(s));
+
+            for(String slots : slotlist){
+                if(slots.contains(s)){
+                    toadd.insertCell(0, slots.replace("Slot", "")
+                            .replaceAll("<.*?>", "")
+                            .trim());
+                }
+            }
+
+            dataFrames.add(toadd);
+        }
+
+        DataFrame slotDataFrame = DataFrame.mergeDataFrames(dataFrames);
+
+        this.skillData.setSlots(slotDataFrame);
+        System.out.println("Slot Dataframe: \n" + slotDataFrame);
 
     }
 
@@ -64,6 +120,8 @@ public class SkillGenerator {
         List<String> slotList = filterLineByRegex(text, "Slot");
         List<String> comb = new ArrayList<>();
 
+        System.out.println("Slot List: ");
+        insertSkillSlot(slotList);
 
         for (String s : slotList) {
             comb.add(s
@@ -103,6 +161,7 @@ public class SkillGenerator {
             slotSet.add(temp);
             // SYNONYMS
         }
+        System.out.println("Slot Set: " + slotSet);
 
     }
 
@@ -111,6 +170,9 @@ public class SkillGenerator {
         int lineNumber = -1;
 
         List<String> actionList = filterLineByRegex(text, "Action");
+
+        System.out.println("Action List: " + actionList);
+        insertSkillAction(actionList);
 
         for (int i = 0; i < actionList.size(); i++) {
 
@@ -126,7 +188,7 @@ public class SkillGenerator {
 
             String[][] data = new String[n][2];
             String line = replaceRegex(actionList.get(i), "Action", "");
-
+            System.out.println("Line: " + line);
             for (int j = 0; j < n; j++) {
 
                 String variable = getOriginalFormatFromRegex(
@@ -144,17 +206,60 @@ public class SkillGenerator {
 
 
                 newLine = replaceFirstRegex(newLine, slot, "");
+
+                System.out.println("Newline: " + newLine);
                 line = newLine;
                 data[j][1] = variable;
                 data[j][0] = slot;
             }
+
+
             makeDataFrame(data, line);
             vitalyMethod(data,line);
         }
 
+
         format.setProblem_action(false);
 
 
+    }
+
+
+    private void insertSkillAction(List<String> actionList){
+
+        DataFrame shitstickape = this.skillData.slots;
+        List<String> filters = new ArrayList<>();
+        for(Rows r : shitstickape.getData()){
+            int count = 0;
+            for(Cell s : r.getCells()){
+                if(s == null) {
+                    count++;
+                    continue;
+                }
+                filters.add(this.skillData.slots.getColumnNames().get(count) + " " + s);
+                count++;
+            }
+        }
+        System.out.println("Filters: " + filters);
+
+        for(String action: new ArrayList<>(actionList)){
+            String sentence = action.replace("Action", "").trim();
+            System.out.println("Sentence: " + sentence);
+            List<String> matchedRegexes = new ArrayList<>();
+            for (String regex : filters) {
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(sentence);
+                if (matcher.find()) {
+                    String matchedRegex = matcher.group();
+                    matchedRegexes.add(matchedRegex);
+                    sentence = sentence.replace(matchedRegex, "").trim();
+                }
+            }
+            System.out.println("Matched regex: " + matchedRegexes);
+            System.out.println("Remaining text: " + sentence);
+            this.skillData.insertAction(matchedRegexes, sentence);
+
+        }
     }
 
     public void makeDataFrame(String[][] data, String action) throws Exception {
@@ -189,6 +294,8 @@ public class SkillGenerator {
         solution.add(action);
         SQL_Formating.add(solution);
     }
+
+    /** GETTERS */
 
     public List<List<String>> getSQL_Formating() {
         return SQL_Formating;

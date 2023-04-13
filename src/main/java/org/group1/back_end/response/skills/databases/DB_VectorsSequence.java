@@ -1,6 +1,9 @@
 package org.group1.back_end.response.skills.databases;
 
 import org.group1.back_end.response.ResponseLibrary;
+import org.group1.back_end.response.skills.dataframe.Cell;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
+import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import org.group1.back_end.utilities.algebra.Distances;
@@ -10,16 +13,18 @@ import java.util.*;
 import static org.group1.back_end.ML.model_optimization.WordMoversDistance.otra;
 
 public class DB_VectorsSequence
-        extends DB_Manager
         implements iDataBase<String, String>,
         iProcess<List<String>, String>{
 
     public static Map<List<String>, String> QUERY_VECTOR_MATCHING;
 
+    public static DataFrame queryData;
+
     public DB_VectorsSequence() {
 
         QUERY_VECTOR_MATCHING = new HashMap<>();
-
+        queryData = new DataFrame(Arrays.asList("VECTOR", "QUERY"));
+        queryData.isSet(true);
     }
 
     public List<String> process(String text){
@@ -40,6 +45,7 @@ public class DB_VectorsSequence
         List<String> a = process(key);
         if(a.size() > 0){
             QUERY_VECTOR_MATCHING.put(a , value);
+            queryData.insert(new Rows(Arrays.asList(new Cell<>(a), new Cell<>(value))));
         }
     }
 
@@ -89,6 +95,7 @@ public class DB_VectorsSequence
             System.out.println("KEY"+count+" = " + key + " ----> " + QUERY_VECTOR_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
+        System.out.println(queryData);
     }
 
 

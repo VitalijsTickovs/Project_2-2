@@ -1,8 +1,10 @@
 package org.group1.back_end.response.skills;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.group1.back_end.response.Response;
 import org.group1.back_end.response.ResponseLibrary;
 import org.group1.back_end.response.skills.databases.DB_Manager;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import org.group1.back_end.utilities.enums.DB;
 
@@ -21,6 +23,9 @@ public class Skill {
     public List<List<List<String>>> SQL_Fromatting;
     public List<String> questions;
     public List<Set<String>> slots;
+
+
+    public DataFrame skill;
 
     /**
      * Build a file SERVICE and list for skills.
@@ -45,13 +50,21 @@ public class Skill {
 
         List<String> texts = SERVICE.readAll();
         List<String[]> pairSet = new ArrayList<>();
-
+        List<SkillData> skillData = new ArrayList<>();
         for (String text : texts){
+            System.out.println("=====================================");
+            System.out.println("Skill: \n" + text + "\n");
             SkillGenerator sp = new SkillGenerator(text);
 
             List<String> questions = sp.getQuestions();
             List<String> actions = sp.getActions();
 
+            sp.getVitalySlot();
+
+            System.out.println("Questions: " + questions);
+            System.out.println("Actions: " + actions);
+
+            System.out.println("Default: " + sp.getDeafaultKey() + " " + sp.getDeafault());
             addVocabulary(sp.getDeafaultKey());
             String[] pairs = new String[2];
             pairs[0] = sp.getDeafaultKey();
@@ -81,12 +94,26 @@ public class Skill {
            SQL_Fromatting.add(sp.getSQL_Formating());
            this.questions.add(sp.getOriginalQuestion());
 
+
+            System.out.println("Slotlist");
+            Set<String> slotlist = sp.getVitalySlot();
+            for(String banana: slotlist){
+                System.out.println(banana);
+            }
+
+            for(Set<String> slot: slots){
+                System.out.println(slot);
+            }
+
+            System.out.println("===================================== \n\n");
         }
 
         for (String[] pair : pairSet) {
             DATABASE_MANAGER.add(pair[0], pair[1]);
         }
-        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
+
+
+//        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
     }
 
     public void addVocabulary(String words){
@@ -112,27 +139,10 @@ public class Skill {
     }
 
     public static void main(String[] args) throws Exception {
-        Skill s = new Skill();
+        Response res = new Response();
 
-        DB database = DB.DB_KEYWORDS;
-
-        System.out.println(s.getSkill("Wich lctures are here on Monday t 9", database));
-        System.out.println(s.getSkill("Which lectures MonFay at xiv",database));
-        System.out.println(s.getSkill("have klass monday 9?",database));
-        System.out.println(s.getSkill("i have lektures on monday 9",database));
-        System.out.println(s.getSkill("WhiCh lecture Monay at 9",database));
-        System.out.println(s.getSkill("do i have lectures on saturday",database));
-
-
-
-        List<String> a = new LinkedList<>();
-        a.add("are");
-        a.add("have");
-        System.out.println(lemmas(a));
-
-        //Print.printKeys();
-        //Print.printVocabulary();
 
     }
+
 
 }

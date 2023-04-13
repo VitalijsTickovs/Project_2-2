@@ -12,8 +12,6 @@ import java.util.List;
 public class SpellingCorrectProcess {
 
     public static String correct(String word){
-        System.out.println();
-        System.out.println("correcting " + word);
         // might be error this ust be fixed
         List<Pair<String, Integer>> suggestions = new ArrayList<>();
         for(String vocab : Skill.VOCABULARY){
@@ -25,12 +23,6 @@ public class SpellingCorrectProcess {
                 return o1.getSecond() - o2.getSecond();
             }
         });
-
-        //todo remove
-       for(int i = 0; i < 5; i++) {
-           System.out.println(suggestions.get(i).getFirst() + " " + suggestions.get(i).getSecond());
-       }
-        System.out.println(" ");
         return suggestions.get(0).getFirst();
     }
 

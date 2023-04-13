@@ -31,8 +31,9 @@ public class Rows {
     }
 
     public boolean equals(Rows r){
-        List<Cell> k = r.getCells();
-        for(Cell l : r.getCells()) if(!this.contains(l)) return false;
+        for(Cell l : r.getCells()) {
+            if (!this.contains(l)) return false;
+        }
         return true;
     }
 
@@ -42,7 +43,7 @@ public class Rows {
 
     public boolean contains(Cell c){
         for(Cell cell : cells){
-            if(cell.getValue() == c.getValue()) return true;
+            if(cell.equals(c)) return true;
         }
         return false;
     }

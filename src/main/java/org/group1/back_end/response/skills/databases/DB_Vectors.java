@@ -1,5 +1,8 @@
 package org.group1.back_end.response.skills.databases;
 
+import org.group1.back_end.response.skills.dataframe.Cell;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
+import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import org.group1.back_end.response.ResponseLibrary;
@@ -8,14 +11,24 @@ import java.util.*;
 
 import static org.group1.back_end.utilities.algebra.Distances.cosine;
 
-public class DB_Vectors extends DB_Manager implements iDataBase<String, String>{
+public class DB_Vectors implements iDataBase<String, String>{
 
     public static Map<double[], String> QUERY_VECTOR_MATCHING;
     public static Map<double[], String> RETRIEVE_QUERY;
 
+
+    public static DataFrame queryData;
+    public static DataFrame retrieveData;
+
     public DB_Vectors() {
         QUERY_VECTOR_MATCHING = new HashMap<>();
         RETRIEVE_QUERY = new HashMap<>();
+        queryData = new DataFrame(Arrays.asList("VECTOR", "QUERY"));
+        queryData.isSet(true);
+        retrieveData = new DataFrame(Arrays.asList("VECTOR", "RESPONSE"));
+        retrieveData.isSet(true);
+
+
     }
 
     public String process(String text){
@@ -35,7 +48,9 @@ public class DB_Vectors extends DB_Manager implements iDataBase<String, String>{
         List<String> newKey = Arrays.stream(process(key).split(" ")).toList();
         double[] vector = ResponseLibrary.VECTOR_SIF.getVector(newKey);
         QUERY_VECTOR_MATCHING.put(vector, value);
+        queryData.insert(new Rows(Arrays.asList(new Cell<>(vector), new Cell<>(key))));
         RETRIEVE_QUERY.put(vector, newKey.toString());
+        retrieveData.insert(new Rows(Arrays.asList(new Cell<>(vector), new Cell<>(newKey.toString()))));
     }
 
     @Override
@@ -79,5 +94,7 @@ public class DB_Vectors extends DB_Manager implements iDataBase<String, String>{
             System.out.println("KEY"+count+" = " + RETRIEVE_QUERY.get(key) + " ----> " + QUERY_VECTOR_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
+        System.out.println(retrieveData.getColumn(1));
+        System.out.println(queryData.getColumn(1));
     }
 }

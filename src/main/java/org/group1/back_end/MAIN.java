@@ -28,7 +28,7 @@ public class MAIN {
                 "lecture monday nine"
         };
 
-        DB[] db = { DB.DB_PERFECT_MATCHING, DB.DB_KEYWORDS, DB.DB_VECTORS, DB.DB_VECTORS_SEQ};
+        DB[] db = {DB.DB_KEYWORDS, DB.DB_PERFECT_MATCHING, DB.DB_VECTORS, DB.DB_VECTORS_SEQ};
 
 
         for (int i = 0; i < db.length; i++) {
