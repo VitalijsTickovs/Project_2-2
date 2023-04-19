@@ -42,7 +42,7 @@ public class SkillDetails implements CustomStage {
     private AnchorPane UIpane,scrollChat;
     private Stage UIstage,chatStage;
     private Scene UIscene;
-    private Button back,help,addAction, slots,delete;
+    private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table,table2;
     private List<String> tempObservable;
@@ -91,16 +91,15 @@ public class SkillDetails implements CustomStage {
 
     public void collectDataFromDatabase() throws SQLException {
         List<String> tempColName = new ArrayList<>();
-        tempColName = sql.getColumnNames(tableName);
-        for (int i = 0; i < sql.getColumnNumber(tableName); i++) {
-           dataPerColumn.add(sql.getAllColumnData(tempColName.get(i),tableName));
+        tempColName = columnNames;
+        for (int i = 0; i < columnNames.size(); i++) {
+            dataPerColumn.add(dataFrames.get(id).getActions().getColumn(i).getData());
         }
     }
 
     public void collectDataFromDatabaseSlot() throws SQLException {
         for (int i = 0; i < slotColumnNames.size(); i++) {
-            ArrayList<String> query = sql.getAllColumnData(slotColumnNames.get(i),"slot_"+id);
-            dataPerColumnSlot.add(query);
+            dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumn(i).getData());
         }
     }
 
@@ -111,6 +110,16 @@ public class SkillDetails implements CustomStage {
     }
 
     public void createButtons(){
+        //save button
+        saveButton = new Button();
+        saveButton.setText("BACK");
+        saveButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
+        saveButton.setStyle("-fx-background-color: transparent");
+        saveButton.setTextFill(Color.WHITE);
+        saveButton.setLayoutX(20);
+        saveButton.setLayoutY(210);
+        saveButton.setCursor(Cursor.CLOSED_HAND);
+        UIpane.getChildren().add(saveButton);
         //back button
         back = new Button();
         back.setText("BACK");
@@ -170,6 +179,25 @@ public class SkillDetails implements CustomStage {
     }
 
     public void setButtonActions(){
+        //save button
+        saveButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                saveButton.setTextFill(Color.rgb(42,97,117));
+            }
+        });
+        saveButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                saveButton.setTextFill(Color.WHITE);
+            }
+        });
+        saveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               //TODO: SAVE LOGIC FOR THE TABLE
+            }
+        });
         //back button
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
@@ -286,10 +314,13 @@ public class SkillDetails implements CustomStage {
             }
         });
     }
+
+    /**
+     * Adds blank ("-") rows to the javaFX table
+     * @throws SQLException
+     */
     public void addRow() throws SQLException {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
-
-
         if(isSlot){     // slot
 
             tempObservable = new ArrayList<>();
@@ -305,7 +336,7 @@ public class SkillDetails implements CustomStage {
             );
 
             tempObservable.clear();
-            sql.addRow("slot_"+id,slotColumnNames);
+            //sql.addRow("slot_"+id,slotColumnNames);
         } else {        // we are in action
             tempObservable = new ArrayList<>();
             for (int j = 0; j < ColNum; j++) {
@@ -318,7 +349,7 @@ public class SkillDetails implements CustomStage {
             );
 
             tempObservable.clear();
-            sql.addRow(tableName,columnNames);
+            //sql.addRow(tableName,columnNames);
         }
 
 
@@ -326,8 +357,10 @@ public class SkillDetails implements CustomStage {
 
     }
 
+    /**
+     * Creates the scrollable pane for the table
+     */
     public void createScrollPane(){
-
         scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -345,17 +378,8 @@ public class SkillDetails implements CustomStage {
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
     }
-    public int countCharAtLongestLine(String string){
-        int count=0;
-        String[] lines = string.split("\r\n|\r|\n");
-        for (int i = 0; i < lines.length; i++) {
-            if(lines[i].length()>count){
-                count = lines[i].length();
-            }
-        }
 
-        return count;
-    }
+
     public void createTable(){
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -364,7 +388,6 @@ public class SkillDetails implements CustomStage {
         table.setEditable(true);
         table.setStyle("-fx-cell-size: 50px;");
 
-        ObservableList<String> cbValues = FXCollections.observableArrayList("1", "2", "3");
         //columns
         for (int i = 0; i < columnNames.size(); i++) {
 

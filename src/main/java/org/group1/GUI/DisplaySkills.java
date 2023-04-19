@@ -265,8 +265,8 @@ public class DisplaySkills implements  CustomStage {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                    SkillDetails skillDetails= new SkillDetails(tempIndex ,response, dataFrames);
-                    skillDetails.setStage(UIstage,chatStage);
+                    SkillDetails skillDetails= new SkillDetails(tempIndex ,response);
+                    //skillDetails.setStage(UIstage,chatStage);
 
                     } catch (SQLException e) {
                         e.printStackTrace();
