@@ -32,13 +32,6 @@ public class DB_VectorsSequence
         return ComplexProcess.process(SimpleProcess.process(text)).stream().toList();
     }
 
-    public List<double[]> processVector(List<String> key){
-        List<double[]> vectorsSeq = new ArrayList<>();
-        for (int i = 0; i < key.size(); i++) {
-            vectorsSeq.add(ResponseLibrary.WORD2VEC.getWordVector(key.get(i)));
-        }
-        return vectorsSeq;
-    }
 
     @Override
     public void add(String key, String value) {

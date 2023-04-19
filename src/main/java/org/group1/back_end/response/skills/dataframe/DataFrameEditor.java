@@ -48,7 +48,6 @@ public class DataFrameEditor extends JFrame {
                 rowData[i] = null;
             }
             tableModel.addRow(rowData);
-            System.out.println(tableModel);
         });
         JButton deleteButton = new JButton("Delete Row");
         deleteButton.addActionListener(e -> {
@@ -56,7 +55,6 @@ public class DataFrameEditor extends JFrame {
             for (int i = selectedRows.length - 1; i >= 0; i--) {
                 tableModel.removeRow(selectedRows[i]);
             }
-            System.out.println(tableModel);
         });
 
         // Create a panel for the buttons

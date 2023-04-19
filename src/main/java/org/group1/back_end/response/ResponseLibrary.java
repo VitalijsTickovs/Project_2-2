@@ -30,7 +30,7 @@ public class ResponseLibrary {
 
     public ResponseLibrary() throws Exception {
         this.skills = new Skill();
-        WORD2VEC = new VectorWord2Vec().getWord2Vec();
+//        WORD2VEC = new VectorWord2Vec().getWord2Vec();
     }
 
     public void reload() throws Exception{

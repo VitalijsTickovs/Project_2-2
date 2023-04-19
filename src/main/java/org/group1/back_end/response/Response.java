@@ -46,12 +46,6 @@ public class Response {
         return result.trim();
     }
 
-    public static void main(String[] args) throws Exception {
-        Skill test = new Skill();
-        Response response = new Response();
-        System.out.println(response.getResponse("What is yuor approximately age?"));
-
-    }
 
     public static DB getDatabase() {
         return database;
