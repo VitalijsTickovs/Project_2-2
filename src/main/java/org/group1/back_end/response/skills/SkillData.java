@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.*;
+import javax.swing.table.*;
 
-public class SkillData {
+public class
+SkillData {
 
     private String id;
     private String question;

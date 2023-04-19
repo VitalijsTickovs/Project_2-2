@@ -48,6 +48,15 @@ public class Rows {
         return false;
     }
 
+    public boolean isNull() {
+        for (Cell cell : cells) {
+            if (cell.getValue() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return cells.stream()

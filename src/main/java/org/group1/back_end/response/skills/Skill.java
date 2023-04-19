@@ -136,7 +136,6 @@ public class Skill {
     public static void main(String[] args) throws Exception {
         Response res = new Response();
 
-
     }
 
 

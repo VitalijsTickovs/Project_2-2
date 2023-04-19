@@ -1,14 +1,10 @@
 package org.group1.back_end.response.skills.dataframe;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.*;
 import javax.swing.table.*;
-
-
 
 
 /**
@@ -152,6 +148,36 @@ public class DataFrame {
         return this;
     }
 
+    public DataFrame insertToFirstFreeSlot(int columnIndex, Object value){
+        for(Rows rows : this.rowsList){
+            System.out.println("dirty printy man: "+  rows.getCells().get(columnIndex).getValue() + "?=" + value);
+            if(rows.getCells().get(columnIndex).getValue() == null ||
+                    rows.getCells().get(columnIndex).getValue().toString().equals(" ")||
+                    rows.getCells().get(columnIndex).getValue().toString().equals("")){
+                rows.getCells().get(columnIndex).setValue(value);
+                return this;
+            }
+        }
+        return insertCell(columnIndex, value);
+    }
+
+    public boolean columnContainsValue(int columnIndex, Object value) {
+        if (columnIndex < 0 || columnIndex >= this.columnNames.size()) {
+            throw new IllegalArgumentException("Invalid column index");
+        }
+
+        for (Rows row : this.rowsList) {
+            Cell cell = row.get(columnIndex);
+            if(cell.getValue() != null){
+                if(cell.getValue().toString().equals(value)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     @Override
     public String toString() {
@@ -217,6 +243,11 @@ public class DataFrame {
         sb.append("\n");
 
         return sb.toString();
+    }
+
+    public DataFrame removeNullRows() {
+        rowsList.removeIf(Rows::isNull);
+        return this;
     }
 
     public static DataFrame merge(DataFrame one, DataFrame two) {
@@ -287,45 +318,6 @@ public class DataFrame {
         }
 
         return model;
-    }
-
-
-
-
-
-    public static void main(String[] args) {
-        // Create column names
-        List<String> columnNames = Arrays.asList("Name", "Age", "Country");
-
-        // Create a new DataFrame
-        DataFrame df = new DataFrame(columnNames);
-        System.out.println("Empty DataFrame:");
-        System.out.println(df);
-
-        // Insert rows
-        Rows row1 = new Rows(Arrays.asList(new Cell<>("Alice"), new Cell<>(30), new Cell<>("USA")));
-        Rows row2 = new Rows(Arrays.asList(new Cell<>("Bob"), new Cell<>(25), new Cell<>("Canada")));
-        Rows row3 = new Rows(Arrays.asList(new Cell<>("Charlie"), new Cell<>(22), new Cell<>("UK")));
-        df.insert(row1);
-        df.insert(row2);
-        df.insert(row3);
-        System.out.println("DataFrame with rows inserted:");
-        System.out.println(df);
-
-        // Display the DataFrame in a JFrame with an editable JTable
-        df.display();
-
-        // Wait for the user to close the JFrame
-        System.out.println("Press ENTER to continue...");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Print the updated DataFrame after editing
-        System.out.println("DataFrame after editing:");
-        System.out.println(df);
     }
 
 }

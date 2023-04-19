@@ -14,7 +14,7 @@ public class Cell<E> {
     E value;
 
     public Cell(E value) {
-        this.value = value;
+        this.setValue(value);
     }
 
     public E getValue() {
@@ -22,7 +22,11 @@ public class Cell<E> {
     }
 
     public void setValue(E value) {
-        this.value = value;
+        if(value == "" || value == " "){
+            this.value = null;
+        }else{
+            this.value = value;
+        }
     }
 
     public String toString() {
