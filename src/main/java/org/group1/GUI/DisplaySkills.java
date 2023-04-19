@@ -24,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplaySkills implements  CustomStage {
-    ArrayList<String> actionNames =new ArrayList();
-    ArrayList<String> slotNames =new ArrayList();
+    ArrayList<String> ruleNames =new ArrayList();
     ArrayList<Button> buttons = new ArrayList<>();
 
     private AnchorPane UIpane,scrollChat;
@@ -60,16 +59,16 @@ public class DisplaySkills implements  CustomStage {
         UIstage.show();
     }
 
-    //TODO: connect it to the database (DETERMINES HOW MANY SKILLS WILL BE DISPLAYED ON SCREEN)
+    /**
+     * Generates rule names
+     */
     public void loadSkillsFromDatabase(){
-        //slot not used for now
         List<String> tempSlot = new ArrayList<>();
         tempSlot = sql.getSlotTableNames();
         List<String> tempAction = new ArrayList<>();
         tempAction = sql.getActionTableNames();
         for (int i = 0; i < this.skillSize; i++) {
-            actionNames.add(tempAction.get(i));
-            slotNames.add(tempSlot.get(i));
+            ruleNames.add("Rule_"+i);
         }
     }
 
@@ -239,12 +238,12 @@ public class DisplaySkills implements  CustomStage {
         UIstage.setOnShown(e ->
                 scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
 
-        for (int i = 0,y=20; i < actionNames.size(); i++) {
-            String temp = actionNames.get(i);
-            String tempSlot = slotNames.get(i);
+        for (int i = 0,y=20; i < ruleNames.size(); i++) {
+            String temp = ruleNames.get(i);
+            int tempIndex = i;
             buttons.add(new Button());
             Button button = buttons.get(i);
-            button.setText(actionNames.get(i));
+            button.setText(ruleNames.get(i));
             button.setFont(Font.font("Impact", FontWeight.BOLD,30));
             button.setStyle("-fx-background-color: transparent");
             button.setTextFill(Color.WHITE);
