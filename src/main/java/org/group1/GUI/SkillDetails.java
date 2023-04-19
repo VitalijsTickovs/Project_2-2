@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.utilities.GeneralFileService;
 import org.group1.database.SQLGUIConnection;
 import org.group1.database.SQLtoTxt;
@@ -58,13 +59,13 @@ public class SkillDetails implements CustomStage {
     private ArrayList<ArrayList<String>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
+    private List<List<DataFrame>> dataFrames;
 
-    public SkillDetails(String tableName, int ColNum, int RowNum, String slotTable, Response responseGenerator) throws SQLException {
+    public SkillDetails(int indexOfRule, Response responseGenerator, List<List<DataFrame>> dataFrames) throws SQLException {
         response = responseGenerator;
-        columnNames = sql.getColumnNames(tableName);
-        id = tableName.replace("action_","");
-        slotColumnNames = sql.getColumnNames("slot_"+id);
-        //sql.setEmptyNull(tableName,columnNames);
+        this.dataFrames = dataFrames;
+        columnNames = dataFrames.get(1).get(indexOfRule).getColumnNames();
+        slotColumnNames = dataFrames.get(0).get(indexOfRule).getColumnNames();
         try{
             fs = new SkillFileService();
         }catch (Exception e){
@@ -72,13 +73,6 @@ public class SkillDetails implements CustomStage {
         }
 
 
-        slotData(slotTable);
-        typeData("slot_"+id);
-        this.tableName=tableName;
-        this.ColNum=ColNum;
-        this.N_ROWS=RowNum;
-        collectDataFromDatabase();
-        collectDataFromDatabaseSlot();
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
@@ -195,7 +189,7 @@ public class SkillDetails implements CustomStage {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                DisplaySkills displaySkills = new DisplaySkills(GeneralFileService.getSize(),response);
+                DisplaySkills displaySkills = new DisplaySkills(response, dataFrames);
                 displaySkills.setStage(UIstage,chatStage);
             }
         });

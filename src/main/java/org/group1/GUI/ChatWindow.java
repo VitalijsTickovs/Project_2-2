@@ -43,6 +43,7 @@ public class ChatWindow implements CustomStage {
     String currentBotInput="";
     private List<DataFrame> slotDataFrame= new ArrayList<>();
     private List<DataFrame> actionDataFrame = new ArrayList<>();
+    private List<List<DataFrame>> dataFrames = new ArrayList<>();
 
     ErrorHandling errorHandling = new ErrorHandling();
     // javafx elements
@@ -146,6 +147,8 @@ public class ChatWindow implements CustomStage {
             this.slotDataFrame.add(slotDataFrame);
 
         }
+        this.dataFrames.add(slotDataFrame);
+        this.dataFrames.add(actionDataFrame);
     }
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
@@ -269,7 +272,7 @@ public class ChatWindow implements CustomStage {
          skillsButton.setOnAction(new EventHandler<ActionEvent>() {
              @Override
              public void handle(ActionEvent event) {
-                 SkillEditor skillEditor = new SkillEditor(responseGenerator);
+                 SkillEditor skillEditor = new SkillEditor(responseGenerator, dataFrames);
                  skillEditor.setStage(UIstage);
              }
          });

@@ -20,9 +20,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
+import org.group1.back_end.response.skills.dataframe.DataFrameEditor;
 import org.group1.back_end.utilities.GeneralFileService;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.group1.back_end.utilities.GeneralFileService.*;
 
@@ -41,9 +44,10 @@ public class SkillEditor implements CustomStage{
     private TextArea questionInput,prevoiusQuestion;
     private Text username;
     private final Response response;
+    private List<List<DataFrame>> dataFrames;
 
     private String skillInput="";
-    public  SkillEditor(Response response){
+    public  SkillEditor(Response response, List<List<DataFrame>> dataFrames){
         this.response = response;
         try {
             fs = new SkillFileService();
@@ -177,7 +181,7 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DisplaySkills displaySkills = new DisplaySkills(GeneralFileService.getSize(),response);
+                DisplaySkills displaySkills = new DisplaySkills(response, dataFrames);
                 displaySkills.setStage(UIstage, chatStage);
             }
         });

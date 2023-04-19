@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.database.DatabaseCredentials;
 import org.group1.database.SQLGUIConnection;
 import org.group1.database.TxtToSQL;
@@ -35,9 +36,11 @@ public class DisplaySkills implements  CustomStage {
     private SQLGUIConnection sql = new SQLGUIConnection();
     private int skillSize;
     private final Response response;
+    private List<List<DataFrame>> dataFrames;
 
-    public DisplaySkills(int id, Response response){
-        this.skillSize = id;
+    public DisplaySkills(Response response, List<List<DataFrame>> dataFrames){
+        this.skillSize = dataFrames.get(0).size();
+        this.dataFrames = dataFrames;
         this.response = response;
         loadSkillsFromDatabase();
         UIpane = new AnchorPane();
@@ -147,7 +150,7 @@ public class DisplaySkills implements  CustomStage {
         defineSkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SkillEditor skillEditor = new SkillEditor(response);
+                SkillEditor skillEditor = new SkillEditor(response, dataFrames);
                 skillEditor.setStage(UIstage,chatStage);
             }
         });
@@ -265,10 +268,7 @@ public class DisplaySkills implements  CustomStage {
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                    int colNum = sql.getColumnNumber(temp);
-                    int rowNum = sql.getRowNumber(temp);
-
-                    SkillDetails skillDetails= new SkillDetails(temp,colNum,rowNum,tempSlot, response);
+                    SkillDetails skillDetails= new SkillDetails(tempIndex ,response, dataFrames);
                     skillDetails.setStage(UIstage,chatStage);
 
                     } catch (SQLException e) {
