@@ -18,8 +18,6 @@ public class SkillGenerator {
     private String deafault;
     private Set<String> slotSet;
     private List<String> questions;
-    private List<List<String>> SQL_Formating;
-    private Set<String> vitalySlot;
 
     List<String> combinations = new ArrayList<>();
 
@@ -29,7 +27,7 @@ public class SkillGenerator {
     String problemCause;
 
 
-    SkillData skillData = new SkillData();
+    SkillData skillData;
 
     public SkillGenerator(String text) throws Exception {
         this();
@@ -45,8 +43,7 @@ public class SkillGenerator {
         this.slotSet = new HashSet<>();
         questions = new LinkedList<>();
         actions = new LinkedList<>();
-        this.vitalySlot = new HashSet<>();
-        this.SQL_Formating = new LinkedList<>();
+        skillData = new SkillData();
     }
 
 
@@ -55,7 +52,7 @@ public class SkillGenerator {
         processSlot(text);
         processAction(text);
         System.out.println(this.skillData);
-        this.skillData.actions.display();
+//        this.skillData.actions.display();
         System.out.println(this.skillData);
     }
 
@@ -128,7 +125,6 @@ public class SkillGenerator {
                     .replaceAll(" ", "").
                     replaceAll("Slot", ""));
         }
-        vitalySlot.addAll(comb);
         comb = RegexUtilities.concatenate(
                         comb
                         ,RegexUtilities.countRegexOccurrences(
@@ -215,7 +211,6 @@ public class SkillGenerator {
 
 
             makeDataFrame(data, line);
-            vitalyMethod(data,line);
         }
 
 
@@ -227,7 +222,7 @@ public class SkillGenerator {
 
     private void insertSkillAction(List<String> actionList){
 
-        DataFrame shitstickape = this.skillData.slots;
+        DataFrame shitstickape = this.skillData.getSlots();
         List<String> filters = new ArrayList<>();
         for(Rows r : shitstickape.getData()){
             int count = 0;
@@ -236,7 +231,7 @@ public class SkillGenerator {
                     count++;
                     continue;
                 }
-                filters.add(this.skillData.slots.getColumnNames().get(count) + " " + s);
+                filters.add(this.skillData.getSlots().getColumnNames().get(count) + " " + s);
                 count++;
             }
         }
@@ -281,28 +276,12 @@ public class SkillGenerator {
         actions.add(action);
     }
 
-    public void vitalyMethod(String[][] data, String action) {
-
-        String question = originalQuestion;
-
-        List<String> solution = new ArrayList<>();
-
-        for (int i = 0; i < data.length; i++) {
-            solution.add(data[i][1]);
-            solution.add(data[i][0]);
-        }
-        solution.add(action);
-        SQL_Formating.add(solution);
-    }
-
     /** GETTERS */
 
-    public List<List<String>> getSQL_Formating() {
-        return SQL_Formating;
-    }
 
-    public Set<String> getVitalySlot(){
-        return this.vitalySlot;
+
+    public SkillData getSkillData() {
+        return skillData;
     }
 
     public String getDeafault() {

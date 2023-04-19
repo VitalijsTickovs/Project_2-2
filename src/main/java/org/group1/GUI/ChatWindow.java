@@ -21,16 +21,9 @@ import javafx.stage.Stage;
 import java.util.*;
 
 import org.apache.commons.lang.WordUtils;
-import org.group1.back_end.response.skills.dataframe.DataFrame;
-import org.group1.back_end.utilities.GeneralFileService;
-import org.group1.back_end.utilities.strings.RegexUtilities;
+import org.group1.back_end.response.skills.SkillData;
 
 import org.group1.back_end.response.Response;
-import org.group1.database.DatabaseCredentials;
-import org.group1.database.TxtToSQL;
-
-import javax.xml.crypto.Data;
-
 
 public class ChatWindow implements CustomStage {
 
@@ -41,9 +34,6 @@ public class ChatWindow implements CustomStage {
     String chat = "";
     String currentUserInput="";
     String currentBotInput="";
-    private List<DataFrame> slotDataFrame= new ArrayList<>();
-    private List<DataFrame> actionDataFrame = new ArrayList<>();
-    private List<List<DataFrame>> dataFrames = new ArrayList<>();
 
     ErrorHandling errorHandling = new ErrorHandling();
     // javafx elements
@@ -59,7 +49,6 @@ public class ChatWindow implements CustomStage {
     public ChatWindow(){
         try{
             responseGenerator = new Response();
-            generateSQL();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,83 +61,6 @@ public class ChatWindow implements CustomStage {
         UIstage.setScene(UIscene);
         design();
         keyboardHandler();
-    }
-    private void generateSQL(){
-        List<List<List<String>>> rules = responseGenerator.getSQL();
-        List<String> questions = responseGenerator.getQuestion();
-        GeneralFileService.setSize(rules.size());
-        //Go through all rules
-        for(int i=0; i<rules.size();i++){
-            int numberOfPlaceholders = RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");
-            String id = Integer.toString(rules.size()-(i));
-            List<List<String>> actions = rules.get(i);
-            ArrayList<String> columnActions = new ArrayList<>();
-            String questionq = questions.get(i);
-            //Count number of occurences of <>(placeholders)
-            for(int z=0;z<RegexUtilities.countRegexOccurrences(questions.get(i),"<.*?>");z++) {
-                String temp = RegexUtilities.getOriginalFormatFromRegex(questionq, "<.*?>");
-                questionq = RegexUtilities.replaceRegex(questionq, temp, "");
-                temp = temp.replace("<","").replace(">","");
-                //check if columns repeat
-                int repeats =0;
-                for(String column: columnActions){
-                    if(column.equals(temp)){
-                        repeats++;
-                    }
-                }
-                if(repeats>0){
-                    temp+="_"+(++repeats);
-                }
-                columnActions.add(temp);
-            }
-            List<String[]> slots = new ArrayList<>();
-            //Going through actions in rule_i
-            for(int j=0; j < actions.size(); j++){
-                //Get the action
-                List<String> action = actions.get(j);
-                String[] remapped = new String[numberOfPlaceholders+1];
-                String text = action.toString();
-
-                //Get used slots and action only
-                //Filter out commas
-                String[] bla = text.split(",");
-                //Filtering of "[","]" and ""
-                int counter =0;
-                for(int z=0;z<bla.length-1;z++){
-                    bla[z] = bla[z]
-                            .replaceAll("\\[","")
-                            .replaceAll("]","")
-                            .trim();
-                    //add the word only if it doesn't contain placeholder
-                    if(RegexUtilities.countRegexOccurrences(bla[z],"<.*?>") == 0){
-                        remapped[counter]=bla[z];
-                        counter++;
-                    }
-                }
-                remapped[remapped.length-1]=bla[bla.length-1];
-                slots.add(remapped);
-            }
-            //Creating DataFrame
-
-            //Create a table action_id with columnActions
-            List<String> actionColumns = (ArrayList<String>) columnActions.clone();
-            actionColumns.add("Action");
-            DataFrame actionDataFrame = new DataFrame(actionColumns);
-            //Inserting data in to action_id
-            actionDataFrame.insert(slots);
-            this.actionDataFrame.add(actionDataFrame);
-
-
-
-            //Create a table slot_id with columnActions
-            DataFrame slotDataFrame = new DataFrame(columnActions);
-            //Inserting all slots in to slot_id
-            slotDataFrame.insert(slots);
-            this.slotDataFrame.add(slotDataFrame);
-
-        }
-        this.dataFrames.add(slotDataFrame);
-        this.dataFrames.add(actionDataFrame);
     }
     public void setStage(Stage mainStage){
         this.menuStage=mainStage;
@@ -272,7 +184,7 @@ public class ChatWindow implements CustomStage {
          skillsButton.setOnAction(new EventHandler<ActionEvent>() {
              @Override
              public void handle(ActionEvent event) {
-                 SkillEditor skillEditor = new SkillEditor(responseGenerator, dataFrames);
+                 SkillEditor skillEditor = new SkillEditor(responseGenerator);
                  skillEditor.setStage(UIstage);
              }
          });

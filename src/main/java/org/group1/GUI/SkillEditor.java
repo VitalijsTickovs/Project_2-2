@@ -19,6 +19,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
+import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.response.skills.SkillFileService;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.DataFrameEditor;
@@ -44,10 +45,11 @@ public class SkillEditor implements CustomStage{
     private TextArea questionInput,prevoiusQuestion;
     private Text username;
     private final Response response;
-    private List<List<DataFrame>> dataFrames;
+    private List<SkillData> dataFrames;
 
     private String skillInput="";
-    public  SkillEditor(Response response, List<List<DataFrame>> dataFrames){
+    public  SkillEditor(Response response){
+        this.dataFrames = response.getSkillData();
         this.response = response;
         try {
             fs = new SkillFileService();
@@ -181,7 +183,7 @@ public class SkillEditor implements CustomStage{
         displaySkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DisplaySkills displaySkills = new DisplaySkills(response, dataFrames);
+                DisplaySkills displaySkills = new DisplaySkills(response);
                 displaySkills.setStage(UIstage, chatStage);
             }
         });

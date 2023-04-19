@@ -41,12 +41,6 @@ public class DataFrame {
         return this;
     }
 
-//    public DataFrame insert(List<Rows> rows) {
-//        for (Rows row : rows) {
-//            this.insert(row);
-//        }
-//        return this;
-//    }
 
     public DataFrame insert(List<String[]> rows){
         for(String[] entry: rows){
@@ -273,63 +267,7 @@ public class DataFrame {
     }
 
 
-    // TODO: please build a method, that displays the dataframe in a Jframe and allows to edit it.
-
-    public void display() {
-        JFrame frame = new JFrame("DataFrame Editor");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        JTable table = new JTable(toTableModel());
-        table.setFillsViewportHeight(true);
-        JScrollPane scrollPane = new JScrollPane(table);
-        frame.add(scrollPane, BorderLayout.CENTER);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addButton = new JButton("Add Row");
-        JButton deleteButton = new JButton("Delete Row");
-        JButton saveButton = new JButton("Save");
-
-        addButton.addActionListener(e -> {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.addRow(new Object[]{});
-        });
-
-        deleteButton.addActionListener(e -> {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                model.removeRow(selectedRow);
-            }
-        });
-
-        saveButton.addActionListener(e -> {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            int rowCount = model.getRowCount();
-            int columnCount = model.getColumnCount();
-
-            this.rowsList.clear();
-
-            for (int i = 0; i < rowCount; i++) {
-                List<Cell> rowData = new ArrayList<>();
-                for (int j = 0; j < columnCount; j++) {
-                    rowData.add(new Cell<>(model.getValueAt(i, j)));
-                }
-                this.insert(new Rows(rowData));
-            }
-
-            frame.dispose();
-            System.out.println(this);
-        });
-
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(saveButton);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        frame.setVisible(true);
-    }
-
+    // TODO: please build a method, that displays the dataframe in a Jframe and allows to edit it
     public DefaultTableModel toTableModel() {
         DefaultTableModel model = new DefaultTableModel() {
             @Override

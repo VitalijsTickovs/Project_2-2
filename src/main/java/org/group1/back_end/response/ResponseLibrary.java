@@ -4,6 +4,7 @@ import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.group1.back_end.ML.model_vectorization.VectorSIF;
 import org.group1.back_end.ML.model_vectorization.VectorWord2Vec;
 import org.group1.back_end.response.skills.Skill;
+import org.group1.back_end.response.skills.SkillData;
 
 import java.io.IOException;
 import java.util.*;
@@ -46,8 +47,9 @@ public class ResponseLibrary {
         return null;
     }
 
-    public List<List<List<String>>> getSQL(){
-        return skills.getSQL_Fromatting();
+
+    public List<SkillData> getSkillData(){
+        return skills.getSkillData();
     }
     public List<String> getQuestions(){
         return skills.getQuestions();

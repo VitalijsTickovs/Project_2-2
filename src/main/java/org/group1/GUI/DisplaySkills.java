@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.back_end.response.Response;
+import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.database.DatabaseCredentials;
 import org.group1.database.SQLGUIConnection;
@@ -35,13 +36,14 @@ public class DisplaySkills implements  CustomStage {
     private SQLGUIConnection sql = new SQLGUIConnection();
     private int skillSize;
     private final Response response;
-    private List<List<DataFrame>> dataFrames;
+    private List<SkillData> dataFrames;
 
-    public DisplaySkills(Response response, List<List<DataFrame>> dataFrames){
-        this.skillSize = dataFrames.get(0).size();
-        this.dataFrames = dataFrames;
+    public DisplaySkills(Response response){
+        this.dataFrames = response.getSkillData();
+        this.skillSize = dataFrames.size();
         this.response = response;
-        loadSkillsFromDatabase();
+        loadSkills();
+
         UIpane = new AnchorPane();
         scrollChat = new AnchorPane();
         UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
@@ -62,13 +64,9 @@ public class DisplaySkills implements  CustomStage {
     /**
      * Generates rule names
      */
-    public void loadSkillsFromDatabase(){
-        List<String> tempSlot = new ArrayList<>();
-        tempSlot = sql.getSlotTableNames();
-        List<String> tempAction = new ArrayList<>();
-        tempAction = sql.getActionTableNames();
-        for (int i = 0; i < this.skillSize; i++) {
-            ruleNames.add("Rule_"+i);
+    public void loadSkills(){
+        for (int i = 1; i < this.skillSize+1; i++) {
+            ruleNames.add("Rule "+i);
         }
     }
 
@@ -149,7 +147,7 @@ public class DisplaySkills implements  CustomStage {
         defineSkills.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SkillEditor skillEditor = new SkillEditor(response, dataFrames);
+                SkillEditor skillEditor = new SkillEditor(response);
                 skillEditor.setStage(UIstage,chatStage);
             }
         });

@@ -1,6 +1,7 @@
 package org.group1.back_end.response;
 
 import org.group1.back_end.response.skills.Skill;
+import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import java.util.*;
@@ -59,8 +60,9 @@ public class Response {
     public static void setDatabase(DB s) {
         database = s;
     }
-    public List<List<List<String>>> getSQL(){
-        return responseLibrary.getSQL();
+
+    public List<SkillData> getSkillData(){
+        return responseLibrary.getSkillData();
     }
     public List<String> getQuestion(){
         return responseLibrary.getQuestions();

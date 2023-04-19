@@ -20,7 +20,7 @@ public class Skill {
     public static Set<String> VOCABULARY = new HashSet<>();
     public static List<List<String>> COMPLETE_QUERY = new LinkedList<>();
     public static DB_Manager DATABASE_MANAGER;
-    public List<List<List<String>>> SQL_Fromatting;
+    public List<SkillData> skillDatas;
     public List<String> questions;
     public List<Set<String>> slots;
 
@@ -35,7 +35,7 @@ public class Skill {
     public Skill() throws Exception {
         DATABASE_MANAGER = new DB_Manager();
         SERVICE = new SkillFileService();
-        SQL_Fromatting = new ArrayList<>();
+        skillDatas = new ArrayList<>();
         questions= new ArrayList<>();
         slots= new ArrayList<>();
         generateSkills();
@@ -50,7 +50,6 @@ public class Skill {
 
         List<String> texts = SERVICE.readAll();
         List<String[]> pairSet = new ArrayList<>();
-        List<SkillData> skillData = new ArrayList<>();
         for (String text : texts){
             System.out.println("=====================================");
             System.out.println("Skill: \n" + text + "\n");
@@ -59,7 +58,6 @@ public class Skill {
             List<String> questions = sp.getQuestions();
             List<String> actions = sp.getActions();
 
-            sp.getVitalySlot();
 
             System.out.println("Questions: " + questions);
             System.out.println("Actions: " + actions);
@@ -91,15 +89,11 @@ public class Skill {
                pairs1[1] = actions.get(i);
                pairSet.add(pairs1);
            }
-           SQL_Fromatting.add(sp.getSQL_Formating());
+           this.skillDatas.add(sp.getSkillData());
            this.questions.add(sp.getOriginalQuestion());
 
 
             System.out.println("Slotlist");
-            Set<String> slotlist = sp.getVitalySlot();
-            for(String banana: slotlist){
-                System.out.println(banana);
-            }
 
             for(Set<String> slot: slots){
                 System.out.println(slot);
@@ -127,8 +121,9 @@ public class Skill {
        return DATABASE_MANAGER.getFirst(text, dataBase);
     }
 
-    public List<List<List<String>>> getSQL_Fromatting(){
-        return this.SQL_Fromatting;
+
+    public List<SkillData> getSkillData(){
+        return this.skillDatas;
     }
 
     public List<Set<String>> getSlots(){
