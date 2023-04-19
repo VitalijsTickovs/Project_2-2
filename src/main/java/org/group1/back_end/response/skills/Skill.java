@@ -59,10 +59,10 @@ public class Skill {
             List<String> actions = sp.getActions();
 
 
-            System.out.println("Questions: " + questions);
-            System.out.println("Actions: " + actions);
+//            System.out.println("Questions: " + questions);
+//            System.out.println("Actions: " + actions);
 
-            System.out.println("Default: " + sp.getDeafaultKey() + " " + sp.getDeafault());
+//            System.out.println("Default: " + sp.getDeafaultKey() + " " + sp.getDeafault());
             addVocabulary(sp.getDeafaultKey());
             String[] pairs = new String[2];
             pairs[0] = sp.getDeafaultKey();
@@ -93,11 +93,11 @@ public class Skill {
            this.questions.add(sp.getOriginalQuestion());
 
 
-            System.out.println("Slotlist");
+//            System.out.println("Slotlist");
 
-            for(Set<String> slot: slots){
-                System.out.println(slot);
-            }
+//            for(Set<String> slot: slots){
+//                System.out.println(slot);
+//            }
 
             System.out.println("===================================== \n\n");
         }

@@ -36,7 +36,7 @@ public class DB_Keywords implements iDataBase<String, String>{
     @Override
     public String getFirst(String key) {
 
-        System.out.println("KEY: " + key);
+//        System.out.println("KEY: " + key);
 
         double closestKey = 0;
 
@@ -75,10 +75,10 @@ public class DB_Keywords implements iDataBase<String, String>{
         int count = 0;
         for (Set<String> key : QUERY_KEYWORD_MATCHING.keySet()) {
             count++;
-            System.out.println("KEY"+count+" = " + key + " ----> " + QUERY_KEYWORD_MATCHING.get(key));
+//            System.out.println("KEY"+count+" = " + key + " ----> " + QUERY_KEYWORD_MATCHING.get(key));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
         System.out.println("------------------------------------------------------------------------------------\n");
-        System.out.println(data);
+//        System.out.println(data);
     }
 }

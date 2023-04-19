@@ -74,7 +74,7 @@ SkillData {
     }
 
     public void display() {
-        System.out.println(this);
+//        System.out.println(this);
         JFrame frame = new JFrame("DataFrame Editor");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
@@ -193,7 +193,7 @@ SkillData {
         Rows row = emptyActionRow();
         List<String> types = slots.getColumnNames();
         for (String slot : _slots) {
-            System.out.println("SLOTSLOT: ");
+//            System.out.println("SLOTSLOT: ");
             Pattern pattern = Pattern.compile("^(<[^>]+>)\\s+(.+)$");
             Matcher matcher = pattern.matcher(slot);
             String type, value;
@@ -201,8 +201,8 @@ SkillData {
             if (matcher.find()) {
                 type = matcher.group(1);
                 value = matcher.group(2);
-                System.out.println("Type: " + type);
-                System.out.println("Value: " + value);
+//                System.out.println("Type: " + type);
+//                System.out.println("Value: " + value);
             } else {
                 System.out.println("The input string does not match the pattern.");
             }

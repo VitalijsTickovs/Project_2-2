@@ -12,6 +12,7 @@ import java.util.*;
 
 import static org.group1.back_end.ML.model_optimization.WordMoversDistance.otra;
 
+
 public class DB_VectorsSequence
         implements iDataBase<String, String>,
         iProcess<List<String>, String>{

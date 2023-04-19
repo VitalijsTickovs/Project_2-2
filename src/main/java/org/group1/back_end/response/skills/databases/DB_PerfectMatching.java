@@ -57,11 +57,11 @@ public class DB_PerfectMatching
         System.out.println("\n---------------------------------- KEYS PERFECT MATCHING --------------------------");
         for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()) {
             count++;
-            System.out.println("KEY "+count+" = " + entry.getKey() + " ----> " + QUERY_PERFECT_MATCHING.get(entry.getKey()));
+//            System.out.println("KEY "+count+" = " + entry.getKey() + " ----> " + QUERY_PERFECT_MATCHING.get(entry.getKey()));
         }
         System.out.println("------------------------------------------------------------------------------------\n");
 
-        System.out.println(data);
+//        System.out.println(data);
     }
 
     @Override

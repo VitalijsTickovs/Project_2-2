@@ -62,7 +62,7 @@ public class GeneralFileService {
     public static void overWrite(SkillData skillData){
         String text ="";
         String question = skillData.getQuestion();
-        System.out.println("Question: "+ question);
+//        System.out.println("Question: "+ question);
         //Converting DataFrame into text
         //Slots
         DataFrame slots = skillData.getSlots();
@@ -84,7 +84,7 @@ public class GeneralFileService {
         //Action
         DataFrame actions = skillData.getActions();
         List<String> actionColumnNames = actions.getColumnNames();
-        System.out.println(actionColumnNames);
+//        System.out.println(actionColumnNames);
         for(int i=0; i<actions.size(); i++) {
             Rows actionRow = actions.get(i);
             text += "Action ";

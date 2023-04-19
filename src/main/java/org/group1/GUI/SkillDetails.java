@@ -69,8 +69,6 @@ public class SkillDetails implements CustomStage {
         response = responseGenerator;
         this.dataFrames = responseGenerator.getSkillData();
         columnNames = dataFrames.get(indexOfRule).getColumnNames();
-        System.out.println(dataFrames.get(indexOfRule).getQuestion());
-        System.out.println("Size of columnNames: " + columnNames.toString());
         slotColumnNames = dataFrames.get(indexOfRule).getSlotNames();
 
         collectDataFromDatabase();

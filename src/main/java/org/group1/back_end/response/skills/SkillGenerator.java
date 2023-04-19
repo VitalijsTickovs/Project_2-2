@@ -51,9 +51,9 @@ public class SkillGenerator {
         processQuestion(text);
         processSlot(text);
         processAction(text);
-        System.out.println(this.skillData);
+//        System.out.println(this.skillData);
 //        this.skillData.actions.display();
-        System.out.println(this.skillData);
+//        System.out.println(this.skillData);
     }
 
     public void processQuestion(String text){
@@ -62,7 +62,7 @@ public class SkillGenerator {
                 .replace("Question", "")
                 .trim();
 
-        System.out.println("Original Question: " + originalQuestion);
+//        System.out.println("Original Question: " + originalQuestion);
         this.skillData.setQuestion(originalQuestion);
     }
 
@@ -106,7 +106,7 @@ public class SkillGenerator {
         DataFrame slotDataFrame = DataFrame.mergeDataFrames(dataFrames);
 
         this.skillData.setSlots(slotDataFrame);
-        System.out.println("Slot Dataframe: \n" + slotDataFrame);
+//        System.out.println("Slot Dataframe: \n" + slotDataFrame);
 
     }
 
@@ -117,7 +117,7 @@ public class SkillGenerator {
         List<String> slotList = filterLineByRegex(text, "Slot");
         List<String> comb = new ArrayList<>();
 
-        System.out.println("Slot List: ");
+//        System.out.println("Slot List: ");
         insertSkillSlot(slotList);
 
         for (String s : slotList) {
@@ -157,7 +157,7 @@ public class SkillGenerator {
             slotSet.add(temp);
             // SYNONYMS
         }
-        System.out.println("Slot Set: " + slotSet);
+//        System.out.println("Slot Set: " + slotSet);
 
     }
 
@@ -167,7 +167,7 @@ public class SkillGenerator {
 
         List<String> actionList = filterLineByRegex(text, "Action");
 
-        System.out.println("Action List: " + actionList);
+//        System.out.println("Action List: " + actionList);
         insertSkillAction(actionList);
 
         for (int i = 0; i < actionList.size(); i++) {
@@ -184,7 +184,7 @@ public class SkillGenerator {
 
             String[][] data = new String[n][2];
             String line = replaceRegex(actionList.get(i), "Action", "");
-            System.out.println("Line: " + line);
+//            System.out.println("Line: " + line);
             for (int j = 0; j < n; j++) {
 
                 String variable = getOriginalFormatFromRegex(
@@ -203,7 +203,7 @@ public class SkillGenerator {
 
                 newLine = replaceFirstRegex(newLine, slot, "");
 
-                System.out.println("Newline: " + newLine);
+//                System.out.println("Newline: " + newLine);
                 line = newLine;
                 data[j][1] = variable;
                 data[j][0] = slot;
@@ -235,11 +235,11 @@ public class SkillGenerator {
                 count++;
             }
         }
-        System.out.println("Filters: " + filters);
+//        System.out.println("Filters: " + filters);
 
         for(String action: new ArrayList<>(actionList)){
             String sentence = action.replace("Action", "").trim();
-            System.out.println("Sentence: " + sentence);
+//            System.out.println("Sentence: " + sentence);
             List<String> matchedRegexes = new ArrayList<>();
             for (String regex : filters) {
                 Pattern pattern = Pattern.compile(regex);
@@ -250,8 +250,8 @@ public class SkillGenerator {
                     sentence = sentence.replace(matchedRegex, "").trim();
                 }
             }
-            System.out.println("Matched regex: " + matchedRegexes);
-            System.out.println("Remaining text: " + sentence);
+//            System.out.println("Matched regex: " + matchedRegexes);
+//            System.out.println("Remaining text: " + sentence);
             this.skillData.insertAction(matchedRegexes, sentence);
 
         }

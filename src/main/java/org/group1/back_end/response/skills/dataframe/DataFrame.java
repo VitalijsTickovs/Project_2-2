@@ -150,7 +150,6 @@ public class DataFrame {
 
     public DataFrame insertToFirstFreeSlot(int columnIndex, Object value){
         for(Rows rows : this.rowsList){
-            System.out.println("dirty printy man: "+  rows.getCells().get(columnIndex).getValue() + "?=" + value);
             if(rows.getCells().get(columnIndex).getValue() == null ||
                     rows.getCells().get(columnIndex).getValue().toString().equals(" ")||
                     rows.getCells().get(columnIndex).getValue().toString().equals("")){
@@ -184,7 +183,6 @@ public class DataFrame {
         StringBuilder sb = new StringBuilder();
 
         List<Integer> columnWidths = new ArrayList<>();
-        System.out.println("This must be 2 when being printed: " + columnNames);
         for (int i = 0; i < columnNames.size(); i++) {
             int maxNameWidth = columnNames.get(i).length();
             int finalI = i;
