@@ -50,8 +50,9 @@ public class SkillData {
             } else {
                 System.out.println("The input string does not match the pattern.");
             }
-            int index = types.indexOf(type); //todo: this will -1
-            row.getCells().get(index).setValue(value);
+            System.out.println("Type: "+ type);
+            int index = types.indexOf(type);
+            if(!type.equals(""))row.getCells().get(index).setValue(value);
         }
         row.getCells().get(row.size()-1).setValue(action);
         actions.insert(row);

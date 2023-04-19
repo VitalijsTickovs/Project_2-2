@@ -20,10 +20,11 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import org.apache.commons.lang.WordUtils;
+import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.utilities.GeneralFileService;
 import org.group1.back_end.utilities.strings.RegexUtilities;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.group1.back_end.response.Response;
 import org.group1.database.DatabaseCredentials;
 import org.group1.database.TxtToSQL;
@@ -40,6 +41,8 @@ public class ChatWindow implements CustomStage {
     String chat = "";
     String currentUserInput="";
     String currentBotInput="";
+    private List<DataFrame> slotDataFrame= new ArrayList<>();
+    private List<DataFrame> actionDataFrame = new ArrayList<>();
 
     ErrorHandling errorHandling = new ErrorHandling();
     // javafx elements
@@ -70,7 +73,6 @@ public class ChatWindow implements CustomStage {
         keyboardHandler();
     }
     private void generateSQL(){
-        TxtToSQL sql = new TxtToSQL();
         List<List<List<String>>> rules = responseGenerator.getSQL();
         List<String> questions = responseGenerator.getQuestion();
         GeneralFileService.setSize(rules.size());
@@ -125,20 +127,24 @@ public class ChatWindow implements CustomStage {
                 remapped[remapped.length-1]=bla[bla.length-1];
                 slots.add(remapped);
             }
-
-            //remove ""
-            columnActions.remove("");
-            sql.removeTables(id);
-            //Create a table slot_id with columnActions
+            //Creating DataFrame
 
             //Create a table action_id with columnActions
-            sql.createActionTable(id,columnActions);
+            List<String> actionColumns = (ArrayList<String>) columnActions.clone();
+            actionColumns.add("Action");
+            DataFrame actionDataFrame = new DataFrame(actionColumns);
             //Inserting data in to action_id
-            sql.insertAction(columnActions,slots,id);
+            actionDataFrame.insert(slots);
+            this.actionDataFrame.add(actionDataFrame);
 
+
+
+            //Create a table slot_id with columnActions
+            DataFrame slotDataFrame = new DataFrame(columnActions);
             //Inserting all slots in to slot_id
-            sql.createTable("slot_"+id);
-            sql.insertSlots("slot_"+id, slots, columnActions);
+            slotDataFrame.insert(slots);
+            this.slotDataFrame.add(slotDataFrame);
+
         }
     }
     public void setStage(Stage mainStage){

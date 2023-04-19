@@ -41,9 +41,21 @@ public class DataFrame {
         return this;
     }
 
-    public DataFrame insert(List<Rows> rows) {
-        for (Rows row : rows) {
-            this.insert(row);
+//    public DataFrame insert(List<Rows> rows) {
+//        for (Rows row : rows) {
+//            this.insert(row);
+//        }
+//        return this;
+//    }
+
+    public DataFrame insert(List<String[]> rows){
+        for(String[] entry: rows){
+            List<Cell> cells = new ArrayList<Cell>();
+            for(int i=0; i<entry.length; i++){
+                cells.add(new Cell(entry[i]));
+            }
+            Rows row = new Rows(cells);
+            insert(row);
         }
         return this;
     }
