@@ -27,11 +27,11 @@ public class a {
         List<double[]> vectorsB = new ArrayList<>();
         for (int i = 0; i < sentenceA.size(); i++) {
             for (int j = 0; j < sentenceB.size(); j++) {
-//                double[] vectorA = ResponseLibrary.WORD2VEC.getWordVector(sentenceA.get(i));
-//                double[] vectorB = ResponseLibrary.WORD2VEC.getWordVector(sentenceB.get(j));
-//                distanceMatrix[i][j] = Distances.euclideanDistance(vectorA, vectorB);
-//                vectorsA.add(vectorA);
-//                vectorsB.add(vectorB);
+                double[] vectorA = ResponseLibrary.WORD2VEC.getWordVector(sentenceA.get(i));
+                double[] vectorB = ResponseLibrary.WORD2VEC.getWordVector(sentenceB.get(j));
+                distanceMatrix[i][j] = Distances.euclideanDistance(vectorA, vectorB);
+                vectorsA.add(vectorA);
+                vectorsB.add(vectorB);
             }
         }
 

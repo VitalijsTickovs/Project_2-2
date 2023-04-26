@@ -36,6 +36,7 @@ import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
 import org.group1.database.SQLGUIConnection;
 import org.group1.database.SQLtoTxt;
+import org.group1.database.Slots;
 
 import java.sql.Array;
 import java.sql.SQLException;
@@ -284,11 +285,11 @@ public class SkillDetails implements CustomStage {
         addAction.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                try {
-//                    addRow();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    addRow();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -347,9 +348,7 @@ public class SkillDetails implements CustomStage {
             }
 
             table2.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
+                    new Slot()
             );
 
             tempObservable.clear();
@@ -372,7 +371,7 @@ public class SkillDetails implements CustomStage {
 
 
 
-//    }
+    }
 
     /**
      * Creates the scrollable pane for the table
@@ -493,7 +492,12 @@ public class SkillDetails implements CustomStage {
             TableColumn<Slot, String> column = new TableColumn<>(
                     columnNames[i]
             );
-            column.setCellValueFactory(new PropertyValueFactory<>(columnNames[i]));
+            column.setCellValueFactory(new TableColumn.CellDataFeatures<Slot, String>(null) {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Slot, String> param) {
+                    return param.getValue().typeProperty();
+                }
+            });
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
             if(i==0) column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(0)));
             else column.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -501,20 +505,23 @@ public class SkillDetails implements CustomStage {
 
             //handles editing cells
             //TODO: change it to support same keys
-            table2.getColumns().forEach(col -> {
-                col.setOnEditCommit(event -> {
-                    int row = event.getTablePosition().getRow();
-                    int colIndex = event.getTablePosition().getColumn();
-                    Object newValue = event.getNewValue();
-                    DataFrame dataFrame = dataFrames.get(id).getActions();
-
-                    //Update the row edited
-                    Rows rowData = dataFrame.get(row);
-                    rowData.get(colIndex).setValue(newValue);
-                });
-            });
             table2.setVisible(isSlot);
         }
+        table2.getColumns().forEach(col -> {
+            col.setOnEditCommit((TableColumn.CellEditEvent<Slot, String> event) -> {
+                int row = event.getTablePosition().getRow();
+                int colIndex = event.getTablePosition().getColumn();
+                String newValue = (String) event.getNewValue();
+                Slot slot = event.getRowValue();
+                if(colIndex==0) slot.setType(newValue);
+                else slot.setValue(newValue);
+                DataFrame dataFrame = dataFrames.get(id).getActions();
+
+                //Update the row edited
+                Rows rowData = dataFrame.get(row);
+                rowData.get(colIndex).setValue(newValue);
+            });
+        });
         //row data
 
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
@@ -550,6 +557,8 @@ public class SkillDetails implements CustomStage {
     public static class Slot {
         private String type;
         private String value;
+
+        public Slot(){}
 
         public Slot(String type, String value) {
             this.type = type;

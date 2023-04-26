@@ -11,16 +11,16 @@ import java.util.*;
 
 public class ResponseLibrary {
 
-//    public static Word2Vec WORD2VEC;
+    public static Word2Vec WORD2VEC;
     public static VectorSIF VECTOR_SIF;
 
 
     static {
-//        try {
-//            WORD2VEC = new VectorWord2Vec().getWord2Vec();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            WORD2VEC = new VectorWord2Vec().getWord2Vec();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         VECTOR_SIF = new VectorSIF();
         VECTOR_SIF.createFrequencyTable();
