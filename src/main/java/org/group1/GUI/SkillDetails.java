@@ -116,8 +116,10 @@ public class SkillDetails implements CustomStage {
 //        List<String> tempColName = new ArrayList<>();
 //        tempColName = columnNames;
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
-            dataPerColumn.add(dataFrames.get(id).getSlots().getColumnData(i));
+            dataPerColumnSlot.add(dataFrames.get(id).getSlots().getDistinctValues(i));
         }
+
+        System.out.println("Size of dataPerCol: " + dataPerColumnSlot.size());
 
     }
 
@@ -486,7 +488,7 @@ public class SkillDetails implements CustomStage {
 
         String[] columnNames = {"type", "value"};
         //columns
-        for (int i = 0; i < slotColumnNames.size(); i++) {
+        for (int i = 0; i < 2; i++) {
 
             TableColumn<Slot, String> column = new TableColumn<>(
                     columnNames[i]
