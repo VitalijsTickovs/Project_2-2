@@ -42,6 +42,7 @@ public class SkillDetails implements CustomStage {
     private AnchorPane UIpane,scrollChat;
     private Stage UIstage,chatStage;
     private Scene UIscene;
+    List<List<String>> TwoColData = new ArrayList<>();
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table,table2;
@@ -109,7 +110,7 @@ public class SkillDetails implements CustomStage {
 //        List<String> tempColName = new ArrayList<>();
 //        tempColName = columnNames;
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
-            dataPerColumn.add(dataFrames.get(id).getSlots().getColumnData(i));
+            dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumnData(i));
         }
 
     }
@@ -452,9 +453,6 @@ public class SkillDetails implements CustomStage {
                             tempObservable
                     )
             );
-            for (int j = 0; j < tempObservable.size(); j++) {
-//                System.out.println("tempObs: "+tempObservable.get(j));
-            }
             tempObservable.clear();
         }
 
@@ -482,20 +480,23 @@ public class SkillDetails implements CustomStage {
         table2.setPrefWidth(480);
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
+        System.out.println("slotColSize: "+slotColumnNames.size());
 
-
+        ArrayList<String> names = new ArrayList<String>();
+        names.add("SlotType");
+        names.add("SlotValue");
         //columns
-        for (int i = 0; i < slotColumnNames.size(); i++) {
-
+        for (int i = 0; i < names.size(); i++) {
+            System.out.println("looping 1");
             final int finalIdx = i;
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    slotColumnNames.get(i)
+                    names.get(i)
             );
             column.setCellValueFactory(param ->
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
             );
-            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
-            if(slotColumnNames.get(i).toUpperCase().equals("SLOTTYPE")) {
+            // THIS ADDS THE OPTION OF COfMBOBOXES IN A TABLE
+            if(names.get(i).toUpperCase().equals("SLOTTYPE")) {
                 column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(i)));
             }else {
                 column.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -523,20 +524,38 @@ public class SkillDetails implements CustomStage {
         }
         //row data
 
+//        tempObservable = new ArrayList<>();
+//        arrangeSlotTypeSlotValue();
+//        for (int i = 0; i < TwoColData.get(0).size(); i++) {
+//            //System.out.println("in 1");
+//            for (int j = 0; j < 2; j++) {
+////                System.out.println("colNum: "+ColNum);
+////                System.out.println("rowNum: "+N_ROWS);
+////                System.out.println("i "+i+" j "+j);
+//                tempObservable.add(dataPerColumn.get(i).get(j));
+//            }
+//            System.out.println(tempObservable);
+//            System.out.println("");
+//            table2.getItems().add(
+//                    FXCollections.observableArrayList(
+//                            tempObservable
+//                    )
+//            );
+//
+//            tempObservable.clear();
+//        }
+
 
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
-
-        for (int j = 0; j < dataPerColumnSlot.get(0).size(); j++) {
+        arrangeSlotTypeSlotValue();
+        System.out.println("size two col data inner array: " + TwoColData.get(0).size());
+        for (int j = 0; j < TwoColData.get(0).size(); j++) {
+            ObservableList<String> rowObservable = FXCollections.observableArrayList();
             for (int i = 0; i < 2; i++) {
-                tempObservable.add(dataPerColumnSlot.get(i).get(j));
+                rowObservable.add(TwoColData.get(i).get(j));
             }
-            table2.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
-            );
-            tempObservable.clear();
+            table2.getItems().add(rowObservable);
         }
 
         //selection listener
@@ -553,6 +572,35 @@ public class SkillDetails implements CustomStage {
         table2.setFixedCellSize(60.0);
         scrollChat.getChildren().add(table2);
         scrollPane.setContent(scrollChat);
+    }
+
+    public void arrangeSlotTypeSlotValue(){
+        List<String> tempArray = new ArrayList<>();
+        List<String> tempArray2 = new ArrayList<>();
+
+        // We are adding to SlotValue (Monday,Friday,... etc.)
+        for (int j=0; j< dataFrames.get(id).getSlots().getColumnNames().size(); j++) {
+            for (int i = 0; i < dataFrames.get(id).getSlots().getData().size(); i++) {
+                if(!dataFrames.get(id).getSlots().getData().get(i).get(j).toString().equals(" ")) {
+                    tempArray2.add(dataFrames.get(id).getSlots().getData().get(i).get(j).toString());
+                }
+            }
+        }
+
+        // i = row size, j = col size
+        // We are adding to SlotType (DAY,DAY,DAY.. etc.)
+        for (int j=0; j< dataFrames.get(id).getSlots().getColumnNames().size(); j++) {
+            for (int i = 0; i < dataFrames.get(id).getSlots().getData().size(); i++) {
+                if(!dataFrames.get(id).getSlots().getData().get(i).get(j).toString().equals(" ")) {
+                    tempArray.add(dataFrames.get(id).getSlots().getColumnNames().get(j));
+                }
+            }
+        }
+
+        TwoColData.add(tempArray);
+        TwoColData.add(tempArray2);
+        System.out.println("TwoCol Size " +TwoColData.size());
+
     }
 //TODO:
     public void slotData() throws SQLException {
