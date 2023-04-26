@@ -4,6 +4,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -124,7 +125,7 @@ public class SkillDetails implements CustomStage {
     public void createButtons(){
         //save button
         saveButton = new Button();
-        saveButton.setText("BACK");
+        saveButton.setText("SAVE");
         saveButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         saveButton.setStyle("-fx-background-color: transparent");
         saveButton.setTextFill(Color.WHITE);
@@ -208,7 +209,44 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                //TODO: SAVE LOGIC FOR THE TABLE
+                    DataFrame slots = new DataFrame(slotColumnNames);
+                    ObservableList<ObservableList<String>> slotRows =  table2.getItems();
+                    //For each row
+                    for(int row = 0; row < slotRows.size(); row++){
+                        int columnIndex=0;
+                        String columnType = slotRows.get(row).get(0);
+                        String columnValue = slotRows.get(row).get(1);
+                        //Finding the order/position of the slotType in columnNames array
+                        for(int type=0; type<slotColumnNames.size(); type++){
+                            String typeName = slotColumnNames.get(type);
+                            if(columnType.equals(typeName)){
+                                columnIndex = type;
+                            }
+                        }
+                        //Inserting the values to first free slot
+                        slots.insertToFirstFreeSlot(columnIndex, columnValue);
+                    }
+                    dataFrames.get(id).setSlots(slots);
+
+                    DataFrame action = new DataFrame(columnNames);
+                    ObservableList<ObservableList<String>> actionRows =  table.getItems();
+                    //For each row
+                    for(int row = 0; row < actionRows.size(); row++){
+                        List<String> rowData = actionRows.get(row);
+                        List<org.group1.back_end.response.skills.dataframe.Cell> rowDataCells = new ArrayList<>();
+                        for(String data: rowData){
+                            org.group1.back_end.response.skills.dataframe.Cell cell = new
+                                    org.group1.back_end.response.skills.dataframe.Cell(data);
+                            rowDataCells.add(cell);
+                        }
+                        Rows rowDataProcessed = new Rows(rowDataCells);
+                        action.insert(rowDataProcessed);
+                        //Finding the order/position of the slotType in columnNames array
+                        //Inserting the values to first free slot
+                    }
+                    dataFrames.get(id).setActions(action);
             }
+
         });
         //back button
         back.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -227,10 +265,6 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                 try {
-//                    sql.setEmptyNull(tableName,columnNames);
-
-//                    SQLtoTxt.overWrite(Integer.toString(id));
-                    //TODO: Save edited Skill
                     GeneralFileService.overWrite(dataFrames.get(id));
                     response.reload();
                 } catch (SQLException e) {
@@ -337,7 +371,7 @@ public class SkillDetails implements CustomStage {
 
             tempObservable = new ArrayList<>();
 
-            for (int j = 0; j < ColNum; j++) {
+            for (int j = 0; j < 2; j++) {
                 tempObservable.add("-");
             }
 
@@ -348,10 +382,9 @@ public class SkillDetails implements CustomStage {
             );
 
             tempObservable.clear();
-            //sql.addRow("slot_"+id,slotColumnNames);
         } else {        // we are in action
             tempObservable = new ArrayList<>();
-            for (int j = 0; j < ColNum; j++) {
+            for (int j = 0; j < columnNames.size(); j++) {
                 tempObservable.add("-");
             }
             table.getItems().add(
@@ -361,7 +394,6 @@ public class SkillDetails implements CustomStage {
             );
 
             tempObservable.clear();
-            //sql.addRow(tableName,columnNames);
         }
 
 
@@ -424,14 +456,9 @@ public class SkillDetails implements CustomStage {
                 col.setOnEditCommit(event -> {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
-                    Object newValue = event.getNewValue();
+                    String newValue =(String) event.getNewValue();
                     // handle the edit
-//                    try {
-//                        sql.updateDatabase(row,newValue.toString(),columnNames.get(colIndex),tableName);
-//
-//                    } catch (SQLException e) {
-//                        e.printStackTrace();
-//                    }
+                    table.getItems().get(row).set(colIndex, newValue);
                 });
             });
         }
@@ -443,9 +470,6 @@ public class SkillDetails implements CustomStage {
         for (int i = 0; i < N_ROWS; i++) {
             //System.out.println("in 1");
             for (int j = 0; j < ColNum; j++) {
-//                System.out.println("colNum: "+ColNum);
-//                System.out.println("rowNum: "+N_ROWS);
-//                System.out.println("i "+i+" j "+j);
                 tempObservable.add(dataPerColumn.get(j).get(i));
             }
             table.getItems().add(
@@ -480,14 +504,12 @@ public class SkillDetails implements CustomStage {
         table2.setPrefWidth(480);
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
-        System.out.println("slotColSize: "+slotColumnNames.size());
 
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         names.add("SlotType");
         names.add("SlotValue");
         //columns
         for (int i = 0; i < names.size(); i++) {
-            System.out.println("looping 1");
             final int finalIdx = i;
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
                     names.get(i)
@@ -495,58 +517,26 @@ public class SkillDetails implements CustomStage {
             column.setCellValueFactory(param ->
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
             );
-            // THIS ADDS THE OPTION OF COfMBOBOXES IN A TABLE
-            if(names.get(i).toUpperCase().equals("SLOTTYPE")) {
+            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE for SlotType( i ==0)
+            if(i==0) {
                 column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(i)));
             }else {
-                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                column.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
             }
             table2.getColumns().add(column);
-
-            //handles editing cells
-            //TODO: change it to support same keys
             table2.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
-                    Object newValue = event.getNewValue();
-                    // handle the edit
-//                    try {
-//                        sql.updateDatabase(row,newValue.toString(),slotColumnNames.get(colIndex),"slot_"+id);
-//
-//                    } catch (SQLException e) {
-//                        //TODO: use label or pane... with warning or not?
-//                        e.printStackTrace();
-//                    }
+                    String newValue = (String) event.getNewValue();
+                    table2.getItems().get(row).set(colIndex,newValue);
                 });
             });
+            //handles editing cells
             table2.setVisible(isSlot);
         }
         //row data
 
-//        tempObservable = new ArrayList<>();
-//        arrangeSlotTypeSlotValue();
-//        for (int i = 0; i < TwoColData.get(0).size(); i++) {
-//            //System.out.println("in 1");
-//            for (int j = 0; j < 2; j++) {
-////                System.out.println("colNum: "+ColNum);
-////                System.out.println("rowNum: "+N_ROWS);
-////                System.out.println("i "+i+" j "+j);
-//                tempObservable.add(dataPerColumn.get(i).get(j));
-//            }
-//            System.out.println(tempObservable);
-//            System.out.println("");
-//            table2.getItems().add(
-//                    FXCollections.observableArrayList(
-//                            tempObservable
-//                    )
-//            );
-//
-//            tempObservable.clear();
-//        }
-
-
-        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
         arrangeSlotTypeSlotValue();
         System.out.println("size two col data inner array: " + TwoColData.get(0).size());
@@ -565,7 +555,7 @@ public class SkillDetails implements CustomStage {
                     public void changed(ObservableValue<? extends TablePosition> observable,
                                         TablePosition oldPos, TablePosition pos) {
                         currentRow = pos.getRow();
-
+                        System.out.println(table2.getItems().get(currentRow));
                     }
                 });
 
@@ -602,7 +592,6 @@ public class SkillDetails implements CustomStage {
         System.out.println("TwoCol Size " +TwoColData.size());
 
     }
-//TODO:
     public void slotData() throws SQLException {
 
         List<String> temp = new ArrayList<>();
