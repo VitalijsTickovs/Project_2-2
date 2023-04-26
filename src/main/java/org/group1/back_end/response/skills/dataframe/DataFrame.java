@@ -45,7 +45,8 @@ public class DataFrame {
                         break;
                     }
                 }
-                if (!found){
+                if (!found && !temp.equals(" ")){
+                    System.out.println(temp + " size: "+temp.length());
                     tempArray.add(temp);
                 }
         }

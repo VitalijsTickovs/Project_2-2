@@ -59,7 +59,7 @@ public class SkillDetails implements CustomStage {
     String tableName;
     private int id;
     private List<List<String>> dataPerColumn = new ArrayList<>();
-    private List<List<Rows>> dataPerColumnSlot = new ArrayList<>();
+    private List<List<String>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
     private List<SkillData> dataFrames;
@@ -94,8 +94,8 @@ public class SkillDetails implements CustomStage {
     }
 
     public void collectDataFromDatabase() throws SQLException {
-        List<String> tempColName = new ArrayList<>();
-        tempColName = columnNames;
+//        List<String> tempColName = new ArrayList<>();
+//        tempColName = columnNames;
         for (int i = 0; i < dataFrames.get(id).getActions().getColumnNames().size(); i++) {
             dataPerColumn.add(dataFrames.get(id).getActions().getColumnData(i));
         }
@@ -106,9 +106,12 @@ public class SkillDetails implements CustomStage {
     }
 
     public void collectDataFromDatabaseSlot() throws SQLException {
-        for (int i = 0; i < slotColumnNames.size(); i++) {
-            dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumn(i).getData());
+//        List<String> tempColName = new ArrayList<>();
+//        tempColName = columnNames;
+        for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
+            dataPerColumn.add(dataFrames.get(id).getSlots().getColumnData(i));
         }
+
     }
 
     public void setStage(Stage mainStage,Stage chatStage){
@@ -439,9 +442,9 @@ public class SkillDetails implements CustomStage {
         for (int i = 0; i < N_ROWS; i++) {
             //System.out.println("in 1");
             for (int j = 0; j < ColNum; j++) {
-                System.out.println("colNum: "+ColNum);
-                System.out.println("rowNum: "+N_ROWS);
-                System.out.println("i "+i+" j "+j);
+//                System.out.println("colNum: "+ColNum);
+//                System.out.println("rowNum: "+N_ROWS);
+//                System.out.println("i "+i+" j "+j);
                 tempObservable.add(dataPerColumn.get(j).get(i));
             }
             table.getItems().add(
@@ -450,7 +453,7 @@ public class SkillDetails implements CustomStage {
                     )
             );
             for (int j = 0; j < tempObservable.size(); j++) {
-                System.out.println("tempObs: "+tempObservable.get(j));
+//                System.out.println("tempObs: "+tempObservable.get(j));
             }
             tempObservable.clear();
         }
@@ -526,7 +529,7 @@ public class SkillDetails implements CustomStage {
 
         for (int j = 0; j < dataPerColumnSlot.get(0).size(); j++) {
             for (int i = 0; i < 2; i++) {
-//                tempObservable.add(dataPerColumnSlot.get(i).get(j));
+                tempObservable.add(dataPerColumnSlot.get(i).get(j));
             }
             table2.getItems().add(
                     FXCollections.observableArrayList(
@@ -597,7 +600,7 @@ public class SkillDetails implements CustomStage {
         setButtonActions();
         createScrollPane();
         //createTable();
-        //createSlotTable();
+        createSlotTable();
     }
 
 }
