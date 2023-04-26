@@ -27,12 +27,6 @@ public class DataFrame {
         this.rowsList = rows;
     }
     public List<String> getDistinctValues(int colNum){
-//        for (int i = 0; i < columnNames.size(); i++) {
-//            System.out.println("Col: "+columnNames.get(i));
-//        }
-//        for (int i = 0; i < rowsList.size(); i++) {
-//            System.out.println("Row: "+rowsList.get(i));
-//        }
         boolean found=false;
         ArrayList<String> tempArray = new ArrayList<>();
 
