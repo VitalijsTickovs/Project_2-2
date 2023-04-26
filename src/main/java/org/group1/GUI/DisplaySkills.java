@@ -266,7 +266,8 @@ public class DisplaySkills implements  CustomStage {
                 public void handle(ActionEvent event) {
                     try {
                     SkillDetails skillDetails= new SkillDetails(tempIndex ,response);
-                    //skillDetails.setStage(UIstage,chatStage);
+                    //TODO: NEW SCREEN update
+                    skillDetails.setStage(UIstage,chatStage);
 
                     } catch (SQLException e) {
                         e.printStackTrace();

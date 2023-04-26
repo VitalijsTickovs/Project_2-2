@@ -58,7 +58,7 @@ public class SkillDetails implements CustomStage {
     List<String> columnNames,slotColumnNames;
     String tableName;
     private int id;
-    private List<List<Rows>> dataPerColumn = new ArrayList<>();
+    private List<List<String>> dataPerColumn = new ArrayList<>();
     private List<List<Rows>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
@@ -70,6 +70,11 @@ public class SkillDetails implements CustomStage {
         this.dataFrames = responseGenerator.getSkillData();
         columnNames = dataFrames.get(indexOfRule).getColumnNames();
         slotColumnNames = dataFrames.get(indexOfRule).getSlotNames();
+        this.ColNum=dataFrames.get(indexOfRule).getActions().getColumnNames().size();
+        this.N_ROWS=dataFrames.get(indexOfRule).getActions().getData().size();
+
+        slotData();
+        typeData();
 
         collectDataFromDatabase();
         collectDataFromDatabaseSlot();
@@ -82,17 +87,22 @@ public class SkillDetails implements CustomStage {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
 
-
+        //TODO: SWING UI
         dataFrames.get(indexOfRule).display();
         design();
+        createTable();
     }
 
     public void collectDataFromDatabase() throws SQLException {
         List<String> tempColName = new ArrayList<>();
         tempColName = columnNames;
-        for (int i = 0; i < columnNames.size(); i++) {
-            dataPerColumn.add(dataFrames.get(id).getActions().getColumn(i).getData());
+        for (int i = 0; i < dataFrames.get(id).getActions().getColumnNames().size(); i++) {
+            dataPerColumn.add(dataFrames.get(id).getActions().getColumnData(i));
         }
+//        System.out.println("Size of dataPerCol: " + dataPerColumn.size());
+//        for (int i = 0; i < dataPerColumn.size(); i++) {
+//            System.out.println("size of row data "+ dataPerColumn.get(i).get());
+//        }
     }
 
     public void collectDataFromDatabaseSlot() throws SQLException {
@@ -404,7 +414,7 @@ public class SkillDetails implements CustomStage {
             }
             table.getColumns().add(column);
             //handles editiing cells
-            //Todo might be changed
+            //Todo UPDATE THE DATAFRAME HERE
             //updates the database on edit
             table.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
@@ -427,14 +437,21 @@ public class SkillDetails implements CustomStage {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
         for (int i = 0; i < N_ROWS; i++) {
+            //System.out.println("in 1");
             for (int j = 0; j < ColNum; j++) {
-//                tempObservable.add(dataPerColumn.get(j).get(i));
+                System.out.println("colNum: "+ColNum);
+                System.out.println("rowNum: "+N_ROWS);
+                System.out.println("i "+i+" j "+j);
+                tempObservable.add(dataPerColumn.get(j).get(i));
             }
             table.getItems().add(
                     FXCollections.observableArrayList(
                             tempObservable
                     )
             );
+            for (int j = 0; j < tempObservable.size(); j++) {
+                System.out.println("tempObs: "+tempObservable.get(j));
+            }
             tempObservable.clear();
         }
 
@@ -534,20 +551,28 @@ public class SkillDetails implements CustomStage {
         scrollChat.getChildren().add(table2);
         scrollPane.setContent(scrollChat);
     }
-
-    public void slotData(String slotTable) throws SQLException {
+//TODO:
+    public void slotData() throws SQLException {
 
         List<String> temp = new ArrayList<>();
-        for (int i = 0; i < columnNames.size(); i++) {
-//            temp = sql.avaiableDataFromSlot(slotTable,columnNames.get(i));
+
+        for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
+            temp = dataFrames.get(id).getSlots().getDistinctValues(i);
             ObservableList<String> values = FXCollections.observableArrayList(temp);
             comboData.add(values);
         }
+//        for (int i = 0; i < comboData.size() ; i++) {
+//            for (int j = 0; j < comboData.get(i).size(); j++) {
+//                System.out.println("distinct: "+ comboData.get(i).get(j));
+//            }
+//            System.out.println(" ");
+//        }
     }
 
-    public void typeData(String slotTable) throws SQLException {
+    public void typeData() throws SQLException {
         List<String> temp = new ArrayList<>();
 //        temp = sql.getSlotType(slotTable);
+        temp=dataFrames.get(id).getSlots().getColumnNames();
         ObservableList<String> values = FXCollections.observableArrayList(temp);
         slotComboData.add(values);
     }

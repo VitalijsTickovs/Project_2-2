@@ -26,6 +26,39 @@ public class DataFrame {
         this.columnNames = columnNames;
         this.rowsList = rows;
     }
+    public List<String> getDistinctValues(int colNum){
+//        for (int i = 0; i < columnNames.size(); i++) {
+//            System.out.println("Col: "+columnNames.get(i));
+//        }
+//        for (int i = 0; i < rowsList.size(); i++) {
+//            System.out.println("Row: "+rowsList.get(i));
+//        }
+        boolean found=false;
+        ArrayList<String> tempArray = new ArrayList<>();
+
+        for (int i = 0; i < rowsList.size() ; i++) {
+                String temp = rowsList.get(i).get(colNum).toString();
+
+                for (int k = i+1; k < rowsList.size()-i-1; k++) {
+                    if (temp.equals(rowsList.get(k).get(colNum).toString())) {
+                        found=true;
+                        break;
+                    }
+                }
+                if (!found){
+                    tempArray.add(temp);
+                }
+        }
+        return tempArray;
+    }
+    public List<String> getColumnData(int colNum) {
+        ArrayList<String> tempArray = new ArrayList<>();
+        for (int i = 0; i < rowsList.size(); i++) {
+            tempArray.add(rowsList.get(i).get(colNum).toString());
+        }
+        return tempArray;
+    }
+
 
     public List<String> getColumnNames() {
         return columnNames;
