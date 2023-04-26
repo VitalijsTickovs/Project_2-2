@@ -492,12 +492,7 @@ public class SkillDetails implements CustomStage {
             TableColumn<Slot, String> column = new TableColumn<>(
                     columnNames[i]
             );
-            column.setCellValueFactory(new TableColumn.CellDataFeatures<Slot, String>(null) {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Slot, String> param) {
-                    return param.getValue().typeProperty();
-                }
-            });
+            column.setCellValueFactory(new PropertyValueFactory<>(columnNames[i]));
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
             if(i==0) column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(0)));
             else column.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -508,13 +503,10 @@ public class SkillDetails implements CustomStage {
             table2.setVisible(isSlot);
         }
         table2.getColumns().forEach(col -> {
-            col.setOnEditCommit((TableColumn.CellEditEvent<Slot, String> event) -> {
+            col.setOnEditCommit(event -> {
                 int row = event.getTablePosition().getRow();
                 int colIndex = event.getTablePosition().getColumn();
-                String newValue = (String) event.getNewValue();
-                Slot slot = event.getRowValue();
-                if(colIndex==0) slot.setType(newValue);
-                else slot.setValue(newValue);
+                Object newValue = event.getNewValue();
                 DataFrame dataFrame = dataFrames.get(id).getActions();
 
                 //Update the row edited
