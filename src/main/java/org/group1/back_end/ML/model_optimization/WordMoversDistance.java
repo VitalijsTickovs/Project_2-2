@@ -19,18 +19,18 @@ public class WordMoversDistance {
         for (int i = 0; i < sentenceA.size(); i++) {
             for (int j = 0; j < sentenceB.size(); j++) {
 
-                double[] vectorA = ResponseLibrary.WORD2VEC.getWordVector(sentenceA.get(i));
-                double[] vectorB = ResponseLibrary.WORD2VEC.getWordVector(sentenceB.get(j));
-                if(vectorA == null){
-                    vectorA = new double[300];
-                }
-                if(vectorB == null){
-                    vectorB = new double[300];
-                }
-
-                costMatrix[i][j] = Distances.euclideanDistance(vectorA, vectorB);
-                vectorsA.add(vectorA);
-                vectorsB.add(vectorB);
+//                double[] vectorA = ResponseLibrary.WORD2VEC.getWordVector(sentenceA.get(i));
+//                double[] vectorB = ResponseLibrary.WORD2VEC.getWordVector(sentenceB.get(j));
+//                if(vectorA == null){
+//                    vectorA = new double[300];
+//                }
+//                if(vectorB == null){
+//                    vectorB = new double[300];
+//                }
+//
+//                costMatrix[i][j] = Distances.euclideanDistance(vectorA, vectorB);
+//                vectorsA.add(vectorA);
+//                vectorsB.add(vectorB);
             }
         }
         double[] source = new double[sentenceA.size()];

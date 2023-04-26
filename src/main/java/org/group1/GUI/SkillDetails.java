@@ -1,16 +1,21 @@
 package org.group1.GUI;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +29,7 @@ import javafx.util.converter.DefaultStringConverter;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.response.skills.SkillFileService;
+import org.group1.back_end.response.skills.dataframe.Cell;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.DataFrameEditor;
 import org.group1.back_end.response.skills.dataframe.Rows;
@@ -44,7 +50,8 @@ public class SkillDetails implements CustomStage {
     private Scene UIscene;
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
-    private TableView<ObservableList<String>> table,table2;
+    private TableView<ObservableList<String>> table;
+    private TableView<Slot> table2;
     private List<String> tempObservable;
     private int N_ROWS, ColNum,currentRow;
 //    private SQLGUIConnection sql = new SQLGUIConnection();
@@ -123,7 +130,7 @@ public class SkillDetails implements CustomStage {
     public void createButtons(){
         //save button
         saveButton = new Button();
-        saveButton.setText("BACK");
+        saveButton.setText("Save");
         saveButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
         saveButton.setStyle("-fx-background-color: transparent");
         saveButton.setTextFill(Color.WHITE);
@@ -207,6 +214,15 @@ public class SkillDetails implements CustomStage {
             @Override
             public void handle(ActionEvent event) {
                //TODO: SAVE LOGIC FOR THE TABLE
+                try {
+                    System.out.println("Id:"+ id);
+                    System.out.println("DataFrame" + dataFrames.get(id));
+
+                    GeneralFileService.overWrite(dataFrames.get(id));
+                    response.reload();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         //back button
@@ -225,18 +241,6 @@ public class SkillDetails implements CustomStage {
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                try {
-//                    sql.setEmptyNull(tableName,columnNames);
-
-//                    SQLtoTxt.overWrite(Integer.toString(id));
-                    //TODO: Save edited Skill
-                    GeneralFileService.overWrite(dataFrames.get(id));
-                    response.reload();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
                 DisplaySkills displaySkills = new DisplaySkills(response);
                 displaySkills.setStage(UIstage,chatStage);
             }
@@ -278,11 +282,11 @@ public class SkillDetails implements CustomStage {
         addAction.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                try {
-                    addRow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    addRow();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -366,7 +370,7 @@ public class SkillDetails implements CustomStage {
 
 
 
-    }
+//    }
 
     /**
      * Creates the scrollable pane for the table
@@ -410,27 +414,24 @@ public class SkillDetails implements CustomStage {
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
             );
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
-            if(!columnNames.get(i).toUpperCase().equals("ACTION")) {
-                column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), comboData.get(i)));
+            if(!columnNames.get(i).equalsIgnoreCase("action")) {
+                column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), comboData.get(0)));
             }else {
                 column.setCellFactory(TextFieldTableCell.forTableColumn());
             }
             table.getColumns().add(column);
-            //handles editiing cells
-            //Todo UPDATE THE DATAFRAME HERE
+
             //updates the database on edit
             table.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
                     Object newValue = event.getNewValue();
-                    // handle the edit
-//                    try {
-//                        sql.updateDatabase(row,newValue.toString(),columnNames.get(colIndex),tableName);
-//
-//                    } catch (SQLException e) {
-//                        e.printStackTrace();
-//                    }
+                    DataFrame dataFrame = dataFrames.get(id).getActions();
+
+                    //Update the row edited
+                    Rows rowData = dataFrame.get(row);
+                    rowData.get(colIndex).setValue(newValue);
                 });
             });
         }
@@ -483,23 +484,17 @@ public class SkillDetails implements CustomStage {
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
 
-
+        String[] columnNames = {"type", "value"};
         //columns
         for (int i = 0; i < slotColumnNames.size(); i++) {
 
-            final int finalIdx = i;
-            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    slotColumnNames.get(i)
+            TableColumn<Slot, String> column = new TableColumn<>(
+                    columnNames[i]
             );
-            column.setCellValueFactory(param ->
-                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
-            );
+            column.setCellValueFactory(new PropertyValueFactory<>(columnNames[i]));
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE
-            if(slotColumnNames.get(i).toUpperCase().equals("SLOTTYPE")) {
-                column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(i)));
-            }else {
-                column.setCellFactory(TextFieldTableCell.forTableColumn());
-            }
+            if(i==0) column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(0)));
+            else column.setCellFactory(TextFieldTableCell.forTableColumn());
             table2.getColumns().add(column);
 
             //handles editing cells
@@ -509,35 +504,30 @@ public class SkillDetails implements CustomStage {
                     int row = event.getTablePosition().getRow();
                     int colIndex = event.getTablePosition().getColumn();
                     Object newValue = event.getNewValue();
-                    // handle the edit
-//                    try {
-//                        sql.updateDatabase(row,newValue.toString(),slotColumnNames.get(colIndex),"slot_"+id);
-//
-//                    } catch (SQLException e) {
-//                        //TODO: use label or pane... with warning or not?
-//                        e.printStackTrace();
-//                    }
+                    DataFrame dataFrame = dataFrames.get(id).getActions();
+
+                    //Update the row edited
+                    Rows rowData = dataFrame.get(row);
+                    rowData.get(colIndex).setValue(newValue);
                 });
             });
             table2.setVisible(isSlot);
         }
         //row data
 
-
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
-
-        for (int j = 0; j < dataPerColumnSlot.get(0).size(); j++) {
-            for (int i = 0; i < 2; i++) {
-                tempObservable.add(dataPerColumnSlot.get(i).get(j));
+        ObservableList<Slot> data = FXCollections.observableArrayList();
+        for(int type = 0; type< dataPerColumnSlot.size(); type++) {
+            List<String> columnData = dataPerColumnSlot.get(type);
+            for (int j = 0; j < columnData.size(); j++) {
+                // Inserting the types based in which array of the data we are
+                // E.g, [Maastricht, Amsterdam] would result in filling 2 rows of <CITY>
+                // for first column, since its the type
+                data.add(new Slot(slotColumnNames.get(type), columnData.get(j)));
             }
-            table2.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
-            );
-            tempObservable.clear();
         }
+        table2.setItems(data);
 
         //selection listener
         table2.getFocusModel().focusedCellProperty().addListener(
@@ -554,7 +544,34 @@ public class SkillDetails implements CustomStage {
         scrollChat.getChildren().add(table2);
         scrollPane.setContent(scrollChat);
     }
-//TODO:
+
+    public static class Slot {
+        private String type;
+        private String value;
+
+        public Slot(String type, String value) {
+            this.type = type;
+            this.value = value;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    //TODO:
     public void slotData() throws SQLException {
 
         List<String> temp = new ArrayList<>();
@@ -564,12 +581,6 @@ public class SkillDetails implements CustomStage {
             ObservableList<String> values = FXCollections.observableArrayList(temp);
             comboData.add(values);
         }
-//        for (int i = 0; i < comboData.size() ; i++) {
-//            for (int j = 0; j < comboData.get(i).size(); j++) {
-//                System.out.println("distinct: "+ comboData.get(i).get(j));
-//            }
-//            System.out.println(" ");
-//        }
     }
 
     public void typeData() throws SQLException {
@@ -599,7 +610,7 @@ public class SkillDetails implements CustomStage {
         createButtons();
         setButtonActions();
         createScrollPane();
-        //createTable();
+//        createTable();
         createSlotTable();
     }
 
