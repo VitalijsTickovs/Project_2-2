@@ -1,10 +1,8 @@
-package org.group1.GUI;
+package org.group1.GUI.utils;
 
 public class ErrorHandling {
     public boolean stringLengthError(String string){
-     if(string.length()>0){
-         return true;
-     }return false;
+        return string.length() > 0;
     }
     //checks if a string has numbers
     public boolean numberError( String check ){

@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class HelpWindow implements CustomStage{
+public class HelpWindow extends StageManager implements ICustomStage {
 
     private AnchorPane UIpane;
     private Stage UIstage;
@@ -18,7 +18,7 @@ public class HelpWindow implements CustomStage{
 
     public HelpWindow(){
         UIpane = new AnchorPane();
-        UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
+        UIscene = new Scene(UIpane, screenWidth,screenHeight);
         UIstage = new Stage();
         UIscene.setFill(Color.LIGHTGRAY);
         UIpane.setStyle("-fx-background-color: transparent");
@@ -48,12 +48,6 @@ public class HelpWindow implements CustomStage{
         UIpane.getChildren().add(exampleLabel);
         UIpane.getChildren().add(exampleLabel2);
 
-    }
-
-    public void setStage(Stage mainStage){
-        this.chatStage=mainStage;
-        mainStage.close();
-        UIstage.show();
     }
 
     @Override

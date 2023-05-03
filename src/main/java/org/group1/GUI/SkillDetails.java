@@ -4,67 +4,45 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
+import org.group1.GUI.utils.ButtonFactory;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillData;
-import org.group1.back_end.response.skills.SkillFileService;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
-import org.group1.back_end.response.skills.dataframe.DataFrameEditor;
 import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
-import org.group1.database.SQLGUIConnection;
-import org.group1.database.SQLtoTxt;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class SkillDetails implements CustomStage {
-    // TODO: YOU WILL HAVE TO DEAL WITH CHAT HISTORY
-    private AnchorPane UIpane,scrollChat;
-    private Stage UIstage,chatStage;
-    private Scene UIscene;
+public class SkillDetails extends StageManager implements ICustomStage {
     List<List<String>> TwoColData = new ArrayList<>();
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table,table2;
     private List<String> tempObservable;
-    private int N_ROWS, ColNum,currentRow;
-//    private SQLGUIConnection sql = new SQLGUIConnection();
-    private ArrayList<ObservableList<String>> comboData = new ArrayList<>();
-    private ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
-
-    private ArrayList<ObservableList<String>> comboDataSlots = new ArrayList<>();
+    private final int ColNum, N_ROWS;
+    private int currentRow;
+    private final ArrayList<ObservableList<String>> comboData = new ArrayList<>();
+    private final ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
     private Text text;
-    SkillFileService fs;
-
     List<String> columnNames,slotColumnNames;
     String tableName;
-    private int id;
-    private List<List<String>> dataPerColumn = new ArrayList<>();
-    private List<List<String>> dataPerColumnSlot = new ArrayList<>();
+    private final int id;
+    private final List<List<String>> dataPerColumn = new ArrayList<>();
+    private final List<List<String>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
-    private List<SkillData> dataFrames;
+    private final List<SkillData> dataFrames;
 
     public SkillDetails(int indexOfRule, Response responseGenerator) throws SQLException {
         id = indexOfRule;
@@ -81,324 +59,143 @@ public class SkillDetails implements CustomStage {
         collectDataFromDatabase();
         collectDataFromDatabaseSlot();
 
-        UIpane = new AnchorPane();
-        scrollChat = new AnchorPane();
-        UIscene = new Scene(UIpane,LoginScreen.screenWidth,LoginScreen.screenHeight);
-        UIstage = new Stage();
-        UIscene.setFill(Color.rgb(18,64,76));
-        UIpane.setStyle("-fx-background-color: transparent");
-        UIstage.setScene(UIscene);
+        initStage();
 
-        //TODO: SWING UI
-        dataFrames.get(indexOfRule).display();
         design();
-        createTable();
     }
 
-    public void collectDataFromDatabase() throws SQLException {
-//        List<String> tempColName = new ArrayList<>();
-//        tempColName = columnNames;
+    public void collectDataFromDatabase(){
         for (int i = 0; i < dataFrames.get(id).getActions().getColumnNames().size(); i++) {
             dataPerColumn.add(dataFrames.get(id).getActions().getColumnData(i));
         }
-//        System.out.println("Size of dataPerCol: " + dataPerColumn.size());
-//        for (int i = 0; i < dataPerColumn.size(); i++) {
-//            System.out.println("size of row data "+ dataPerColumn.get(i).get());
-//        }
     }
 
-    public void collectDataFromDatabaseSlot() throws SQLException {
-//        List<String> tempColName = new ArrayList<>();
-//        tempColName = columnNames;
+    public void collectDataFromDatabaseSlot() {
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
             dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumnData(i));
         }
-
-    }
-
-    public void setStage(Stage mainStage,Stage chatStage){
-        this.chatStage=chatStage;
-        mainStage.close();
-        UIstage.show();
     }
 
     public void createButtons(){
         //save button
-        saveButton = new Button();
-        saveButton.setText("SAVE");
-        saveButton.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        saveButton.setStyle("-fx-background-color: transparent");
-        saveButton.setTextFill(Color.WHITE);
-        saveButton.setLayoutX(20);
-        saveButton.setLayoutY(210);
-        saveButton.setCursor(Cursor.CLOSED_HAND);
+        saveButton = ButtonFactory.createButton("SAVE", 20,210);
         UIpane.getChildren().add(saveButton);
         //back button
-        back = new Button();
-        back.setText("BACK");
-        back.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        back.setStyle("-fx-background-color: transparent");
-        back.setTextFill(Color.WHITE);
-        back.setLayoutX(20);
-        back.setLayoutY(170);
-        back.setCursor(Cursor.CLOSED_HAND);
+        back = ButtonFactory.createButton("BACK", 20, 170);
         UIpane.getChildren().add(back);
-
         //help button
-        help = new Button();
-        help.setText("HELP");
-        help.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        help.setStyle("-fx-background-color: transparent");
-        help.setTextFill(Color.WHITE);
-        help.setLayoutX(20);
-        help.setLayoutY(130);
-        help.setCursor(Cursor.CLOSED_HAND);
+        help = ButtonFactory.createButton("HELP", 20, 130);
         UIpane.getChildren().add(help);
-
         //addAction button
-        addAction = new Button();
-        addAction.setText("ADD ROW");
-        addAction.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        addAction.setStyle("-fx-background-color: transparent");
-        addAction.setTextFill(Color.WHITE);
-        addAction.setLayoutX(380);
-        addAction.setLayoutY(450);
-        addAction.setCursor(Cursor.CLOSED_HAND);
+        addAction = ButtonFactory.createButton("ADD ROW", 380, 450);
         UIpane.getChildren().add(addAction);
 
         //slots button
-        slots = new Button();
-        slots.setText("SLOTS");
-        slots.setFont(Font.font("Impact", FontWeight.BOLD,20));
-        slots.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        slots.setTextFill(Color.WHITE);
-        slots.setCursor(Cursor.CLOSED_HAND);
+        slots = ButtonFactory.createButton("SLOTS", 380, 500);
         slots.setPrefSize(400,50);
-        slots.setLayoutX(380);
-        slots.setLayoutY(500);
         UIpane.getChildren().add(slots);
 
         //help button
-        delete = new Button();
-        delete.setText("DELETE");
-        delete.setFont(Font.font("Impact", FontWeight.BOLD,30));
-        delete.setStyle("-fx-background-color: transparent");
-        delete.setTextFill(Color.WHITE);
-        delete.setLayoutX(650);
-        delete.setLayoutY(450);
-        delete.setCursor(Cursor.CLOSED_HAND);
+        delete = ButtonFactory.createButton("DELETE", 650, 450);
         UIpane.getChildren().add(delete);
 
     }
 
     public void setButtonActions(){
         //save button
-        saveButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                saveButton.setTextFill(Color.rgb(42,97,117));
-            }
-        });
-        saveButton.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                saveButton.setTextFill(Color.WHITE);
-            }
-        });
-        saveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-               //TODO: SAVE LOGIC FOR THE TABLE
-                    DataFrame slots = new DataFrame(slotColumnNames);
-                    ObservableList<ObservableList<String>> slotRows =  table2.getItems();
-                    //For each row
-                    for(int row = 0; row < slotRows.size(); row++){
-                        int columnIndex=0;
-                        String columnType = slotRows.get(row).get(0);
-                        String columnValue = slotRows.get(row).get(1);
-                        //Finding the order/position of the slotType in columnNames array
-                        for(int type=0; type<slotColumnNames.size(); type++){
-                            String typeName = slotColumnNames.get(type);
-                            if(columnType.equals(typeName)){
-                                columnIndex = type;
-                            }
-                        }
-                        //Inserting the values to first free slot
-                        slots.insertToFirstFreeSlot(columnIndex, columnValue);
+        ButtonFactory.setDefaultActions(saveButton);
+        saveButton.setOnAction(e -> {
+            DataFrame slots = new DataFrame(slotColumnNames);
+            ObservableList<ObservableList<String>> slotRows =  table2.getItems();
+            //For each row
+            for (ObservableList<String> slotRow : slotRows) {
+                int columnIndex = 0;
+                String columnType = slotRow.get(0);
+                String columnValue = slotRow.get(1);
+                //Finding the order/position of the slotType in columnNames array
+                for (int type = 0; type < slotColumnNames.size(); type++) {
+                    String typeName = slotColumnNames.get(type);
+                    if (columnType.equals(typeName)) {
+                        columnIndex = type;
                     }
-                    dataFrames.get(id).setSlots(slots);
-
-                    DataFrame action = new DataFrame(columnNames);
-                    ObservableList<ObservableList<String>> actionRows =  table.getItems();
-                    //For each row
-                    for(int row = 0; row < actionRows.size(); row++){
-                        List<String> rowData = actionRows.get(row);
-                        List<org.group1.back_end.response.skills.dataframe.Cell> rowDataCells = new ArrayList<>();
-                        for(String data: rowData){
-                            org.group1.back_end.response.skills.dataframe.Cell cell = new
-                                    org.group1.back_end.response.skills.dataframe.Cell(data);
-                            rowDataCells.add(cell);
-                        }
-                        Rows rowDataProcessed = new Rows(rowDataCells);
-                        action.insert(rowDataProcessed);
-                        //Finding the order/position of the slotType in columnNames array
-                        //Inserting the values to first free slot
-                    }
-                    dataFrames.get(id).setActions(action);
+                }
+                //Inserting the values to first free slot
+                slots.insertToFirstFreeSlot(columnIndex, columnValue);
             }
+            dataFrames.get(id).setSlots(slots);
 
+            DataFrame action = new DataFrame(columnNames);
+            ObservableList<ObservableList<String>> actionRows =  table.getItems();
+            //For each row
+            for (List<String> rowData : actionRows) {
+                List<org.group1.back_end.response.skills.dataframe.Cell> rowDataCells = new ArrayList<>();
+                for (String data : rowData) {
+                    org.group1.back_end.response.skills.dataframe.Cell cell = new
+                            org.group1.back_end.response.skills.dataframe.Cell(data);
+                    rowDataCells.add(cell);
+                }
+                Rows rowDataProcessed = new Rows(rowDataCells);
+                action.insert(rowDataProcessed);
+            }
+            dataFrames.get(id).setActions(action);
+            GeneralFileService.overWrite(dataFrames.get(id));
         });
         //back button
-        back.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                back.setTextFill(Color.rgb(42,97,117));
-            }
-        });
-        back.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                back.setTextFill(Color.WHITE);
-            }
-        });
-        back.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    GeneralFileService.overWrite(dataFrames.get(id));
-                    response.reload();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                DisplaySkills displaySkills = new DisplaySkills(response);
-                displaySkills.setStage(UIstage,chatStage);
-            }
+        ButtonFactory.setDefaultActions(back);
+        back.setOnAction(e -> {
+            DisplaySkills displaySkills = new DisplaySkills(response);
+            displaySkills.setStage(UIstage,chatStage);
         });
 
         //help button
-        help.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                help.setTextFill(Color.rgb(42,97,117));
-            }
-        });
-        help.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                help.setTextFill(Color.WHITE);
-            }
-        });
-        help.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //TODO : SET HELP WINDOW
-            }
+        ButtonFactory.setDefaultActions(help);
+        help.setOnAction(e -> {
+            //TODO : SET HELP WINDOW
         });
 
         //addColumn
-        addAction.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                addAction.setTextFill(Color.rgb(42,97,117));
-            }
-        });
-        addAction.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                addAction.setTextFill(Color.WHITE);
-            }
-        });
-        addAction.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    addRow();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        ButtonFactory.setDefaultActions(addAction);
+        addAction.setOnAction(e -> {
+            addRow();
         });
 
-        delete.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                delete.setTextFill(Color.rgb(42,97,117));
-            }
-        });
-        delete.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                delete.setTextFill(Color.WHITE);
-            }
-        });
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (isSlot) {
-                    table2.getItems().remove(currentRow);
-                }else table.getItems().remove(currentRow);
-
-            }
+        ButtonFactory.setDefaultActions(delete);
+        delete.setOnAction(e -> {
+            if (isSlot) {
+                table2.getItems().remove(currentRow);
+            }else table.getItems().remove(currentRow);
         });
 
         //slotbutton
-        slots.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                isSlot = !isSlot;
-                if(isSlot){
-                    slots.setText("Action");
-                    text.setText("slot_"+id);
-                }else{
-                    slots.setText("Slots");
-                    text.setText("action_"+id);
-                }
-                table.setVisible(!isSlot);
-                table2.setVisible(isSlot);
+        slots.setOnAction(e -> {
+            isSlot = !isSlot;
+            if(isSlot){
+                slots.setText("Action");
+                text.setText("slot_"+id);
+            }else{
+                slots.setText("Slots");
+                text.setText("action_"+id);
             }
+            table.setVisible(!isSlot);
+            table2.setVisible(isSlot);
         });
     }
 
     /**
      * Adds blank ("-") rows to the javaFX table
-     * @throws SQLException
      */
-    public void addRow() throws SQLException {
+    public void addRow() {
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
-        if(isSlot){     // slot
+        TableView<ObservableList<String>> tableView;
+        if (!isSlot) tableView = table;
+        else tableView = table2;
 
-            tempObservable = new ArrayList<>();
-
-            for (int j = 0; j < 2; j++) {
-                tempObservable.add("-");
-            }
-
-            table2.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
-            );
-
-            tempObservable.clear();
-        } else {        // we are in action
-            tempObservable = new ArrayList<>();
-            for (int j = 0; j < columnNames.size(); j++) {
-                tempObservable.add("-");
-            }
-            table.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
-            );
-
-            tempObservable.clear();
+        tempObservable = new ArrayList<>();
+        for (int j = 0; j < 2; j++) {
+        tempObservable.add("-");
         }
-
-
-
-
+        tableView.getItems().add(FXCollections.observableArrayList(tempObservable));
+        tempObservable.clear();
     }
 
     /**
@@ -449,8 +246,7 @@ public class SkillDetails implements CustomStage {
                 column.setCellFactory(TextFieldTableCell.forTableColumn());
             }
             table.getColumns().add(column);
-            //handles editiing cells
-            //Todo UPDATE THE DATAFRAME HERE
+            //handles editing cells
             //updates the database on edit
             table.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
@@ -463,26 +259,19 @@ public class SkillDetails implements CustomStage {
             });
         }
         //row data
-
-
         //TODO: QUICK FIX FOR ROW : CUT THE WORDS
         tempObservable = new ArrayList<>();
         for (int i = 0; i < N_ROWS; i++) {
-            //System.out.println("in 1");
             for (int j = 0; j < ColNum; j++) {
                 tempObservable.add(dataPerColumn.get(j).get(i));
             }
-            table.getItems().add(
-                    FXCollections.observableArrayList(
-                            tempObservable
-                    )
-            );
+            table.getItems().add(FXCollections.observableArrayList(tempObservable));
             tempObservable.clear();
         }
 
         //selection listener
         table.getFocusModel().focusedCellProperty().addListener(
-                new ChangeListener<TablePosition>() {
+                new ChangeListener<>() {
                     @Override
                     public void changed(ObservableValue<? extends TablePosition> observable,
                                         TablePosition oldPos, TablePosition pos) {
@@ -497,10 +286,8 @@ public class SkillDetails implements CustomStage {
     }
 
     public void createSlotTable(){
-
         table2 = new TableView<>();
         table2.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
         table2.setPrefWidth(480);
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
@@ -511,12 +298,8 @@ public class SkillDetails implements CustomStage {
         //columns
         for (int i = 0; i < names.size(); i++) {
             final int finalIdx = i;
-            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    names.get(i)
-            );
-            column.setCellValueFactory(param ->
-                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
-            );
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(names.get(i));
+            column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
             // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE for SlotType( i ==0)
             if(i==0) {
                 column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(i)));
@@ -539,7 +322,6 @@ public class SkillDetails implements CustomStage {
 
         tempObservable = new ArrayList<>();
         arrangeSlotTypeSlotValue();
-        System.out.println("size two col data inner array: " + TwoColData.get(0).size());
         for (int j = 0; j < TwoColData.get(0).size(); j++) {
             ObservableList<String> rowObservable = FXCollections.observableArrayList();
             for (int i = 0; i < 2; i++) {
@@ -555,7 +337,6 @@ public class SkillDetails implements CustomStage {
                     public void changed(ObservableValue<? extends TablePosition> observable,
                                         TablePosition oldPos, TablePosition pos) {
                         currentRow = pos.getRow();
-                        System.out.println(table2.getItems().get(currentRow));
                     }
                 });
 
@@ -592,26 +373,19 @@ public class SkillDetails implements CustomStage {
         System.out.println("TwoCol Size " +TwoColData.size());
 
     }
-    public void slotData() throws SQLException {
+    public void slotData() {
 
-        List<String> temp = new ArrayList<>();
+        List<String> temp;
 
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
             temp = dataFrames.get(id).getSlots().getDistinctValues(i);
             ObservableList<String> values = FXCollections.observableArrayList(temp);
             comboData.add(values);
         }
-//        for (int i = 0; i < comboData.size() ; i++) {
-//            for (int j = 0; j < comboData.get(i).size(); j++) {
-//                System.out.println("distinct: "+ comboData.get(i).get(j));
-//            }
-//            System.out.println(" ");
-//        }
     }
 
-    public void typeData() throws SQLException {
-        List<String> temp = new ArrayList<>();
-//        temp = sql.getSlotType(slotTable);
+    public void typeData() {
+        List<String> temp;
         temp=dataFrames.get(id).getSlots().getColumnNames();
         ObservableList<String> values = FXCollections.observableArrayList(temp);
         slotComboData.add(values);
@@ -629,14 +403,14 @@ public class SkillDetails implements CustomStage {
         UIpane.getChildren().add(text);
 
         //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,LoginScreen.screenHeight);
+        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
         sideMenu.setFill(Color.rgb(159,182,189));
         UIpane.getChildren().add(sideMenu);
 
         createButtons();
         setButtonActions();
         createScrollPane();
-        //createTable();
+        createTable();
         createSlotTable();
     }
 
