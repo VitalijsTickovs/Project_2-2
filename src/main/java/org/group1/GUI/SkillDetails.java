@@ -4,61 +4,45 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 import org.group1.GUI.utils.ButtonFactory;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillData;
-import org.group1.back_end.response.skills.SkillFileService;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
-import org.group1.back_end.response.skills.dataframe.DataFrameEditor;
 import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
 
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SkillDetails extends StageManager implements ICustomStage {
-    // TODO: YOU WILL HAVE TO DEAL WITH CHAT HISTORY
     List<List<String>> TwoColData = new ArrayList<>();
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
     private TableView<ObservableList<String>> table,table2;
     private List<String> tempObservable;
-    private final int N_ROWS, ColNum;
+    private final int ColNum, N_ROWS;
     private int currentRow;
-    private ArrayList<ObservableList<String>> comboData = new ArrayList<>();
-    private ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
-
-    private ArrayList<ObservableList<String>> comboDataSlots = new ArrayList<>();
+    private final ArrayList<ObservableList<String>> comboData = new ArrayList<>();
+    private final ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
     private Text text;
     List<String> columnNames,slotColumnNames;
     String tableName;
     private final int id;
-    private List<List<String>> dataPerColumn = new ArrayList<>();
-    private List<List<String>> dataPerColumnSlot = new ArrayList<>();
+    private final List<List<String>> dataPerColumn = new ArrayList<>();
+    private final List<List<String>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
-    private List<SkillData> dataFrames;
+    private final List<SkillData> dataFrames;
 
     public SkillDetails(int indexOfRule, Response responseGenerator) throws SQLException {
         id = indexOfRule;
@@ -76,10 +60,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
         collectDataFromDatabaseSlot();
 
         initStage();
+
         design();
     }
 
-    public void collectDataFromDatabase() {
+    public void collectDataFromDatabase(){
         for (int i = 0; i < dataFrames.get(id).getActions().getColumnNames().size(); i++) {
             dataPerColumn.add(dataFrames.get(id).getActions().getColumnData(i));
         }
@@ -89,14 +74,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
             dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumnData(i));
         }
-
     }
-
-//    public void setStage(Stage mainStage,Stage chatStage){
-//        this.chatStage=chatStage;
-//        mainStage.close();
-//        UIstage.show();
-//    }
 
     public void createButtons(){
         //save button
@@ -105,20 +83,16 @@ public class SkillDetails extends StageManager implements ICustomStage {
         //back button
         back = ButtonFactory.createButton("BACK", 20, 170);
         UIpane.getChildren().add(back);
-
         //help button
         help = ButtonFactory.createButton("HELP", 20, 130);
         UIpane.getChildren().add(help);
-
         //addAction button
         addAction = ButtonFactory.createButton("ADD ROW", 380, 450);
         UIpane.getChildren().add(addAction);
-
         //slots button
         slots = ButtonFactory.createButton("SLOTS", 380, 500);
         slots.setPrefSize(400,50);
         UIpane.getChildren().add(slots);
-
         //help button
         delete = ButtonFactory.createButton("DELETE", 650, 450);
         UIpane.getChildren().add(delete);
@@ -209,30 +183,19 @@ public class SkillDetails extends StageManager implements ICustomStage {
      * Adds blank ("-") rows to the javaFX table
      */
     public void addRow() {
-        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
-        if(isSlot){     // slot
+        TableView<ObservableList<String>> tableView;
+        if (isSlot) {
+            tableView = table2;
 
-            tempObservable = new ArrayList<>();
-
-            for (int j = 0; j < 2; j++) {
-                tempObservable.add("-");
-            }
-            table2.getItems().add(FXCollections.observableArrayList(tempObservable));
-
-            tempObservable.clear();
-        } else {        // we are in action
-            tempObservable = new ArrayList<>();
-            for (int j = 0; j < columnNames.size(); j++) {
-                tempObservable.add("-");
-            }
-            table.getItems().add(FXCollections.observableArrayList(tempObservable));
-
-            tempObservable.clear();
+        }else {
+            tableView = table;
         }
-
-
-
-
+        tempObservable = new ArrayList<>();
+        for (int j = 0; j < tableView.getItems().size(); j++) {
+            tempObservable.add("-");
+        }
+        tableView.getItems().add(FXCollections.observableArrayList(tempObservable));
+        tempObservable.clear();
     }
 
     /**
@@ -412,7 +375,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
     }
     public void slotData() {
 
-        List<String> temp = new ArrayList<>();
+        List<String> temp;
 
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
             temp = dataFrames.get(id).getSlots().getDistinctValues(i);
@@ -440,7 +403,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
         UIpane.getChildren().add(text);
 
         //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,700);
+        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
         sideMenu.setFill(Color.rgb(159,182,189));
         UIpane.getChildren().add(sideMenu);
 
