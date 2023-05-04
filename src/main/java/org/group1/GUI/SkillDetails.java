@@ -16,6 +16,7 @@ import javafx.util.converter.DefaultStringConverter;
 import org.group1.GUI.utils.ButtonFactory;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.skills.SkillData;
+import org.group1.back_end.response.skills.dataframe.Cell;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
@@ -110,15 +111,18 @@ public class SkillDetails extends StageManager implements ICustomStage {
                 int columnIndex = 0;
                 String columnType = slotRow.get(0);
                 String columnValue = slotRow.get(1);
-                //Finding the order/position of the slotType in columnNames array
-                for (int type = 0; type < slotColumnNames.size(); type++) {
-                    String typeName = slotColumnNames.get(type);
-                    if (columnType.equals(typeName)) {
-                        columnIndex = type;
+                // Check for user to correctly fill the cells
+                if(!columnType.equals("-") && !columnValue.equals("-")) {
+                    //Finding the order/position of the slotType in columnNames array
+                    for (int type = 0; type < slotColumnNames.size(); type++) {
+                        String typeName = slotColumnNames.get(type);
+                        if (columnType.equals(typeName)) {
+                            columnIndex = type;
+                        }
                     }
+                    //Inserting the values to first free slot
+                    slots.insertToFirstFreeSlot(columnIndex, columnValue);
                 }
-                //Inserting the values to first free slot
-                slots.insertToFirstFreeSlot(columnIndex, columnValue);
             }
             dataFrames.get(id).setSlots(slots);
 
@@ -126,10 +130,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
             ObservableList<ObservableList<String>> actionRows =  table.getItems();
             //For each row
             for (List<String> rowData : actionRows) {
-                List<org.group1.back_end.response.skills.dataframe.Cell> rowDataCells = new ArrayList<>();
+                List<Cell> rowDataCells = new ArrayList<>();
                 for (String data : rowData) {
-                    org.group1.back_end.response.skills.dataframe.Cell cell = new
-                            org.group1.back_end.response.skills.dataframe.Cell(data);
+                    Cell cell;
+                    if(data.equals("-")) cell = new Cell("");
+                    else cell = new Cell(data);
                     rowDataCells.add(cell);
                 }
                 Rows rowDataProcessed = new Rows(rowDataCells);
@@ -191,7 +196,8 @@ public class SkillDetails extends StageManager implements ICustomStage {
             tableView = table;
         }
         tempObservable = new ArrayList<>();
-        for (int j = 0; j < tableView.getItems().size(); j++) {
+        System.out.println("tableView size:" + tableView.getItems().get(0).size());
+        for (int j = 0; j < tableView.getItems().get(0).size(); j++) {
             tempObservable.add("-");
         }
         tableView.getItems().add(FXCollections.observableArrayList(tempObservable));
@@ -370,7 +376,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
 
         TwoColData.add(tempArray);
         TwoColData.add(tempArray2);
-        System.out.println("TwoCol Size " +TwoColData.size());
+//        System.out.println("TwoCol Size " +TwoColData.size());
 
     }
     public void slotData() {
@@ -379,6 +385,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
 
         for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
             temp = dataFrames.get(id).getSlots().getDistinctValues(i);
+            temp.add(""); // add option to add empty space for a slot
             ObservableList<String> values = FXCollections.observableArrayList(temp);
             comboData.add(values);
         }

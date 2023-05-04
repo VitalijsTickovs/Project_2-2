@@ -206,13 +206,12 @@ public class ChatWindow extends StageManager implements ICustomStage {
                     ke.consume();
                 }else if(ke.getCode() == KeyCode.ENTER){
                 // Send user message on enter
-                    String input = userInput.getText().replace("\n","");
+                    String input = userInput.getText().replaceAll("\n","");
                     setUserInput(input);
                     setChatText(input, false);
 
                     setBotChatText(responseGenerator.getResponse(currentUserInput));
                     setChatText(currentBotInput, true);
-
                     userInput.setText("");
                 }
             }

@@ -60,7 +60,10 @@ public class Rows {
     @Override
     public String toString() {
         return cells.stream()
-                .map(cell -> cell.getValue().toString())
+                .map(cell -> {
+                    Object value = cell.getValue();
+                    return value != null ? value.toString() : "";
+                })
                 .collect(Collectors.joining(", "));
     }
 

@@ -64,11 +64,13 @@ public class GeneralFileService {
         String question = skillData.getQuestion();
         //Converting DataFrame into text
         //Slots
+        //Getting slot DataFrame
         DataFrame slots = skillData.getSlots();
         List<String> slotColumnName = slots.getColumnNames();
+        //Going through each column
         for(int i=0; i<slotColumnName.size();i++) {
             DataFrame slotColumn = slots.getColumn(i);
-
+            //Going through each row of the column
             for (int j=0; j<slotColumn.size(); j++) {
                 Rows slotRow = slotColumn.get(j);
                 Cell value = slotRow.get(0);
@@ -81,21 +83,25 @@ public class GeneralFileService {
 
 
         //Action
+        //Getting Action dataframe
         DataFrame actions = skillData.getActions();
         System.out.println(actions);
+        //Getting placeholders of actions
         List<String> actionColumnNames = actions.getColumnNames();
-//        System.out.println(actionColumnNames);
+        //For each row in action
         for(int i=0; i<actions.size(); i++) {
             Rows actionRow = actions.get(i);
             text += "Action ";
+            //For each cell of action
             for (int j=0; j<actionRow.size(); j++) {
-                if(actionRow.get(j).getValue()!=null) {
-                    if (actionRow.get(j).getValue().equals("I have no idea")) {
+                Cell cell = actionRow.get(j);
+                if(cell.getValue()!=null) {
+                    if (cell.getValue().equals("I have no idea")) {
                         text += "I have no idea\n";
                     } else {
-                        if (!actionColumnNames.get(j).contains("Action"))
+                        if (!actionColumnNames.get(j).contains("Action") && !cell.getValue().equals("")) {
                             text += actionColumnNames.get(j) + " " + actionRow.get(j) + " ";
-                        else {
+                        }else {
                             text += actionRow.get(j) + "\n";
                         }
                     }
