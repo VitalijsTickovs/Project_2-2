@@ -87,7 +87,7 @@ public class ChatWindow extends StageManager implements ICustomStage {
             helpWindow.setStage(UIstage);
         });
         //skills button
-        ButtonFactory.setDefaultActions(helpButton);
+        ButtonFactory.setDefaultActions(skillsButton);
         skillsButton.setOnAction( e -> {
             SkillEditor skillEditor = new SkillEditor(responseGenerator);
             skillEditor.setStage(UIstage);
