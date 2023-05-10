@@ -1,0 +1,4 @@
+Question How is <PERSON>'S day? 
+Slot <PERSON> Natalia 
+Action <PERSON> Natalia Natalia is very happy  
+Action I have no idea

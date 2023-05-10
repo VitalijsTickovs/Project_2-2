@@ -1,0 +1,32 @@
+Question What event do I have planned on <DAY> at <TIME> in <CITY>?
+Slot <CITY> Maastricht
+Slot <CITY> Amsterdam
+Slot <CITY> Sittard
+Slot <CITY> Eind
+Slot <CITY> Utrecht
+Slot <DAY> Monday
+Slot <DAY> Tuesday
+Slot <DAY> Wednesday
+Slot <DAY> Thursday
+Slot <DAY> Friday
+Slot <DAY> Saturday
+Slot <DAY> Sunday
+Slot <DAY> July
+Slot <TIME> 09:00
+Slot <TIME> 10:00
+Slot <TIME> 11:00
+Slot <TIME> 12:00
+Slot <TIME> 13:00
+Slot <TIME> 14:00
+Slot <TIME> 15:00
+Slot <TIME> 16:00
+Slot <TIME> 17:00
+Slot <TIME> 18:00
+Slot <TIME> 255:00
+Action <CITY> Maastricht <DAY> Tuesday <TIME> 14:00 You have a swimming lesson.
+Action <CITY> Amsterdam <DAY> Monday <TIME> 09:00 You have a TCS lecture.
+Action I have no idea
+Action <CITY> Eind <DAY> Saturday <TIME> 255:00 Save
+Action <CITY> Sittard <DAY> Tuesday <TIME> 10:00 Hi
+Action <DAY> Tuesday <TIME> 10:00 fdasfdasfsd
+Action <DAY> Tuesday <TIME> 09:00 Hello to every City

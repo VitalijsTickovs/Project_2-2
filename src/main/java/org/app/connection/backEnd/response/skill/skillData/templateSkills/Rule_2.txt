@@ -1,0 +1,17 @@
+Question What is the forecast for <DAY> in <LOCATION>?
+Slot <DAY> Friday
+Slot <DAY> Monday
+Slot <DAY> Saturday
+Slot <DAY> Sunday
+Slot <DAY> Thursday
+Slot <DAY> Tuesday
+Slot <DAY> Wednesday
+Slot <LOCATION> Maastricht
+Action <DAY> Monday <LOCATION> Maastricht  The weather is nice on Monday in Maastricht
+Action <DAY> Tuesday <LOCATION> Maastricht  The weather is cold on Tuesday in Maastricht
+Action <DAY> Wednesday <LOCATION> Maastricht  The weather is cold on Wednesday in Maastricht
+Action <DAY> Thursday <LOCATION> Maastricht  The weather is sunny on Thursday in Maastricht
+Action <DAY> Friday <LOCATION> Maastricht  The weather is cloudy on Friday in Maastricht
+Action <DAY> Saturday <LOCATION> Maastricht  The weather is nice on Saturday in Maastricht
+Action <DAY> Sunday <LOCATION> Maastricht  The weather is cloudy on Sunday in Maastricht
+Action I have no idea
