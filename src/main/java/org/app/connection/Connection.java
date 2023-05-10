@@ -13,6 +13,6 @@ public class Connection {
     }
 
     public void run(){
-
+        frontEnd.run();
     }
 }
