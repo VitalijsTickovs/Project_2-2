@@ -1,5 +1,0 @@
-What event do I have planned on Tuesday at 14:00  in Maastricht -> You have a swimming lesson.
-How hard is Lab 1 for TCS? -> Very hard!
-What event do I have planned on Monday at 09:00 in Amsterdam? -> You have a TCS lecture.
-How hard is Homework_2 for HCI? -> It’s moderately hard.
-Can you give me the written name of the following character “;”? -> Semicolon.
