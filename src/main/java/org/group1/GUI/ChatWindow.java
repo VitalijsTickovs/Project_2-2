@@ -7,8 +7,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -189,9 +187,7 @@ public class ChatWindow extends StageManager implements ICustomStage {
     @Override
     public void design(){
         //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
+        createSideMenu();
 
         crateTextAreas();
         createButtons();

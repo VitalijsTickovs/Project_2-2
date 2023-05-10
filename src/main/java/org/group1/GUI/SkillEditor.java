@@ -25,7 +25,7 @@ public class SkillEditor extends StageManager implements ICustomStage {
     private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
-    private Text username;
+    private Text taskText;
     private final Response response;
 
     private String skillInput="";
@@ -114,8 +114,8 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 skillInput += "Question " + toUpper(question);
 
                 UIpane.getChildren().remove(sendUserInput);
-                username.setTranslateX(475);
-                username.setText("Add the slots");
+                taskText.setTranslateX(475);
+                taskText.setText("Add the slots");
                 UIpane.getChildren().add(slotButton);
 
                 previousQuestion = new TextArea(skillInput);
@@ -146,8 +146,8 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 skillInput += addNamingSlot(toUpper(slot));
 
                 UIpane.getChildren().remove(slotButton);
-                username.setText("Add the actions");
-                username.setTranslateX(460);
+                taskText.setText("Add the actions");
+                taskText.setTranslateX(460);
                 UIpane.getChildren().add(actionButton);
             } else System.out.println("invalid message");
             questionInput.setText("");
@@ -228,10 +228,7 @@ public class SkillEditor extends StageManager implements ICustomStage {
 
     @Override
     public void design() {
-        //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
+        createSideMenu();
 
         questionInput = new TextArea();
         questionInput.setFont(Font.font("Arial Narrow",25));
@@ -242,13 +239,7 @@ public class SkillEditor extends StageManager implements ICustomStage {
         questionInput.setPrefSize(400,70);
         UIpane.getChildren().add(questionInput);
 
-        username = new Text("Define your question");
-        username.setFont(Font.font("Impact",40));
-        username.setStyle("-fx-font-weight: bold");
-        username.setFill(Color.WHITE);
-        username.setTranslateX(420);
-        username.setTranslateY(250);
-        UIpane.getChildren().add(username);
+        taskText = createText("Define Your Question", 420,250);
 
         createButtons();
         defineButtonActions();

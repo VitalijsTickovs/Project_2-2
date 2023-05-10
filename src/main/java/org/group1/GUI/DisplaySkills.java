@@ -154,18 +154,9 @@ public class DisplaySkills extends StageManager implements ICustomStage {
      */
     @Override
     public void design() {
-        Text text = new Text("Choose which skill to access");
-        text.setFont(Font.font("Impact",40));
-        text.setStyle("-fx-font-weight: bold");
-        text.setFill(Color.WHITE);
-        text.setTranslateX(340);
-        text.setTranslateY(40);
-        UIpane.getChildren().add(text);
+        createText("Choose which skill to access", 340, 40);
 
-        //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
+        createSideMenu();
 
         createButtons();
         setButtonsAction();

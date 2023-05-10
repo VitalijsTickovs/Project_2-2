@@ -26,39 +26,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillDetails extends StageManager implements ICustomStage {
-    List<List<String>> TwoColData = new ArrayList<>();
+    private String tableName;
+    private final int id;
+    private Text text;
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
+    private final List<SkillData> dataFrames;
     private TableView<ObservableList<String>> table,table2;
-    private List<String> tempObservable;
+    private final ArrayList<ObservableList<String>> comboData, slotComboData;
+    private final List<String> columnNames,slotColumnNames;
+    private final List<List<String>> dataPerColumn;
     private final int ColNum, N_ROWS;
     private int currentRow;
-    private final ArrayList<ObservableList<String>> comboData = new ArrayList<>();
-    private final ArrayList<ObservableList<String>> slotComboData = new ArrayList<>();
-    private Text text;
-    List<String> columnNames,slotColumnNames;
-    String tableName;
-    private final int id;
-    private final List<List<String>> dataPerColumn = new ArrayList<>();
-    private final List<List<String>> dataPerColumnSlot = new ArrayList<>();
     private boolean isSlot= false;
     private final Response response;
-    private final List<SkillData> dataFrames;
 
     public SkillDetails(int indexOfRule, Response responseGenerator) throws SQLException {
         id = indexOfRule;
         response = responseGenerator;
-        this.dataFrames = responseGenerator.getSkillData();
+        dataFrames = responseGenerator.getSkillData();
         columnNames = dataFrames.get(indexOfRule).getColumnNames();
         slotColumnNames = dataFrames.get(indexOfRule).getSlotNames();
-        this.ColNum=dataFrames.get(indexOfRule).getActions().getColumnNames().size();
-        this.N_ROWS=dataFrames.get(indexOfRule).getActions().getData().size();
+        ColNum=dataFrames.get(indexOfRule).getActions().getColumnNames().size();
+        N_ROWS=dataFrames.get(indexOfRule).getActions().getData().size();
+        dataPerColumn = new ArrayList<>();
+        comboData = new ArrayList<>();
+        slotComboData = new ArrayList<>();
 
-        slotData();
-        typeData();
+        setPlaceholderComboData();
+        setSlotsTypeComboData();
 
         collectDataFromDatabase();
-        collectDataFromDatabaseSlot();
 
         initStage();
 
@@ -68,12 +66,6 @@ public class SkillDetails extends StageManager implements ICustomStage {
     public void collectDataFromDatabase(){
         for (int i = 0; i < dataFrames.get(id).getActions().getColumnNames().size(); i++) {
             dataPerColumn.add(dataFrames.get(id).getActions().getColumnData(i));
-        }
-    }
-
-    public void collectDataFromDatabaseSlot() {
-        for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
-            dataPerColumnSlot.add(dataFrames.get(id).getSlots().getColumnData(i));
         }
     }
 
@@ -195,7 +187,7 @@ public class SkillDetails extends StageManager implements ICustomStage {
         }else {
             tableView = table;
         }
-        tempObservable = new ArrayList<>();
+        List<String> tempObservable = new ArrayList<>();
         System.out.println("tableView size:" + tableView.getItems().get(0).size());
         for (int j = 0; j < tableView.getItems().get(0).size(); j++) {
             tempObservable.add("-");
@@ -235,10 +227,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
         table.setEditable(true);
         table.setStyle("-fx-cell-size: 50px;");
 
-        //columns
+        // Constructing all the columns in Action
         for (int i = 0; i < columnNames.size(); i++) {
 
             final int finalIdx = i;
+            // Making the columns with the placeholder name
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
                     columnNames.get(i)
             );
@@ -253,7 +246,6 @@ public class SkillDetails extends StageManager implements ICustomStage {
             }
             table.getColumns().add(column);
             //handles editing cells
-            //updates the database on edit
             table.getColumns().forEach(col -> {
                 col.setOnEditCommit(event -> {
                     int row = event.getTablePosition().getRow();
@@ -263,16 +255,6 @@ public class SkillDetails extends StageManager implements ICustomStage {
                     table.getItems().get(row).set(colIndex, newValue);
                 });
             });
-        }
-        //row data
-        //TODO: QUICK FIX FOR ROW : CUT THE WORDS
-        tempObservable = new ArrayList<>();
-        for (int i = 0; i < N_ROWS; i++) {
-            for (int j = 0; j < ColNum; j++) {
-                tempObservable.add(dataPerColumn.get(j).get(i));
-            }
-            table.getItems().add(FXCollections.observableArrayList(tempObservable));
-            tempObservable.clear();
         }
 
         //selection listener
@@ -291,6 +273,17 @@ public class SkillDetails extends StageManager implements ICustomStage {
         scrollPane.setContent(scrollChat);
     }
 
+    private void populateTable() {
+        List<String> tempObservable = new ArrayList<>();
+        for (int i = 0; i < N_ROWS; i++) {
+            for (int j = 0; j < ColNum; j++) {
+                tempObservable.add(dataPerColumn.get(j).get(i));
+            }
+            table.getItems().add(FXCollections.observableArrayList(tempObservable));
+            tempObservable.clear();
+        }
+    }
+
     public void createSlotTable(){
         table2 = new TableView<>();
         table2.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -298,15 +291,13 @@ public class SkillDetails extends StageManager implements ICustomStage {
         table2.setEditable(true);
         table2.setStyle("-fx-cell-size: 50px;");
 
-        ArrayList<String> names = new ArrayList<>();
-        names.add("SlotType");
-        names.add("SlotValue");
+        String[] names = new String[]{"SlotType","SlotValue"};
         //columns
-        for (int i = 0; i < names.size(); i++) {
+        for (int i = 0; i < names.length; i++) {
             final int finalIdx = i;
-            TableColumn<ObservableList<String>, String> column = new TableColumn<>(names.get(i));
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(names[i]);
             column.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
-            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE for SlotType( i ==0)
+            // THIS ADDS THE OPTION OF COMBOBOXES IN A TABLE for SlotType, i.e, i == 0
             if(i==0) {
                 column.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), slotComboData.get(i)));
             }else {
@@ -326,12 +317,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
         }
         //row data
 
-        tempObservable = new ArrayList<>();
-        arrangeSlotTypeSlotValue();
-        for (int j = 0; j < TwoColData.get(0).size(); j++) {
+        List<List<String>> twoColData = arrangeSlotTypeSlotValue();
+        for (int j = 0; j < twoColData.get(0).size(); j++) {
             ObservableList<String> rowObservable = FXCollections.observableArrayList();
             for (int i = 0; i < 2; i++) {
-                rowObservable.add(TwoColData.get(i).get(j));
+                rowObservable.add(twoColData.get(i).get(j));
             }
             table2.getItems().add(rowObservable);
         }
@@ -351,39 +341,32 @@ public class SkillDetails extends StageManager implements ICustomStage {
         scrollPane.setContent(scrollChat);
     }
 
-    public void arrangeSlotTypeSlotValue(){
-        List<String> tempArray = new ArrayList<>();
-        List<String> tempArray2 = new ArrayList<>();
+    public List<List<String>> arrangeSlotTypeSlotValue(){
+        List<List<String>> colData = new ArrayList<>();
+        List<String> slotTypes = new ArrayList<>();
+        List<String> slotValues = new ArrayList<>();
 
-        // We are adding to SlotValue (Monday,Friday,... etc.)
-        for (int j=0; j< dataFrames.get(id).getSlots().getColumnNames().size(); j++) {
-            for (int i = 0; i < dataFrames.get(id).getSlots().getData().size(); i++) {
-                if(!dataFrames.get(id).getSlots().getData().get(i).get(j).toString().equals(" ")) {
-                    tempArray2.add(dataFrames.get(id).getSlots().getData().get(i).get(j).toString());
+        for (int j=0; j< slotColumnNames.size(); j++) {
+            List<Rows> dataFrame = dataFrames.get(id).getSlots().getData();
+            for (int i = 0; i < dataFrame.size(); i++) {
+                if(!dataFrame.get(i).get(j).toString().equals(" ")) {
+                    // Adding to SlotType (DAY,DAY,DAY.. etc.)
+                    slotTypes.add(dataFrames.get(id).getSlots().getColumnNames().get(j));
+                    // Adding to SlotValue (Monday,Friday,... etc.)
+                    slotValues.add(dataFrames.get(id).getSlots().getData().get(i).get(j).toString());
                 }
             }
         }
 
-        // i = row size, j = col size
-        // We are adding to SlotType (DAY,DAY,DAY.. etc.)
-        for (int j=0; j< dataFrames.get(id).getSlots().getColumnNames().size(); j++) {
-            for (int i = 0; i < dataFrames.get(id).getSlots().getData().size(); i++) {
-                if(!dataFrames.get(id).getSlots().getData().get(i).get(j).toString().equals(" ")) {
-                    tempArray.add(dataFrames.get(id).getSlots().getColumnNames().get(j));
-                }
-            }
-        }
-
-        TwoColData.add(tempArray);
-        TwoColData.add(tempArray2);
-//        System.out.println("TwoCol Size " +TwoColData.size());
-
+        colData.add(slotTypes);
+        colData.add(slotValues);
+        return colData;
     }
-    public void slotData() {
+    public void setPlaceholderComboData() {
 
         List<String> temp;
 
-        for (int i = 0; i < dataFrames.get(id).getSlots().getColumnNames().size(); i++) {
+        for (int i = 0; i < slotColumnNames.size(); i++) {
             temp = dataFrames.get(id).getSlots().getDistinctValues(i);
             temp.add(""); // add option to add empty space for a slot
             ObservableList<String> values = FXCollections.observableArrayList(temp);
@@ -391,33 +374,22 @@ public class SkillDetails extends StageManager implements ICustomStage {
         }
     }
 
-    public void typeData() {
-        List<String> temp;
-        temp=dataFrames.get(id).getSlots().getColumnNames();
-        ObservableList<String> values = FXCollections.observableArrayList(temp);
+    public void setSlotsTypeComboData() {
+        ObservableList<String> values = FXCollections.observableArrayList(slotColumnNames);
         slotComboData.add(values);
     }
 
     @Override
     public void design() {
+        createText(tableName, 540, 40);
 
-        text = new Text(tableName);
-        text.setFont(Font.font("Impact",40));
-        text.setStyle("-fx-font-weight: bold");
-        text.setFill(Color.WHITE);
-        text.setTranslateX(540);
-        text.setTranslateY(40);
-        UIpane.getChildren().add(text);
-
-        //side menu
-        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
-        sideMenu.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(sideMenu);
+        createSideMenu();
 
         createButtons();
         setButtonActions();
         createScrollPane();
         createTable();
+        populateTable();
         createSlotTable();
     }
 

@@ -3,6 +3,9 @@ package org.group1.GUI;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public abstract class StageManager {
@@ -29,6 +32,23 @@ public abstract class StageManager {
         this.chatStage=chatStage;
         mainStage.close();
         UIstage.show();
+    }
+
+    public void createSideMenu(){
+        Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
+        sideMenu.setFill(Color.rgb(159,182,189));
+        UIpane.getChildren().add(sideMenu);
+    }
+
+    public Text createText(String title, int posX, int posY){
+        Text text = new Text(title);
+        text.setFont(Font.font("Impact",40));
+        text.setStyle("-fx-font-weight: bold");
+        text.setFill(Color.WHITE);
+        text.setTranslateX(posX);
+        text.setTranslateY(posY);
+        UIpane.getChildren().add(text);
+        return text;
     }
 
     public Stage getUIstage(){
