@@ -1,6 +1,5 @@
 package org.group1.back_end.response.skills.databases;
 
-import com.mysql.cj.result.Row;
 import org.group1.back_end.ML.model_vectorization.Vector;
 import org.group1.back_end.response.skills.dataframe.Cell;
 import org.group1.back_end.response.skills.dataframe.DataFrame;

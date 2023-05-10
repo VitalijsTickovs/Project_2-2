@@ -44,11 +44,8 @@ dependencies {
 
     implementation 'org.slf4j:slf4j-nop:2.0.7'
 
-
-
-    implementation 'mysql:mysql-connector-java:8.0.26'
-    // https://mvnrepository.com/artifact/org.mybatis/mybatis
     implementation 'org.mybatis:mybatis:3.5.13'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 }
 
 test {

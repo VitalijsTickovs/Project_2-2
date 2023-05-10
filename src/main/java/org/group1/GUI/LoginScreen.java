@@ -15,6 +15,7 @@ import org.group1.GUI.utils.ButtonFactory;
 import static org.group1.database.DatabaseCredentials.setPassword;
 import static org.group1.database.DatabaseCredentials.setUsername;
 
+
 public class LoginScreen extends StageManager implements ICustomStage {
     //VIEW SETTINGS
     public Button loginButton;
