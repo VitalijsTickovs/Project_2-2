@@ -1,16 +1,26 @@
 package org.group1.GUI;
 
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.group1.GUI.utils.ButtonFactory;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.group1.database.DatabaseCredentials.setPassword;
 import static org.group1.database.DatabaseCredentials.setUsername;
@@ -91,15 +101,26 @@ public class LoginScreen extends StageManager implements ICustomStage {
             loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         });
         loginButton.setOnAction(e -> {
-            ChatWindow chatWindow= null;
-            setPassword(passwordTextField.getText());
-            setUsername(loginTextField.getText());
-            try {
-                chatWindow = new ChatWindow();
-            } catch (Exception exc) {
-                throw new RuntimeException(exc);
-            }
-            chatWindow.setStage(UIstage);
+            //close the existing stage
+            UIstage.close();
+            //create and display the loading screen
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.show();
+            // Start a separate thread to load the models
+            Thread loadingThread = new Thread(() -> {
+                // Delays the loading so it can display the new stage content
+                try {
+                    Thread.sleep(100); // Adjust the duration as needed
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                // Terminate loading screen and open the chatwindow
+                Platform.runLater(() -> {
+                    loadingScreen.close();
+                    openChatWindow();
+                });
+            });
+            loadingThread.start();
         });
 
     }
@@ -121,9 +142,11 @@ public class LoginScreen extends StageManager implements ICustomStage {
                         throw new RuntimeException(e);
                     }
                     chatWindow.setStage(UIstage);
+
                 }
             }
         });
     }
+
 
 }

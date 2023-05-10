@@ -22,6 +22,18 @@ public abstract class StageManager {
         UIpane.setStyle("-fx-background-color: transparent");
         UIstage.setScene(UIscene);
     }
+    public void openChatWindow() {
+        // Create the chat window
+        ChatWindow chatWindow = null;
+        try {
+            chatWindow = new ChatWindow();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Set the stage for the chat window
+        chatWindow.setStage(chatStage);
+    }
 
     public void setStage(Stage mainStage){
         this.chatStage=mainStage;
