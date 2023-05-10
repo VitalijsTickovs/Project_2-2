@@ -6,7 +6,6 @@ import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,7 +16,6 @@ import javax.swing.table.*;
 public class
 SkillData {
 
-    private String id;
     private String question;
     private DataFrame slots;
     private DataFrame actions;

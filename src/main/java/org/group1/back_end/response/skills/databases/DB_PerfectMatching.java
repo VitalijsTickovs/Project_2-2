@@ -38,16 +38,6 @@ public class DB_PerfectMatching
         double closestKey = 0;
         String tempKey = process(key);
 
-//        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
-//
-//            String keySet = entry.getKey();
-//            double distance = Distances.jaccard(keySet, tempKey);
-//
-//            if (distance > closestKey) {
-//                closestKey = distance;
-//                tempKey = keySet;
-//            }
-//        }
         return QUERY_PERFECT_MATCHING.getOrDefault(tempKey, "Sorry I dont understand what you are trying to say");
     }
 

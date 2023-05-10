@@ -3,6 +3,7 @@ package org.group1.back_end.response.skills;
 import org.apache.ibatis.jdbc.SQL;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.ResponseLibrary;
+import org.group1.back_end.response.skills.CFG.ContextFreeGrammar;
 import org.group1.back_end.response.skills.databases.DB_Manager;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.textprocessing.SimpleProcess;
@@ -24,6 +25,23 @@ public class Skill {
     public List<String> questions;
     public List<Set<String>> slots;
 
+    private String cfg_rule = "Rule <S> <EXPR>" +
+            "Rule <EXPR> <TERM> | <EXPR> <ADD_OP> <TERM>\n" +
+            "Rule <TERM> <FACTOR> | <TERM> <MUL_OP> <FACTOR>\n" +
+            "Rule <FACTOR> <NUMBER> | <LPAREN> <EXPR> <RPAREN>\n" +
+            "Rule <ADD_OP> + | -\n" +
+            "Rule <MUL_OP> * | /\n" +
+            "Rule <LPAREN> (\n" +
+            "Rule <RPAREN> )\n" +
+            "Rule <NUMBER> <DIGIT> | <NUMBER> <DIGIT>\n" +
+            "Rule <DIGIT> 0 | 1 | 2 \n" +
+            "Action <EXPR> * <TERM> <ADD_OP> <TERM> eval_add_sub\n" +
+            "Action <TERM> * <FACTOR> <MUL_OP> <FACTOR> eval_mul_div\n" +
+            "Action <FACTOR> * <LPAREN> <EXPR> <RPAREN> eval_parentheses\n" +
+            "Action <NUMBER> * <DIGIT> append_digit\n" +
+            "Action <NUMBER> * <NUMBER> <DIGIT> append_digit" +
+            "Action I have no idea";
+    private ContextFreeGrammar cfg = new ContextFreeGrammar(cfg_rule);
 
     public DataFrame skill;
 
@@ -59,10 +77,6 @@ public class Skill {
             List<String> actions = sp.getActions();
 
 
-//            System.out.println("Questions: " + questions);
-//            System.out.println("Actions: " + actions);
-
-//            System.out.println("Default: " + sp.getDeafaultKey() + " " + sp.getDeafault());
             addVocabulary(sp.getDeafaultKey());
             String[] pairs = new String[2];
             pairs[0] = sp.getDeafaultKey();
@@ -93,12 +107,6 @@ public class Skill {
            this.questions.add(sp.getOriginalQuestion());
 
 
-//            System.out.println("Slotlist");
-
-//            for(Set<String> slot: slots){
-//                System.out.println(slot);
-//            }
-
             System.out.println("===================================== \n\n");
         }
 
@@ -107,7 +115,10 @@ public class Skill {
         }
 
 
-//        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
+        List<String[]> result = cfg.getResult();
+        for(String[] w: result){
+            DATABASE_MANAGER.add(w[0], w[1]);
+        }
     }
 
     public void addVocabulary(String words){
