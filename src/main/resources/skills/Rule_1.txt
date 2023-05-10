@@ -1,0 +1,9 @@
+Question Which lectures are there on <DAY> at <TIME>
+Slot <DAY> Monday
+Slot <DAY> Saturday
+Slot <TIME> 11
+Slot <TIME> 9
+Action <DAY> Saturday There are no lectures on Saturday
+Action <DAY> Monday <TIME> 9  We start the week with math
+Action <DAY> Monday <TIME> 11  On Monday noon we have Theoretical Computer Science
+Action I have no idea
