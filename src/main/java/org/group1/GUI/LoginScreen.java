@@ -53,6 +53,7 @@ public class LoginScreen extends StageManager implements ICustomStage {
         textField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;");
         UIpane.getChildren().add(textField);
     }
+    Thread loadingThread = new Thread();
     private void setTextElements(){
         Text username = new Text("Username: ");
         setText(username,550, 270);
@@ -110,7 +111,7 @@ public class LoginScreen extends StageManager implements ICustomStage {
             Thread loadingThread = new Thread(() -> {
                 // Delays the loading so it can display the new stage content
                 try {
-                    Thread.sleep(100); // Adjust the duration as needed
+                    Thread.sleep(6000); // Adjust the duration as needed
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
@@ -121,8 +122,8 @@ public class LoginScreen extends StageManager implements ICustomStage {
                 });
             });
             loadingThread.start();
-        });
 
+        });
     }
 
     //@Override

@@ -188,7 +188,6 @@ public class ChatWindow extends StageManager implements ICustomStage {
     public void design(){
         //side menu
         createSideMenu();
-
         crateTextAreas();
         createButtons();
         createScrollPane();
