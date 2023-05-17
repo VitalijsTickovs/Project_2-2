@@ -3,6 +3,7 @@ package org.group1.back_end.utilities.enums;
 public enum Paths {
 
     DATA_TXT_SKILLS("/src/main/resources/skills/"),
+    DATA_TXT_CFG_SKILLS("/src/main/resources/cfgSkills/"),
     DATA_DATABASE("/src/main/java/org/group1/response/data/dataBase.txt"),
     DATA_TXT_STOP_WORDS("/src/main/resources/words_datasets/StopWords.txt"),
     DATA_TXT_DICCTIONARY("/src/main/resources/words_datasets/Words.txt"),

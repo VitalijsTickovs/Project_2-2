@@ -117,9 +117,7 @@ public class SkillGenerator {
         List<String> slotList = filterLineByRegex(text, "Slot");
         List<String> comb = new ArrayList<>();
 
-//        System.out.println("Slot List: ");
         insertSkillSlot(slotList);
-
         for (String s : slotList) {
             comb.add(s
                     .replaceAll(" ", "").
@@ -221,7 +219,6 @@ public class SkillGenerator {
 
 
     private void insertSkillAction(List<String> actionList){
-
         DataFrame shitstickape = this.skillData.getSlots();
         List<String> filters = new ArrayList<>();
         for(Rows r : shitstickape.getData()){

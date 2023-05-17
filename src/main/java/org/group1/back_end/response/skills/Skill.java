@@ -39,6 +39,7 @@ public class Skill {
         questions= new ArrayList<>();
         slots= new ArrayList<>();
         generateSkills();
+        generateCFGSkill();
     }
 
     /**
@@ -47,7 +48,6 @@ public class Skill {
      * @throws IOException
      */
     public void generateSkills() throws Exception {
-
         List<String> texts = SERVICE.readAll();
         List<String[]> pairSet = new ArrayList<>();
         for (String text : texts){
@@ -89,6 +89,7 @@ public class Skill {
                pairs1[1] = actions.get(i);
                pairSet.add(pairs1);
            }
+            System.out.println(sp.getSkillData().getActions());
            this.skillDatas.add(sp.getSkillData());
            this.questions.add(sp.getOriginalQuestion());
 
@@ -108,6 +109,19 @@ public class Skill {
 
 
 //        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
+    }
+
+    public void generateCFGSkill() throws IOException {
+        List<String> cfgSkills = SERVICE.readCFG();
+        for(String skill: cfgSkills) {
+            ContextFreeGrammar cfg = new ContextFreeGrammar(skill);
+            List<String[]> pairSet = cfg.getREAL_DATA();
+
+            for (String[] pair : pairSet) {
+                System.out.println(pair[0] + " --> " +pair[1]);
+                DATABASE_MANAGER.add(pair[0], pair[1]);
+            }
+        }
     }
 
     public void addVocabulary(String words){

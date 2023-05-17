@@ -5,6 +5,7 @@ import org.group1.back_end.utilities.enums.Paths;
 import java.io.*;
 import java.util.*;
 
+import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_CFG_SKILLS;
 import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_SKILLS;
 
 public class SkillFileService {
@@ -62,6 +63,26 @@ public class SkillFileService {
         while (sc.hasNextLine()) content.append(sc.nextLine()).append("\n");
 
         return content.toString();
+    }
+
+    public List<String> readCFG() throws IOException {
+        File[] files = new File((path + DATA_TXT_CFG_SKILLS.path)).listFiles();
+
+        String[] paths = new String[files.length];
+
+        for (int i = 0; i < files.length; i++) {
+            String path = files[i].getCanonicalPath();
+            if(!path.contains("DS_Store"))
+                paths[i] = path;
+        }
+
+        List<String> allFiles = new ArrayList<>();
+
+        for (String file : paths) {
+            if(file!=null) allFiles.add(read(file));
+        }
+
+        return allFiles;
     }
 
     public String read(Paths p) throws FileNotFoundException {
