@@ -13,24 +13,19 @@ public class SkillData {
     public SkillData(){
         try {
             fileReader = new SkillFileService();
+
             fileReader.setFilesName(FilesNaming.TEMPLATE);
             template.addAll(fileReader.readAll());
+
             fileReader.setFilesName(FilesNaming.CFG);
             cfg.addAll(fileReader.readAll());
+
             fileReader.setFilesName(FilesNaming.QUERY);
             query.addAll(fileReader.readAll());
+
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        template.forEach(System.out::println);
-        cfg.forEach(System.out::println);
-
-    }
-
-    public static void main(String[] args) {
-        SkillData data = new SkillData();
-
     }
 
     public void setTemplate(List<String> template) {

@@ -1,6 +1,7 @@
 package org.app.connection.backEnd;
 
 import org.app.connection.backEnd.response.ResponseManager;
+import org.app.connection.backEnd.response.skill.Skill;
 import org.app.connection.backEnd.response.skill.skillData.SkillData;
 import org.app.connection.utils.enums.DataBase;
 
@@ -10,13 +11,15 @@ public class BackEndManager {
     private DataBase currentDataBase;
     private ResponseManager responseManager;
 
+    private Skill skills = new Skill();
+
     public BackEndManager(){
         responseManager = new ResponseManager();
-        currentDataBase = DataBase.DB_PERFECT_MATCHING;
+        currentDataBase = DataBase.DB_QUERY;
     }
 
     public String getResponse(String question){
-        return question;
+        return skills.getResponse(question);
     }
 
     public void setDataBase(DataBase dataBase){

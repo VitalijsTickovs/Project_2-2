@@ -1,7 +1,7 @@
 package org.app.connection.backEnd.response.skill.skillProcessor;
 
 import org.app.connection.backEnd.response.skill.skillData.SkillData;
-import org.app.connection.backEnd.response.skill.skillProcessor.format.*;
+import org.app.connection.backEnd.response.skill.skillProcessor.process.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,11 @@ public class SkillProcessor {
         this.unifiedData = new ArrayList<>();
         this.processTemplate(data.getTemplate());
         this.processCFG(data.getCfg());
-        this.processQuery(data.getCfg());
+        this.processQuery(data.getQuery());
     }
 
     private void unifyData(List<String[]> data){
+        if(data == null) return;
         this.unifiedData.addAll(data);
     }
 
@@ -38,7 +39,7 @@ public class SkillProcessor {
 
     private void processQuery(List<String> dataQuery){
         this.formatQuery = new FormatQuery(dataQuery);
-        unifyData(formatCFG.getData());
+        unifyData(formatQuery.getData());
     }
 
     public List<String[]> getUnifiedData() {
