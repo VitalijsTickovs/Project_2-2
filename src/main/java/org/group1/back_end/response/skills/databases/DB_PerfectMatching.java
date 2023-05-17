@@ -28,6 +28,7 @@ public class DB_PerfectMatching
     @Override
     public void add(String key, String value) {
         String newKey = process(key);
+        System.out.println(newKey);
         QUERY_PERFECT_MATCHING.put(newKey, value);
         data.insert(new Rows(Arrays.asList(new Cell<>(newKey), new Cell<>(value))));
     }
@@ -37,6 +38,7 @@ public class DB_PerfectMatching
 
         double closestKey = 0;
         String tempKey = process(key);
+        System.out.println(key);
 
 //        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
 //

@@ -59,9 +59,6 @@ public class Skill {
             List<String> actions = sp.getActions();
 
 
-//            System.out.println("Questions: " + questions);
-//            System.out.println("Actions: " + actions);
-
 //            System.out.println("Default: " + sp.getDeafaultKey() + " " + sp.getDeafault());
             addVocabulary(sp.getDeafaultKey());
             String[] pairs = new String[2];
@@ -89,12 +86,10 @@ public class Skill {
                pairs1[1] = actions.get(i);
                pairSet.add(pairs1);
            }
-            System.out.println(sp.getSkillData().getActions());
            this.skillDatas.add(sp.getSkillData());
            this.questions.add(sp.getOriginalQuestion());
 
 
-//            System.out.println("Slotlist");
 
 //            for(Set<String> slot: slots){
 //                System.out.println(slot);
@@ -108,7 +103,6 @@ public class Skill {
         }
 
 
-//        DATABASE_MANAGER.printKeys(DB.DB_PERFECT_MATCHING);
     }
 
     public void generateCFGSkill() throws IOException {
@@ -118,7 +112,7 @@ public class Skill {
             List<String[]> pairSet = cfg.getREAL_DATA();
 
             for (String[] pair : pairSet) {
-                System.out.println(pair[0] + " --> " +pair[1]);
+//                System.out.println(pair[0] + " --> " +pair[1]);
                 DATABASE_MANAGER.add(pair[0], pair[1]);
             }
         }
@@ -146,11 +140,5 @@ public class Skill {
     public List<String> getQuestions(){
         return questions;
     }
-
-    public static void main(String[] args) throws Exception {
-        Response res = new Response();
-
-    }
-
 
 }
