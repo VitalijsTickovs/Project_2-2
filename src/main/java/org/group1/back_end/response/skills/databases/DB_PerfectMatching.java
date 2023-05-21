@@ -5,6 +5,8 @@ import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
+import org.group1.back_end.utilities.algebra.Distances;
+import oshi.json.util.JsonUtil;
 
 import java.util.*;
 
@@ -28,8 +30,9 @@ public class DB_PerfectMatching
     @Override
     public void add(String key, String value) {
         String newKey = process(key);
-        System.out.println(newKey);
+//        System.out.println("Value " + value);
         QUERY_PERFECT_MATCHING.put(newKey, value);
+//        System.out.println("Got Value: " + QUERY_PERFECT_MATCHING.get(newKey));
         data.insert(new Rows(Arrays.asList(new Cell<>(newKey), new Cell<>(value))));
     }
 
@@ -38,18 +41,16 @@ public class DB_PerfectMatching
 
         double closestKey = 0;
         String tempKey = process(key);
-        System.out.println(key);
+        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
+            String keySet = entry.getKey();
+            double distance = Distances.jaccard(keySet, tempKey);
 
-//        for (Map.Entry<String, String> entry : QUERY_PERFECT_MATCHING.entrySet()){
-//
-//            String keySet = entry.getKey();
-//            double distance = Distances.jaccard(keySet, tempKey);
-//
-//            if (distance > closestKey) {
-//                closestKey = distance;
-//                tempKey = keySet;
-//            }
-//        }
+            if (distance < closestKey) {
+                System.out.println("Best Key: "+ keySet);
+                closestKey = distance;
+                tempKey = keySet;
+            }
+        }
         return QUERY_PERFECT_MATCHING.getOrDefault(tempKey, "Sorry I dont understand what you are trying to say");
     }
 
@@ -68,11 +69,12 @@ public class DB_PerfectMatching
 
     @Override
     public String process(String sentence) {
-
         List<String> a = SimpleProcess.process(sentence);
         a = ComplexProcess.lemmas(a);
-
-        String b = a.toString();
+        String b= "";
+        for(String aa: a){
+            b = b.concat(" "+ aa);
+        }
         return b;
     }
 

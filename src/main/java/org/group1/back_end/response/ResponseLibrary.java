@@ -16,11 +16,11 @@ public class ResponseLibrary {
 
 
     static {
-        try {
-            WORD2VEC = new VectorWord2Vec().getWord2Vec();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            WORD2VEC = new VectorWord2Vec().getWord2Vec();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         VECTOR_SIF = new VectorSIF();
         VECTOR_SIF.createFrequencyTable();

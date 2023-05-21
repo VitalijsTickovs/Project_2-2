@@ -54,11 +54,12 @@ public class DB_Keywords implements iDataBase<String, String>{
             double distance = Distances.jaccard(keySet, tempKey);
             double[] a = Vector.setToVector(keySet);
             double[] b = Vector.setToVector(tempKey);
-            //double distance = Distances.euclideanDistance(a, b);
-
+            double distancee = Distances.euclideanDistance(a, b);
             if (distance < closestKey) {
+
                 closestKey = distance;
                 tempKey = keySet;
+                System.out.println("Key:"+ keySet);
             }
         }
         String nextBestResponse = QUERY_KEYWORD_MATCHING.getOrDefault(tempKey, "Sorry I dont understand what you are trying to say");

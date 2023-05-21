@@ -112,7 +112,7 @@ public class Skill {
             List<String[]> pairSet = cfg.getREAL_DATA();
 
             for (String[] pair : pairSet) {
-//                System.out.println(pair[0] + " --> " +pair[1]);
+                addVocabulary(pair[0]);
                 DATABASE_MANAGER.add(pair[0], pair[1]);
             }
         }
