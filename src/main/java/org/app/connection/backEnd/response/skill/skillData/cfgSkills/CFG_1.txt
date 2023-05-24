@@ -1,4 +1,4 @@
-Rule <s> <action>
+Rule <S> <action>
 Rule <action> <weather>
 Rule <weather> How is the weather in <location> | <pro> <verb> in <location> . What is the weather?
 Rule <location> in <city> <time>

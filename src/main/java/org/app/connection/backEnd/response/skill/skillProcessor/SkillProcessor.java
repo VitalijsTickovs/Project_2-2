@@ -28,11 +28,13 @@ public class SkillProcessor {
     }
 
     private void processTemplate(List<String> dataTemplate){
+        if(dataTemplate == null) return;
         this.formatTemplate = new FormatTemplate(dataTemplate);
         unifyData(formatTemplate.getData());
     }
 
     private void processCFG(List<String> dataCFG){
+        if(dataCFG == null) return;
         this.formatCFG = new FormatCFG(dataCFG);
         unifyData(formatCFG.getData());
     }

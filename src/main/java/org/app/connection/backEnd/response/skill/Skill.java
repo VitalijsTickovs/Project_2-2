@@ -16,8 +16,11 @@ public class Skill {
         DATABASE_MANGER = new Data_Base_Manager();
         this.skills = new SkillData();
         List<String[]> data = process(skills);
-        DATABASE_MANGER.put(data);
 
+        for (int i = 0; i < data.size(); i++) {
+            System.out.println("Value "+ data.get(i)[0] + " ----> Response: " + data.get(i)[1]);
+        }
+        DATABASE_MANGER.put(data);
     }
 
     public void put(List<String[]> data){

@@ -16,7 +16,8 @@ public class Data_Base_Query {
         data.forEach(keyValue -> DATA_BASE.put(keyValue[0], keyValue[1]));
     }
 
-    public String get(String key){
-        return DATA_BASE.get(key);
+    public Map<String, String> get(String key){
+        return DATA_BASE;
     }
+
 }

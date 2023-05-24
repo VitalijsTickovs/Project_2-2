@@ -10,7 +10,6 @@ public class BackEndManager {
 
     private DataBase currentDataBase;
     private ResponseManager responseManager;
-
     private Skill skills = new Skill();
 
     public BackEndManager(){
@@ -22,14 +21,19 @@ public class BackEndManager {
         return skills.getResponse(question);
     }
 
+
+    // Change INFORMATION RETRIEVAL MODEL
     public void setDataBase(DataBase dataBase){
-         responseManager.setDatabase(dataBase);
+        responseManager.setDatabase(dataBase);
     }
 
+
+    // Know current database
     public DataBase getDataBase(){
         return currentDataBase;
     }
-    
+
+    // Getting processed all processed skill data
     public SkillData getSkillData(){
         return  responseManager.getSkills().getSkillData();
     }

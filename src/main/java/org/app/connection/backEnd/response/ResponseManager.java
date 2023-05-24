@@ -26,4 +26,8 @@ public class ResponseManager {
     public void setSkills(Skill skills){
         this.skills = skills;
     }
+
+    public static void main(String[] args) {
+        ResponseManager a = new ResponseManager();
+    }
 }
