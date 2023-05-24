@@ -1,0 +1,1 @@
+SimpleCalulator--->src/main/resources/Scripts/SimpleCalculator.txt
