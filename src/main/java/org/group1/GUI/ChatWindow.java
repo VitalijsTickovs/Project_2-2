@@ -1,14 +1,20 @@
 package org.group1.GUI;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -66,7 +72,7 @@ public class ChatWindow extends StageManager implements ICustomStage {
         UIpane.getChildren().add(logoutButton);
 
         //exit Button
-        exitButton = ButtonFactory.createButton("EXIT", 20, 250);
+        exitButton = ButtonFactory.createButton("EXIT", 20, 580);
         UIpane.getChildren().add(exitButton);
 
         // send button
@@ -114,7 +120,7 @@ public class ChatWindow extends StageManager implements ICustomStage {
                 userInput.setText("");
             }else System.out.println("invalid message");
         });
-     }
+    }
     public void setChatText(String input, boolean isBotOutput){
         // Adding the input into a list that will display chat messages
         TextArea textArea = new TextArea(input);
@@ -191,7 +197,59 @@ public class ChatWindow extends StageManager implements ICustomStage {
         crateTextAreas();
         createButtons();
         createScrollPane();
+        createScroolList();
     }
+
+    public void createScroolList(){
+
+        //This is the blank rectangle to the left of the arrow
+        Rectangle rectangle = new Rectangle(40,260,100,25);
+        rectangle.setFill(Color.WHITE);
+        Text textMessage = new Text("NameOfList");
+        textMessage.setX(50);
+        textMessage.setY(280);
+        textMessage.setFill(Color.LIGHTGRAY);
+        textMessage.setFont(Font.font("Ariel",16));
+        //textMessage.setStyle("-fx-font-weight: bold");
+        UIpane.getChildren().add(rectangle);
+        UIpane.getChildren().add(textMessage);
+
+        //Here we add the content of the list
+        ListView<String> listView = new ListView<>();
+        listView.getItems().addAll("Item 1", "Item 2", "Item 3", "Item 4", "Item 5","Item 6", "Item 7", "Item 8");
+
+        // Enable vertical scrolling for the ListView
+        listView.setPrefSize(100, 125);
+
+        // Initially hide the list
+        listView.setVisible(false);
+        listView.setTranslateX(40);
+        listView.setTranslateY(260);
+
+        // Listeners to show and hide list
+        Button bar = new Button("\\/");
+        bar.setOnMouseClicked(event -> {
+            listView.setVisible(!listView.isVisible());
+        });
+        rectangle.setOnMouseClicked(event -> {
+            listView.setVisible(!listView.isVisible());
+        });
+        bar.setTranslateX(140);
+        bar.setTranslateY(260);
+        UIpane.getChildren().add(bar);
+        UIpane.getChildren().add(listView);
+
+        // THIS IS WHERE WE DETECT IF AN ITEM IN THE LIST HAS BEEN SELECTED
+        listView.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<String>() {
+                    public void changed(ObservableValue<? extends String> ov,
+                                        String old_val, String new_val) {
+                        System.out.println("selected "+ new_val);
+                        // You can use the if statements to match the enum names to item names
+                    }
+                });
+    }
+
     public void keyboardHandler(){
         UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
@@ -200,7 +258,7 @@ public class ChatWindow extends StageManager implements ICustomStage {
                     loginScreen.setStage(UIstage);
                     ke.consume();
                 }else if(ke.getCode() == KeyCode.ENTER){
-                // Send user message on enter
+                    // Send user message on enter
                     String input = userInput.getText().replaceAll("\n","");
                     setUserInput(input);
                     setChatText(input, false);
@@ -213,23 +271,23 @@ public class ChatWindow extends StageManager implements ICustomStage {
         });
     }
 
-        public int countLines(String string){
-            String[] lines = string.split("\r\n|\r|\n");
-            int count=lines.length;
-            for (int i = 0; i < lines.length; i++) {
-                count=count+18;
-            }
-            return count;
+    public int countLines(String string){
+        String[] lines = string.split("\r\n|\r|\n");
+        int count=lines.length;
+        for (int i = 0; i < lines.length; i++) {
+            count=count+18;
         }
-        public int countCharAtLongestLine(String string){
+        return count;
+    }
+    public int countCharAtLongestLine(String string){
         int count=0;
-            String[] lines = string.split("\r\n|\r|\n");
-            for (int i = 0; i < lines.length; i++) {
-                if(lines[i].length()>count){
-                    count = lines[i].length();
-                }
+        String[] lines = string.split("\r\n|\r|\n");
+        for (int i = 0; i < lines.length; i++) {
+            if(lines[i].length()>count){
+                count = lines[i].length();
             }
-
-            return count;
         }
+
+        return count;
+    }
 }
