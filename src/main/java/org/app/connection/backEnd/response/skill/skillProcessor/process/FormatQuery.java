@@ -3,7 +3,6 @@ package org.app.connection.backEnd.response.skill.skillProcessor.process;
 import java.util.*;
 
 public class FormatQuery {
-
     private List<String[]> data;
     public FormatQuery(List<String> data){
         this.data = new ArrayList<>();

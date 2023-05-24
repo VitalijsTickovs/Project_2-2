@@ -40,6 +40,7 @@ public class SkillProcessor {
     }
 
     private void processQuery(List<String> dataQuery){
+        if(dataQuery == null) return;
         this.formatQuery = new FormatQuery(dataQuery);
         unifyData(formatQuery.getData());
     }

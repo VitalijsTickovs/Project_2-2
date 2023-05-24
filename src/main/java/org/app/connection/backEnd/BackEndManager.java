@@ -14,9 +14,11 @@ public class BackEndManager {
 
     public BackEndManager(){
         responseManager = new ResponseManager();
+        //Setting a default database
         currentDataBase = DataBase.DB_QUERY;
     }
 
+    // Getting the output from the bot
     public String getResponse(String question){
         return skills.getResponse(question);
     }
