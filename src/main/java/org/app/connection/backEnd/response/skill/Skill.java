@@ -12,8 +12,13 @@ public class Skill {
     public SkillData skills;
     private Data_Base_Manager DATABASE_MANGER;
 
+    public static void main(String[] args) {
+        Skill a = new Skill();
+    }
+
     public Skill(){
         DATABASE_MANGER = new Data_Base_Manager();
+
         this.skills = new SkillData();
         List<String[]> data = process(skills);
 

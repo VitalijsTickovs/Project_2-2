@@ -1,7 +1,5 @@
 package org.app.connection.backEnd.response.skill.skillProcessor.process;
 
-import org.app.connection.backEnd.response.skill.skillProcessor.process.processUtility.RegexUtilities;
-
 import java.util.ArrayList;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -9,27 +7,6 @@ import java.util.regex.Pattern;
 
 
 public class FormatCFG {
-
-
-    public static void main(String[] args) {
-        String a = "Rule <S> <action>\n" +
-                "Rule <action> <weather>\n" +
-                "Rule <weather> How is the weather in <location> | <pro> <verb> in <location> . What is the weather?\n" +
-                "Rule <location> in <city> <time>\n" +
-                "Rule <city> New York | Berlin\n" +
-                "Rule <time> tomorrow | today\n" +
-                "Rule <pro> I | she | he| my mother\n" +
-                "Rule <verb> am| is\n" +
-                "Action <weather> * <city> New York <time> tomorrow It will be sunny.\n" +
-                "Action <weather> * <city> Berlin It is rainy.\n" +
-                "Action <weather> * <pro> my mother <verb> is  <city> New York <time> today It is stormy today.\n" +
-                "Action I have no idea";
-
-        FormatCFG b = new FormatCFG(a);
-
-        System.out.println(b.REAL_DATA);
-
-    }
 
     private List<String[]> REAL_DATA;
 
@@ -53,9 +30,9 @@ public class FormatCFG {
     public void process(String data) {
         ContextFreeGrammar context_free_grammar = new ContextFreeGrammar(data);
         REAL_DATA = context_free_grammar.getREAL_DATA();
-        System.out.println("nonT " + context_free_grammar.nonTerminals);
-        System.out.println("deep " + context_free_grammar.deep);
-        System.out.println("size " + context_free_grammar.size);
+        //System.out.println("nonT " + context_free_grammar.nonTerminals);
+       // System.out.println("deep " + context_free_grammar.deep);
+       // System.out.println("size " + context_free_grammar.size);
     }
 
     public List<String[]> getData() {
@@ -70,6 +47,7 @@ public class FormatCFG {
         Map<String, String> DATABASE = new HashMap<>();
         private final Map<String, Set<String>> validCombinations;
 
+        private static Set<String> terminals = new HashSet<>();
         private final String[] lines;
         private final Set<String> sentences = new HashSet<>();
 
@@ -80,14 +58,35 @@ public class FormatCFG {
             actions = new HashMap<>();
             validCombinations = new HashMap<>();
             lines = grammar.split("\\n");
+            generateVocabulary();
             generateProductionRules();
             generateSentences("<S>");
             generateAnswers();
             miMetoido();
         }
 
+        public void generateVocabulary(){
+            for(int i=0; i<lines.length; i++){
+                String[] productions = lines[i].split(" ", 3);
+                String RHS = productions[2];
+                String[] RHS_Components = RHS.split("\\|");
+                for (String a : RHS_Components) {
+                    if(!hasFormat(a)){
+                        terminals.add(a.trim());
+                    }
+                }
+            }
+        }
+
+
         public static boolean hasFormat(String word) {
-            return PATTERN.matcher(word).matches();
+            String[] components = word.split(" ");
+            for (String component : components) {
+                if(PATTERN.matcher(component).matches()){
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void generateAnswers(){
@@ -114,7 +113,7 @@ public class FormatCFG {
                             }
                         }
 
-                        System.out.println(variables.toString());
+                        //System.out.println(variables.toString());
                         String sentence = findPhraseWithKeywords(new ArrayList<>(sentences), variables);
 
                         DATABASE.put(sentence, placeHolder_action[1]);
@@ -162,7 +161,7 @@ public class FormatCFG {
                 boolean allKeywordsPresent = true;
 
                 for (String keyword : keywords) {
-                    if (!phrase.contains(keyword)) {
+                    if (!phrase.trim().contains(keyword.trim())) {
                         allKeywordsPresent = false;
                         break;
                     }
@@ -194,6 +193,7 @@ public class FormatCFG {
                     }
 
                     rules.put(nonTerminal, productionList);
+
                     //System.out.println(nonTerminal + "____" + productionList);
                 }
             }

@@ -19,6 +19,11 @@ public class BackEndManager {
     }
 
     // Getting the output from the bot
+
+    public static void main(String[] args) {
+        BackEndManager a = new BackEndManager();
+        System.out.println(a.getResponse( "my mother am in in New York today . What is the weather?"));
+    }
     public String getResponse(String question){
         return skills.getResponse(question);
     }

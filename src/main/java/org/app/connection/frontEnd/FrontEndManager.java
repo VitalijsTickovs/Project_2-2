@@ -21,7 +21,7 @@ public class FrontEndManager extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        StageManager stageManager = new StageManager(connection);
+        StageManager stageManager = new StageManager();
 
         primaryStage = stageManager.getUIstage();
         primaryStage.show();

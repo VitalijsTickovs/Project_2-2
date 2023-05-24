@@ -15,8 +15,8 @@ public class StageManager {
     protected Stage chatStage = new Stage();
     private static Connection connection = null;
 
-    public StageManager(Connection con){
-        connection = con;
+    public StageManager(){
+        connection = new Connection();
         UIstage.setScene(new SceneLogin());
     }
 
