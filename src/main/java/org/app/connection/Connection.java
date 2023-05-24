@@ -10,7 +10,7 @@ public class Connection {
     private FrontEndManager frontEnd;
 
     public Connection(){
-//        backEnd = new BackEndManager();
+        backEnd = new BackEndManager();
         frontEnd = new FrontEndManager(this);
     }
 

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import org.app.connection.frontEnd.FrontEndManager;
 import org.app.connection.frontEnd.stage.StageManager;
 import org.app.connection.frontEnd.stage.scenes.utils.ButtonFactory;
 import org.app.connection.frontEnd.stage.scenes.utils.ErrorHandling;
@@ -75,31 +76,32 @@ public class SceneChat extends SceneManager implements ICustomScene {
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         UIPane.getChildren().add(sendUserInput);
 
-        //setActionForButtons();
+        setActionForButtons();
     }
 
-    /*public void setActionForButtons(){
+    public void setActionForButtons(){
         //help button
         ButtonFactory.setDefaultActions(helpButton);
-        helpButton.setOnAction( e -> {
-            HelpWindow helpWindow = new HelpWindow();
-            helpWindow.setStage(UIstage);
-        });
+//        helpButton.setOnAction( e -> {
+//            HelpWindow helpWindow = new HelpWindow();
+//            helpWindow.setStage(UIstage);
+//        });
         //skills button
         ButtonFactory.setDefaultActions(skillsButton);
-        skillsButton.setOnAction( e -> {
-            SkillEditor skillEditor = new SkillEditor(responseGenerator);
-            skillEditor.setStage(UIstage);
-        });//logout button
+//        skillsButton.setOnAction( e -> {
+//            SkillEditor skillEditor = new SkillEditor(responseGenerator);
+//            skillEditor.setStage(UIstage);
+//        });
+        // logout button
         ButtonFactory.setDefaultActions(logoutButton);
-        logoutButton.setOnAction( e -> {
-            LoginScreen loginScreen = new LoginScreen();
-            loginScreen.setStage(UIstage);
-        });
+//        logoutButton.setOnAction( e -> {
+//            LoginScreen loginScreen = new LoginScreen();
+//            loginScreen.setStage(UIstage);
+//        });
         //exit button
         ButtonFactory.setDefaultActions(exitButton);
         exitButton.setOnAction( e -> {
-            UIstage.close();
+            StageManager.close();
         });
 
         //user chat
@@ -110,12 +112,13 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 setUserInput(userInput.getText());
                 setChatText(currentUserInput, false);
                 //Getting response from the bot
-                setBotChatText(responseGenerator.getResponse(currentUserInput));
+                setBotChatText(StageManager.getResponse(currentUserInput));
                 setChatText(currentBotInput, true);
                 userInput.setText("");
             }else System.out.println("invalid message");
         });
-     }*/
+    }
+
     public void setChatText(String input, boolean isBotOutput){
         // Adding the input into a list that will display chat messages
         TextArea textArea = new TextArea(input);
@@ -204,7 +207,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                     setUserInput(input);
                     setChatText(input, false);
 
-//                    setBotChatText(responseGenerator.getResponse(currentUserInput));
+                    setBotChatText(StageManager.getResponse(currentUserInput));
                     setChatText(currentBotInput, true);
                     userInput.setText("");
                 }

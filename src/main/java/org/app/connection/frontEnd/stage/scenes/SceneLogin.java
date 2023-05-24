@@ -92,7 +92,8 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         });
         loginButton.setOnAction(e -> {
             //close the existing stage
-            //TODO transition with loading
+            //TODO: transition with loading
+            //FOR NOW ITS LOADING STRAIGHT TO CHAT WINDOW
 //            SceneLogin sceneLogin = new SceneLogin();
 //            StageManager.setScene(sceneLogin);
 

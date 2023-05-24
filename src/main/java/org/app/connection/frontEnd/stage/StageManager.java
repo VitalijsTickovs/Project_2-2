@@ -13,7 +13,7 @@ import org.app.connection.frontEnd.stage.scenes.SceneLogin;
 public class StageManager {
     protected static Stage UIstage = new Stage();
     protected Stage chatStage = new Stage();
-    private static Connection connection = null;
+    private static Connection connection;
 
     public StageManager(){
         connection = new Connection();
@@ -37,6 +37,10 @@ public class StageManager {
         this.chatStage=mainStage;
         mainStage.close();
         UIstage.show();
+    }
+
+    public static String getResponse(String query){
+        return connection.getResponse(query);
     }
 
     public static void setScene(Scene newScene){

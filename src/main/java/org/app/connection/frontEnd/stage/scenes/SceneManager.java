@@ -6,12 +6,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.app.connection.frontEnd.stage.StageManager;
 
 public class SceneManager extends Scene {
     public static int screenWidth = 900;
     public static int screenHeight = 700;
     protected AnchorPane UIPane;
     protected AnchorPane scrollChat = new AnchorPane();
+
     public SceneManager(){
         super(new AnchorPane(), screenWidth, screenHeight);
         setFill(Color.rgb(18,64,76));

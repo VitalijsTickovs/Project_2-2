@@ -108,8 +108,25 @@ public class FormatCFG {
                         List<String> variables = new ArrayList<>();
                         //Si tiene formato devuelve la siguente
                         for (int i = 0; i < palabritas.length; i++) {
+
                             if(hasFormat(palabritas[i])){
-                                variables.add(palabritas[i+1]);
+                                String variable = "";
+                                int count = i+1;
+                                boolean trick1;
+                                boolean trick2;
+                                boolean trick3;
+                                boolean trick4;
+                                do{
+                                    variable += palabritas[count];
+                                    count++;
+                                    if(count >= palabritas.length) break;
+                                    trick1 = terminals.contains(variable.trim());
+                                    trick2 = terminals.contains(" " +variable);
+                                    trick4 = terminals.contains(variable + " ");
+                                    trick3 = trick1 || trick2 || trick4;
+                                    variable = variable + " ";
+                                }while(!trick3);
+                                variables.add(variable);
                             }
                         }
 

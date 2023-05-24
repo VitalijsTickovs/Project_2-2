@@ -47,6 +47,7 @@ public class Skill {
     }
 
     public String getResponse(String query){
+
         return DATABASE_MANGER.get(query);
     }
 
