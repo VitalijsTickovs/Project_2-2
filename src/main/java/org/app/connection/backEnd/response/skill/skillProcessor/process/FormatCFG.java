@@ -30,9 +30,6 @@ public class FormatCFG {
     public void process(String data) {
         ContextFreeGrammar context_free_grammar = new ContextFreeGrammar(data);
         REAL_DATA = context_free_grammar.getREAL_DATA();
-        //System.out.println("nonT " + context_free_grammar.nonTerminals);
-       // System.out.println("deep " + context_free_grammar.deep);
-       // System.out.println("size " + context_free_grammar.size);
     }
 
     public List<String[]> getData() {

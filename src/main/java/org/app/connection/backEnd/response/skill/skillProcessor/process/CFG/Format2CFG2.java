@@ -4,11 +4,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Format2CFG {
+public class Format2CFG2 {
 
     private static final Pattern PATTERN = Pattern.compile("<[^>]+>");
     private static final String OR = ".*\\|.*";
-    public static HashMap<String, String> REAL_DATA;
+
     public static List<String[]> REAL_REAL_DATA = new ArrayList<>();
 
     static List<String> questions;
@@ -23,26 +23,13 @@ public class Format2CFG {
 
     public static Set<String> terminals = new HashSet<>();
 
-    static FormatTree formatTree;
+    static FormatTree2 formatTree;
 
-    public Format2CFG(List<String> data) {
-        REAL_DATA = new HashMap<>();
+    public Format2CFG2(List<String> data) {
+
         SplitRuleAction(data);
-
-        createListData();
-        for(String[] map: REAL_REAL_DATA){
-            System.out.println(map[0] + " -----> "+ map[1]);
-        }
     }
 
-    public static void  createListData(){
-
-        for (Map.Entry<String, String> entrada : REAL_DATA.entrySet()) {
-//            System.out.println(entrada.getKey() + ", Valor: " + entrada.getValue());
-            REAL_REAL_DATA.add(new String[]{entrada.getKey(), entrada.getValue()});
-
-        }
-    }
 
     public void SplitRuleAction(List<String> data){
         List<String> rules = new ArrayList<>();
@@ -57,7 +44,7 @@ public class Format2CFG {
         }
 
         processRules(rules);
-        formatTree = new FormatTree(leftHandSide, rightHandSide);
+        formatTree = new FormatTree2(leftHandSide, rightHandSide);
         processActions(actions);
     }
 
@@ -88,7 +75,7 @@ public class Format2CFG {
             }
             if(hasNonTerminals) {
                 String[] temp = new String[input.get(i).length + 1];
-                temp[0] = "";
+                temp[0] = ""; /// THE EMPTY SPACE SHOULD BE \s
                 for (int j = 0; j < row.length; j++) {
                     temp[j + 1] = row[j];
                 }
@@ -126,18 +113,15 @@ public class Format2CFG {
             }
 
         }
-        questions = formatTree.findSentences("<S>");
-        populate();
+
         for (int i = 0; i < LHS.size(); i++) {
             createAction(LHS.get(i), RHS.get(i));
         }
+        //for (int i = 0; i < LHS.size(); i++) {
+        //    System.out.println(LHS.get(i) + " \t " + RHS.get(i));
+        //}
     }
 
-    public static void populate(){
-        for (String a : questions) {
-            REAL_DATA.put(a, "I have no idea");
-        }
-    }
     public static void createAction(String LHS, String RHS){
 
         Set<String> variables = new HashSet<>();
@@ -151,12 +135,17 @@ public class Format2CFG {
             variables.add(variable);
             RHS = RHS.replace(variable, "").trim();
         }
+        System.out.println(RHS+"\n\n\n\n");
+        //variables.forEach(System.out::println);
+        findPositives(LHS, variables);
 
-        for (String key : questions) {
-            if(containsAllPlaceHolders(variables, key)){
-                REAL_DATA.put(key, RHS);
-            }else REAL_DATA.putIfAbsent(key, "I have no idea");
-        }
+    }
+
+    public static void findPositives(String start, Set<String> placeholders){
+        Set<String> UNIVERSE = new HashSet<>(terminals);
+        UNIVERSE.removeAll(placeholders);
+        List<String> CORRECT_QUESTIONS = formatTree.findSentences(start, new ArrayList<>(UNIVERSE));
+        CORRECT_QUESTIONS.forEach(System.out::println);
     }
 
     public static String removeVariable(String RHS){
@@ -203,7 +192,7 @@ public class Format2CFG {
 
             }
         }
-        terminals.add("");
+        terminals.add(" ");
     }
 
 
@@ -254,8 +243,14 @@ public class Format2CFG {
             input.add(row);
         }
 
-        Format2CFG a = new Format2CFG(input);
+        Format2CFG2 a = new Format2CFG2(input);
 
+        List<String> c = new ArrayList<>();
+        c.add("Berlin");
+        c.add("today");
+        c.add("New York");
+
+        List<String> b = formatTree.findSentences("<S>", c);
 
     }
 }

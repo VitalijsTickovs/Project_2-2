@@ -30,7 +30,6 @@ public class FormatTree {
     private List<String> sentences = new ArrayList<>();
 
     public void recursiveExpansion(List<String> medusa){
-
         // base case
         // no terminals
         int nonTerminalPosition = findNonTerminalIndex(medusa);
@@ -44,8 +43,8 @@ public class FormatTree {
             return;
         }
         String firstNonTerminal = medusa.get(nonTerminalPosition);
-
-        List<List<String>> values = division(PRODUCTIONS.get(firstNonTerminal));
+        String[] getProduction = PRODUCTIONS.get(firstNonTerminal);
+        List<List<String>> values = division(getProduction);
 
         // Now we expand the nodes and of course you use recursion because
         // that is what medusa goes in the direction.
