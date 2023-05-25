@@ -30,8 +30,7 @@ public class FormatTree2PlayWithThis {
         return sentences;
     }
 
-
-    public void recursiveFind(List<String> medusa, List<String> excludeWords){
+    public void recursiveFind(List<String> medusa, List<String> excludeWords, Set<String> placeHolders){
 
         // base case
         // no terminals
@@ -123,7 +122,7 @@ public class FormatTree2PlayWithThis {
             newMedusa.remove(nonTerminalPosition);
             newMedusa.addAll(nonTerminalPosition, value);
 
-            recursiveFind(newMedusa, excludeWords);
+            recursiveFind(newMedusa, excludeWords, placeHolders);
         }
     }
 
@@ -171,7 +170,7 @@ public class FormatTree2PlayWithThis {
 
         List<List<String>> output = new ArrayList<>();
 
-        for (int i = 0; i < production.length; i++) {
+        for(int i = 0; i < production.length; i++) {
             output.add(convertToList(production[i]));
         }
         return output;
@@ -181,31 +180,23 @@ public class FormatTree2PlayWithThis {
         List<String> output = new ArrayList<>();
         String[] splittedInput = input.split(" ");
         List<String> normalTexts = new ArrayList<>();
-        Pattern pattern = Pattern.compile("<.*?>");
-        Matcher matcher = pattern.matcher(input);
 
         for(String splitInput: splittedInput){
             if(!splitInput.matches("<.*?>")){
-                normalTexts.add(splitInput);
+//                if(splitInput.equals(""))
+                normalTexts.add(splitInput); // CHECK THIS LINE
             }else{
-                String normalText = String.join(" ", normalTexts);
-                output.add(normalText);
+                if(normalTexts.size()>0) {
+                    String normalText = String.join(" ", normalTexts).trim();
+                    output.add(normalText);
+                    normalTexts = new ArrayList<>();
+                }
                 output.add(splitInput);
-                
             }
         }
-
-//        int start = 0;
-//        while (matcher.find()) {
-//            if (matcher.start() != 0) {
-//                output.add(input.substring(start, matcher.start()).trim());
-//            }
-//            output.add(input.substring(matcher.start(), matcher.end()));
-//            start = matcher.end();
-//        }
-//        if (start != input.length()) {
-//            output.add(input.substring(start).trim());
-//        }
+        if(normalTexts.size()>0){
+            output.add(String.join(" ", normalTexts).trim());
+        }
         return output;
     }
 

@@ -81,28 +81,36 @@ public class FormatTree2 {
         List<List<String>> output = new ArrayList<>();
 
         for (int i = 0; i < production.length; i++) {
-            output.add(convertToList(production[i]));
+            output.add(convertToList2(production[i]));
+        }
+        return output;
+    }
+
+    private List<String> convertToList2(String input){
+        List<String> output = new ArrayList<>();
+        String[] splittedInput = input.split(" ");
+        List<String> normalTexts = new ArrayList<>();
+
+        for(String splitInput: splittedInput){
+            if(!splitInput.matches("<.*?>")){
+//                if(splitInput.equals(""))
+                normalTexts.add(splitInput);
+            }else{
+                if(normalTexts.size()>0) {
+                    String normalText = String.join(" ", normalTexts).trim();
+                    output.add(normalText);
+                }
+                output.add(splitInput);
+                normalTexts = new ArrayList<>();
+            }
         }
         return output;
     }
 
     private List<String> convertToList(String input){
         List<String> output = new ArrayList<>();
-//        String[] splittedInput = input.split(" ");
-//        List<String> normalTexts = new ArrayList<>();
         Pattern pattern = Pattern.compile("<.*?>");
         Matcher matcher = pattern.matcher(input);
-
-//        for(String splitInput: splittedInput){
-//            if(!splitInput.matches("<.*?>")){
-//                normalTexts.add(splitInput);
-//            }else{
-//                String normalText = String.join(" ", normalTexts);
-//                output.add(normalText);
-//                output.add(splitInput);
-//                normalTexts = new ArrayList<>();
-//            }
-//        }
 
         int start = 0;
         while (matcher.find()) {
