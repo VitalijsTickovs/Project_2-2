@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.group1.GUI.utils.ButtonFactory;
+import org.group1.back_end.Camera.CameraEndPoint;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class LoginScreen extends StageManager implements ICustomStage {
     public LoginScreen(){
         loginTextField = new TextField();
         passwordTextField = new PasswordField();
+
         initStage();
         design();
         keyboardHandler();
@@ -102,28 +104,33 @@ public class LoginScreen extends StageManager implements ICustomStage {
             loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         });
         loginButton.setOnAction(e -> {
-            //close the existing stage
-            UIstage.close();
-            //create and display the loading screen
-            LoadingScreen loadingScreen = new LoadingScreen();
-            loadingScreen.show();
-            // Start a separate thread to load the models
-            Thread loadingThread = new Thread(() -> {
-                // Delays the loading so it can display the new stage content
-                try {
-                    Thread.sleep(6000); // Adjust the duration as needed
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                // Terminate loading screen and open the chatwindow
-                Platform.runLater(() -> {
-                    loadingScreen.close();
-                    openChatWindow();
-                });
-            });
-            loadingThread.start();
+            if(CameraEndPoint.authenticate()) {
+                //close the existing stage
+                UIstage.close();
+                //create and display the loading scree
+                LoadingScreen loadingScreen = new LoadingScreen();
+                loadingScreen.show();
 
-        });
+                // Start a separate thread to load the models
+                Thread loadingThread = new Thread(() -> {
+                    // Delays the loading so it can display the new stage content
+                    try {
+                        Thread.sleep(6000); // Adjust the duration as needed
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    // Terminate loading screen and open the chatwindow
+                    Platform.runLater(() -> {
+                        loadingScreen.close();
+                        openChatWindow();
+                    });
+                });
+                loadingThread.start();
+
+            }else{
+                loginButton.setText("Wrong Credentials");
+                loginButton.setStyle("-fx-background-color: rgba(255,0,0,1);");
+            }});
     }
 
     //@Override
