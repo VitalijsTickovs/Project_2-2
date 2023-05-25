@@ -1,5 +1,4 @@
 package org.group1.GUI;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -13,23 +12,29 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.group1.GUI.ChatWindow;
+import org.group1.GUI.DisplaySkills;
+import org.group1.GUI.ICustomStage;
+import org.group1.GUI.StageManager;
 import org.group1.GUI.utils.ButtonFactory;
 import org.group1.GUI.utils.ErrorHandling;
 import org.group1.back_end.response.Response;
 
+import java.util.ArrayList;
+
 import static org.group1.back_end.utilities.GeneralFileService.*;
 
 
-public class SkillEditor extends StageManager implements ICustomStage {
+public class DefineCFG extends StageManager implements ICustomStage {
     private Stage chatStage;
-    private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton, defineCFG;
+    private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton,defineCFG,next;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
     private Text taskText;
     private final Response response;
-
+    private ArrayList<String> ruleCollection = new ArrayList<>();
     private String skillInput="";
-    public  SkillEditor(Response response){
+    public  DefineCFG(Response response){
         this.response = response;
         initStage();
         design();
@@ -62,27 +67,29 @@ public class SkillEditor extends StageManager implements ICustomStage {
 
         //define skills button
         defineSkills = ButtonFactory.createButton("DEFINE SKILLS", 20, 170);
-        defineSkills.setTextFill(Color.rgb(42,97,117));
         UIpane.getChildren().add(defineSkills);
 
         //define CFG button
         defineCFG = ButtonFactory.createButton("DEFINE CFG", 20, 210);
+        defineCFG.setTextFill(Color.rgb(42,97,117));
         UIpane.getChildren().add(defineCFG);
 
         //send user input button
-        sendUserInput = ButtonFactory.createButton("SUBMIT QUESTION", 500, 380);
+            sendUserInput = ButtonFactory.createButton("FINISH RULE", 380, 380);
         sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setPrefSize(200,50);
         UIpane.getChildren().add(sendUserInput);
 
+        //next button
+        next = ButtonFactory.createButton("NEXT RULE", 560, 380);
+        next.setStyle("-fx-background-color: rgba(159,182,189,1)");
+        next.setPrefSize(200,50);
+        UIpane.getChildren().add(next);
+
         //slot button
-        slotButton = ButtonFactory.createButton("SUBMIT SLOT", 500, 380);
+        slotButton = ButtonFactory.createButton("FINISH ACTION", 380, 380);
         slotButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         slotButton.setPrefSize(200,50);
-
-        //action button
-        actionButton = ButtonFactory.createButton("SUBMIT ACTION", 500, 380);
-        actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
     }
 
     public void defineButtonActions() {
@@ -94,14 +101,17 @@ public class SkillEditor extends StageManager implements ICustomStage {
         });
 
         //define skills action
-        defineSkills.setOnAction(e -> {
-            //TODO: change the window to the one where you can choose skills
+        ButtonFactory.setDefaultActions(defineSkills);
+        defineSkills.setOnAction(e ->{
+            SkillEditor skillEditor = new SkillEditor(response);
+            skillEditor.setStage(UIstage,chatStage);
         });
 
         //help button action
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            //TODO : SET HELP WINDOW
+            HelpScreen helpScreen = new HelpScreen();
+            helpScreen.setStage(UIstage);
         });
 
         //back button action
@@ -111,33 +121,36 @@ public class SkillEditor extends StageManager implements ICustomStage {
             chatWindow.setStage(UIstage, chatStage);
         });
 
-        //define CFG action
-        ButtonFactory.setDefaultActions(defineCFG);
-        defineCFG.setOnAction(e -> {
-            DefineCFG chatWindow = new DefineCFG(response);
-            chatWindow.setStage(UIstage, chatStage);
+        //next action
+        //TODO: GET THE RULE AND ACTION HERE
+        next.setOnAction(e -> {
+            if (errorHandling.stringLengthError(questionInput.getText())) {
+                String question = questionInput.getText();
+                skillInput += "RULE " + toUpper(question);
+                ruleCollection.add(skillInput);
+                questionInput.setText("");
+
+            } else System.out.println("invalid message");
+            questionInput.setText("");
+
+        });
+        next.setOnMouseEntered(e-> {
+            next.setStyle("-fx-background-color: rgba(42,97,117,1)");
+        });
+        next.setOnMouseExited(e -> {
+            next.setStyle("-fx-background-color: rgba(159,182,189,1)");
         });
 
         //send user input action
+
         sendUserInput.setOnAction(e -> {
             if (errorHandling.stringLengthError(questionInput.getText())) {
-                String question = questionInput.getText();
-                skillInput += "Question " + toUpper(question);
-
                 UIpane.getChildren().remove(sendUserInput);
+
                 taskText.setTranslateX(475);
-                taskText.setText("Add the slots");
+                taskText.setText("Define Actions");
                 UIpane.getChildren().add(slotButton);
 
-                previousQuestion = new TextArea(skillInput);
-                previousQuestion.setFont(Font.font("Impact", FontWeight.BOLD,20));
-                previousQuestion.setStyle("-fx-control-inner-background: rgba(18,64,76);"+ "-fx-text-fill: white ;"
-                        +"-fx-text-box-border: transparent;"+"-fx-focus-color: transparent;");
-                previousQuestion.setLayoutX(385);
-                previousQuestion.setLayoutY(450);
-                previousQuestion.setWrapText(true);
-                previousQuestion.setPrefSize(400,300);
-                UIpane.getChildren().add(previousQuestion);
             } else System.out.println("invalid message");
             questionInput.setText("");
             // TODO: go into this file to define slots and actions...
@@ -151,32 +164,21 @@ public class SkillEditor extends StageManager implements ICustomStage {
         });
 
         //slot button action
-        slotButton.setOnAction(e -> {
-            if (errorHandling.stringLengthError(questionInput.getText())) {
-                String slot = questionInput.getText();
-                skillInput += addNamingSlot(toUpper(slot));
 
-                UIpane.getChildren().remove(slotButton);
-                taskText.setText("Add the actions");
-                taskText.setTranslateX(460);
-                UIpane.getChildren().add(actionButton);
-            } else System.out.println("invalid message");
-            questionInput.setText("");
+        slotButton.setOnMouseEntered(e-> {
+            slotButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
+        });
+        slotButton.setOnMouseExited(e -> {
+            slotButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         });
 
-        //action button actions
-        actionButton.setOnMouseEntered(e-> {
-            actionButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
-        });
-        actionButton.setOnMouseExited(e -> {
-            actionButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        });
-        actionButton.setOnAction(new EventHandler<ActionEvent>() {
+
+        slotButton.setOnAction(new EventHandler<ActionEvent>() {
             private void createAlert(){
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Information Dialog");
                 alert.setHeaderText(null);
-                alert.setContentText("Skill edited sucessfuly");
+                alert.setContentText("CFG edited sucessfuly");
                 alert.setOnCloseRequest( e ->{
                             ChatWindow chatWindow = new ChatWindow();
                             chatWindow.setStage(UIstage, chatStage);
@@ -188,13 +190,6 @@ public class SkillEditor extends StageManager implements ICustomStage {
             @Override
             public void handle(ActionEvent event) {
                 if (errorHandling.stringLengthError(questionInput.getText())) {
-                    String action = questionInput.getText();
-                    skillInput += addNamingAction(toUpper(action));
-
-                    // this makes the next available rule .txt
-                    // in which we will add the actions & slots
-                    write(skillInput);
-                    skillInput = "";
 
                     createAlert();
 
