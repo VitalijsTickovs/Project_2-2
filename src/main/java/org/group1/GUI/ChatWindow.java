@@ -87,8 +87,8 @@ public class ChatWindow extends StageManager implements ICustomStage {
         //help button
         ButtonFactory.setDefaultActions(helpButton);
         helpButton.setOnAction( e -> {
-            HelpWindow helpWindow = new HelpWindow();
-            helpWindow.setStage(UIstage);
+            HelpScreen helpWindow = new HelpScreen();
+            helpWindow.start();
         });
         //skills button
         ButtonFactory.setDefaultActions(skillsButton);

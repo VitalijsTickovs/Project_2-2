@@ -2,22 +2,33 @@ package org.group1.GUI;
 
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.group1.GUI.utils.ButtonFactory;
 
 public class HelpScreen extends StageManager implements ICustomStage {
     private Button exitButton;
+    protected int screenWidth = 900;
+    protected int screenHeight = 700;
+    protected AnchorPane UIpane = new AnchorPane();
+    protected Scene UIscene = new Scene(UIpane, screenWidth,screenHeight);
+    protected Stage UIstage = new Stage();
+    protected Stage chatStage = new Stage();
 
     public HelpScreen() {
-        initStage();
+        UIscene.setFill(Color.rgb(18,64,76));
+        UIpane.setStyle("-fx-background-color: transparent");
+        UIstage.setScene(UIscene);
         design();
     }
 
@@ -26,6 +37,9 @@ public class HelpScreen extends StageManager implements ICustomStage {
         createButtons();
         addBackground();
         textContentDisplay();
+    }
+    public void start(){
+        UIstage.show();
     }
     public void addBackground(){
 
@@ -42,20 +56,6 @@ public class HelpScreen extends StageManager implements ICustomStage {
         UIpane.getChildren().add(rectangle3);
     }
 
-//    public void createTextAreas(String text, int x, int y, int width, int height, TextArea textArea) {
-//        //User input textField
-//        textArea = new TextArea();
-//        textArea.setPrefSize(width, height);
-//        textArea.setEditable(false);
-//        textArea.setTranslateX(x);
-//        textArea.setTranslateY(y);
-//        textArea.setWrapText(true);
-//        textArea.setFont(Font.font("Calibri", 16));
-//        textArea.setStyle("-fx-control-inner-background: rgb(159,182,189); -fx-background-color: rgb(159,182,189); -fx-text-fill: white;");
-//        textArea.setText(text);
-//
-//        UIpane.getChildren().add(textArea);
-//    }
 public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize) {
     //User input textField
     textArea = new Text();
@@ -69,7 +69,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
 }
     public void createButtons() {
         //exit Button
-        exitButton = ButtonFactory.createButton("BACK", 770, 650);
+        exitButton = ButtonFactory.createButton("CLOSE", 770, 650);
         UIpane.getChildren().add(exitButton);
 
         setActionForButtons();
@@ -78,8 +78,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
         //exit button
         ButtonFactory.setDefaultActions(exitButton);
         exitButton.setOnAction(e -> {
-            ChatWindow chatWindow = new ChatWindow();
-            chatWindow.setStage(UIstage);
+            UIstage.close();
         });
     }
     public void textContentDisplay(){
