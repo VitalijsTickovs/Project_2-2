@@ -22,7 +22,7 @@ public class Data_Base_Manager {
     public String get(String key){
         Map<String, String> database = dataBase.get(key);
         //return Retrievalblabla.getValue()
-        return database.get(key);
+        return database.getOrDefault(key, "I have no idea");
     }
 
     public void setDataBase(DataBase dataBase){

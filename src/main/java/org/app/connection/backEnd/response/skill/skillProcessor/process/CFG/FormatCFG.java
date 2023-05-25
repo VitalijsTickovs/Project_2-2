@@ -4,10 +4,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Format2CFG2PlayWithThis {
+public class FormatCFG {
 
     private static final Pattern PATTERN = Pattern.compile("<[^>]+>");
     private static final String OR = ".*\\|.*";
+
+    public static HashMap<String, String> REAL_DATA;
 
     public static List<String[]> REAL_REAL_DATA = new ArrayList<>();
 
@@ -23,13 +25,24 @@ public class Format2CFG2PlayWithThis {
 
     public static Set<String> terminals = new HashSet<>();
 
-    static FormatTree2PlayWithThis formatTree;
+    static FormatTree formatTree;
 
-    public Format2CFG2PlayWithThis(List<String> data) {
-
+    public FormatCFG(List<String> data) {
+        REAL_DATA = new HashMap<>();
         SplitRuleAction(data);
+
+        createListData();
     }
 
+    public static void  createListData(){
+        for (Map.Entry<String, String> entrada : REAL_DATA.entrySet()) {
+            REAL_REAL_DATA.add(new String[]{entrada.getKey(), entrada.getValue()});
+        }
+    }
+
+    public List<String[]> getRealData(){
+        return REAL_REAL_DATA;
+    }
 
     public void SplitRuleAction(List<String> data){
         List<String> rules = new ArrayList<>();
@@ -44,7 +57,7 @@ public class Format2CFG2PlayWithThis {
         }
 
         processRules(rules);
-        formatTree = new FormatTree2PlayWithThis(leftHandSide, rightHandSide);
+        formatTree = new FormatTree(leftHandSide, rightHandSide);
         processActions(actions);
     }
 
@@ -113,40 +126,50 @@ public class Format2CFG2PlayWithThis {
             }
 
         }
+        questions = formatTree.findSentences("<S>");
+        populate();
 
         for (int i = 0; i < LHS.size(); i++) {
             createAction(LHS.get(i), RHS.get(i));
         }
-        //for (int i = 0; i < LHS.size(); i++) {
-        //    System.out.println(LHS.get(i) + " \t " + RHS.get(i));
-        //}
     }
 
-    public static void createAction(String LHS, String RHS){
+    public void populate(){
+        for (String a : questions) {
+            REAL_DATA.put(a, "I have no idea");
+        }
+    }
+
+    public void createAction(String LHS, String RHS){
 
         Set<String> variables = new HashSet<>();
         while (isPlaceHolder(RHS)){
             //Removing placeholder
             String placeHolder = getFirstPlaceHolder(RHS);
-            RHS = RHS.replace(placeHolder, "").trim();
+            RHS = RHS.replaceFirst(placeHolder, "").trim();
 
             // getting placeholder variable
             String variable = removeVariable(RHS);
             variables.add(variable);
-            RHS = RHS.replace(variable, "").trim();
+            RHS = RHS.replaceFirst(variable, "").trim();
         }
-        System.out.println(RHS+"\n\n\n\n");
         //variables.forEach(System.out::println);
-        findPositives(LHS, variables);
+
+        mapCorrectActions(findPositives(LHS, variables), RHS);
 
     }
 
-    public static void findPositives(String start, Set<String> placeholders){
+    public void mapCorrectActions(List<String> keys, String value){
+        for(String key: keys){
+            REAL_DATA.put(key,value);
+        }
+
+    }
+
+    public List<String> findPositives(String start, Set<String> placeholders){
         Set<String> UNIVERSE = new HashSet<>(terminals);
-        //UNIVERSE.add("");
         UNIVERSE.removeAll(placeholders);
-        List<String> CORRECT_QUESTIONS = formatTree.findSentences(start, new ArrayList<>(UNIVERSE), placeholders);
-        CORRECT_QUESTIONS.forEach(System.out::println);
+        return formatTree.findSentences(start, new ArrayList<>(UNIVERSE), placeholders);
     }
 
     public static String removeVariable(String RHS){
@@ -226,21 +249,27 @@ public class Format2CFG2PlayWithThis {
     }
 
     public static void main(String[] args) {
-        String text = "Rule <S> <ACTION>\n" +
-                "Rule <ACTION> <LOCATION> | <SCHEDULE>\n" +
-                "Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION> | <TIMEEXPRESSION> which lectu\n" +
-                "Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>\n" +
-                "Rule <TIME> 9 | 12\n" +
-                "Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located\n" +
-                "Rule <PRO> I | you | he | she\n" +
-                "Rule <ROOM> DeepSpace | SpaceBox\n" +
-                "Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday\n" +
-                "Action <SCHEDULE> * <DAY> Saturday There are no lectures on Saturday\n" +
-                "Action <SCHEDULE> * <DAY> Monday <TIME> 9 We start the week with math\n" +
-                "Action <SCHEDULE> * <DAY> Monday <TIME> 12 On Monday noon we have Theoratical Computer S\n" +
-                "Action <LOCATION> * <ROOM> DeepSpace DeepSpace is the first room after the entrance\n" +
-                "Action <LOCATION> * <ROOM> SpaceBox SpaceBox is in the first floor\n" +
+        String text = "Rule <S> <action>\n" +
+                "Rule <action> <weather>\n" +
+                "Rule <weather> How is the weather in <location> | <pro> <verb> in <location> . What is the weather?\n" +
+                "Rule <location> <city> <time>\n" +
+                "Rule <city> New York | Berlin\n" +
+                "Rule <time> tomorrow | today\n" +
+                "Rule <pro> I | she | he| my mother\n" +
+                "Rule <verb> am| is\n" +
+                "Action <weather> * <city> New York <time> tomorrow It will be sunny.\n" +
+                "Action <weather> * <city> Berlin It is rainy.\n" +
+                "Action <weather> * <pro> my mother <verb> is <city> New York <time> today It is stormy today.\n" +
                 "Action I have no idea";
+
+        String input1 =
+                "Rule <S> <expr>\n"+
+                "Rule <expr> <expr> + <term> | <term>\n" +
+                "Rule <term> <term> * <factor> | <factor>\n" +
+                "Rule <factor> ( <expr> ) | <number>\n" +
+                "Rule <number> <number> <digit> | <digit>\n" +
+                "Rule <digit>  0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9\n"+
+                "Action <expr> * <digit> 0 <digit> 3 is equal to 3";
 
         String[] text2 = text.split("\n");
         List<String> input = new ArrayList<>();
@@ -248,7 +277,7 @@ public class Format2CFG2PlayWithThis {
             input.add(row);
         }
 
-        Format2CFG2PlayWithThis a = new Format2CFG2PlayWithThis(input);
+        FormatCFG a = new FormatCFG(input);
 
         List<String> c = new ArrayList<>();
         c.add("Berlin");

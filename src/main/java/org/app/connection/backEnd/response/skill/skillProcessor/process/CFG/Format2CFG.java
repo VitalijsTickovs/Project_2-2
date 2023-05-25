@@ -23,7 +23,7 @@ public class Format2CFG {
 
     public static Set<String> terminals = new HashSet<>();
 
-    static FormatTree formatTree;
+    static FormatTreeTesting formatTreeTesting;
 
     public Format2CFG(List<String> data) {
         REAL_DATA = new HashMap<>();
@@ -57,7 +57,7 @@ public class Format2CFG {
         }
 
         processRules(rules);
-        formatTree = new FormatTree(leftHandSide, rightHandSide);
+        formatTreeTesting = new FormatTreeTesting(leftHandSide, rightHandSide);
         processActions(actions);
     }
 
@@ -126,7 +126,7 @@ public class Format2CFG {
             }
 
         }
-        questions = formatTree.findSentences("<S>");
+        questions = formatTreeTesting.findSentences("<S>");
         populate();
         for (int i = 0; i < LHS.size(); i++) {
             createAction(LHS.get(i), RHS.get(i));
