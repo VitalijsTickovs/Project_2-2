@@ -29,7 +29,6 @@ public class Skill {
     }
 
     public void put(List<String[]> data){
-
         DATABASE_MANGER.put(data);
     }
 

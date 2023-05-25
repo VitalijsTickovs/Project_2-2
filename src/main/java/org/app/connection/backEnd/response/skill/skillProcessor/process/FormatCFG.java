@@ -2,9 +2,6 @@ package org.app.connection.backEnd.response.skill.skillProcessor.process;
 
 import java.util.ArrayList;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 public class FormatCFG {
 

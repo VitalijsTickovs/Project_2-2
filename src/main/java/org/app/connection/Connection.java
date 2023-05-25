@@ -19,6 +19,7 @@ public class Connection {
     }
 
     public void run(){
+//        System.out.println(getResponse("in Berlin . What is the weather?"));
         frontEnd.run();
     }
 
