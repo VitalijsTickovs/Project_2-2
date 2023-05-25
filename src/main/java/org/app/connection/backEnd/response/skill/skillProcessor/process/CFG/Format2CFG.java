@@ -38,9 +38,7 @@ public class Format2CFG {
     public static void  createListData(){
 
         for (Map.Entry<String, String> entrada : REAL_DATA.entrySet()) {
-//            System.out.println(entrada.getKey() + ", Valor: " + entrada.getValue());
             REAL_REAL_DATA.add(new String[]{entrada.getKey(), entrada.getValue()});
-
         }
     }
 
@@ -223,15 +221,7 @@ public class Format2CFG {
                 return false;
             }
         }
-        terminals.remove("");
-        Set<String> differenceSet = new HashSet<>(terminals);
-        differenceSet.removeAll(set);
-        for(String element: differenceSet){
-            if(text.contains(element)){
-                return false;
-            }
-        }
-        System.out.println("Found element");
+
         return true;
     }
 

@@ -10,7 +10,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import org.app.connection.frontEnd.FrontEndManager;
 import org.app.connection.frontEnd.stage.StageManager;
 import org.app.connection.frontEnd.stage.scenes.utils.ButtonFactory;
 import org.app.connection.frontEnd.stage.scenes.utils.ErrorHandling;

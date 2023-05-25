@@ -11,7 +11,7 @@ public class Connection {
 
     public Connection(){
         backEnd = new BackEndManager();
-        frontEnd = new FrontEndManager(this);
+        frontEnd = new FrontEndManager();
     }
 
     public String getResponse(String question){
