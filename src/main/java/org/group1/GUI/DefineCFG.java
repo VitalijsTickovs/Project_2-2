@@ -75,21 +75,21 @@ public class DefineCFG extends StageManager implements ICustomStage {
         UIpane.getChildren().add(defineCFG);
 
         //send user input button
-            sendUserInput = ButtonFactory.createButton("FINISH RULE", 380, 380);
+            sendUserInput = ButtonFactory.createButton("FINISH RULE", 385, 380);
         sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setPrefSize(200,50);
         UIpane.getChildren().add(sendUserInput);
 
         //next button
-        next = ButtonFactory.createButton("NEXT RULE", 560, 380);
+        next = ButtonFactory.createButton("NEXT RULE", 585, 380);
         next.setStyle("-fx-background-color: rgba(159,182,189,1)");
         next.setPrefSize(200,50);
         UIpane.getChildren().add(next);
 
         //slot button
-        slotButton = ButtonFactory.createButton("FINISH ACTION", 380, 380);
+        slotButton = ButtonFactory.createButton("FINISH ACTION", 385, 380);
         slotButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        slotButton.setPrefSize(200,50);
+        slotButton.setPrefSize(220,50);
     }
 
     public void defineButtonActions() {
@@ -150,7 +150,7 @@ public class DefineCFG extends StageManager implements ICustomStage {
                 taskText.setTranslateX(475);
                 taskText.setText("Define Actions");
                 UIpane.getChildren().add(slotButton);
-
+                next.setText("NEXT ACTION");
             } else System.out.println("invalid message");
             questionInput.setText("");
             // TODO: go into this file to define slots and actions...
