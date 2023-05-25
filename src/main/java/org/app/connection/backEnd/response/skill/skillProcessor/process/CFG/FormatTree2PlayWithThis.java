@@ -21,11 +21,12 @@ public class FormatTree2PlayWithThis {
 
     }
 
-    public List<String> findSentences(String start, List<String> targetWords){
+    public List<String> findSentences(String start, List<String> targetWords, Set<String> placeholders){
         sentences = new ArrayList<>();
+
         List<String> stack = new LinkedList<>();
         stack.add(start);
-        recursiveFind(stack, targetWords);
+        recursiveFind(stack, targetWords, placeholders);
         return sentences;
     }
 
@@ -35,19 +36,69 @@ public class FormatTree2PlayWithThis {
         // base case
         // no terminals
         int nonTerminalPosition = findNonTerminalIndex(medusa);
+
         if(nonTerminalPosition == -1){
+
+
+            boolean MedusahasEmptyString = true;
+            for (String word : medusa) {
+                if(word.equals("")){
+                    MedusahasEmptyString = false;
+                    break;
+                }
+            }
+
+            if(MedusahasEmptyString){
+                excludeWords.add("");
+            }else{
+                while(excludeWords.remove("")){
+                }
+            }
+            boolean anyFound = false;
+
+            String MYCHECKER = String.join(" ", medusa);
+
+            List<Boolean> hasExcluded = new ArrayList<>();
+
+            for(String element : medusa){
+                //boolean
+                for(String component: excludeWords) {
+                    if (component.equals(element)) {
+                        hasExcluded.add(true);
+                        break;
+                    }
+                }
+            }
+
+            if(hasExcluded.size() != 0){
+                anyFound=true;
+            }
+
+
+            ///Vitaly comment
+            List<Boolean> hasPlaceholder = new ArrayList<>();
+            for(String placeholder: placeHolders){
+                for(String component: medusa){
+                    if (placeholder.equals(component)) {
+                        hasPlaceholder.add(true);
+                        break;
+                    }
+                }
+            }
+
+            if(hasPlaceholder.size()!= placeHolders.size()){
+                anyFound=true;
+            }
+            //false
+
+
+
             String sentence = String.join(" ", medusa)
                     .replaceAll("\\s+", " ")
                     .trim();
 
+
             // Check if the sentence contains any of the exclude words
-            boolean anyFound = false;
-            for (String word : excludeWords) {
-                if (sentence.contains(word)) {
-                    anyFound = true;
-                    break;
-                }
-            }
 
             // Only add the sentence if it does not contain any of the exclude words
             if (!anyFound) {
@@ -61,7 +112,8 @@ public class FormatTree2PlayWithThis {
 
         /// HAZLO TU BRO POR QU ETE V A IR MEJOR ME REFIERO A LO DE TANTA LISTA AGURPA
 
-        List<List<String>> values = division(PRODUCTIONS.get(firstNonTerminal));
+        String[] keyOfProduction = PRODUCTIONS.get(firstNonTerminal);
+        List<List<String>> values = division(keyOfProduction);
 
         // Now we expand the nodes and of course you use recursion because
         // that is what medusa goes in the direction.

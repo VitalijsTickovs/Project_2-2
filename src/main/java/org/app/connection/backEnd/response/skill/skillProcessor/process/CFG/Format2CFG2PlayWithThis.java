@@ -143,8 +143,9 @@ public class Format2CFG2PlayWithThis {
 
     public static void findPositives(String start, Set<String> placeholders){
         Set<String> UNIVERSE = new HashSet<>(terminals);
+        //UNIVERSE.add("");
         UNIVERSE.removeAll(placeholders);
-        List<String> CORRECT_QUESTIONS = formatTree.findSentences(start, new ArrayList<>(UNIVERSE));
+        List<String> CORRECT_QUESTIONS = formatTree.findSentences(start, new ArrayList<>(UNIVERSE), placeholders);
         CORRECT_QUESTIONS.forEach(System.out::println);
     }
 
@@ -192,7 +193,7 @@ public class Format2CFG2PlayWithThis {
 
             }
         }
-        terminals.add(" ");
+       // terminals.add("");
     }
 
 
@@ -225,18 +226,22 @@ public class Format2CFG2PlayWithThis {
     }
 
     public static void main(String[] args) {
-        String text = "Rule <S> <action>\n" +
-                "Rule <action> <weather>\n" +
-                "Rule <weather> How is the weather in <location> | <pro> <verb> in <location> . What is the weather?\n" +
-                "Rule <location> <city> <time>\n" +
-                "Rule <city> New York | Berlin\n" +
-                "Rule <time> tomorrow | today\n" +
-                "Rule <pro> I | she | he| my mother\n" +
-                "Rule <verb> am| is\n" +
-                "Action <weather> * <city> New York <time> tomorrow It will be sunny.\n" +
-                "Action <weather> * <city> Berlin It is rainy.\n" +
-                "Action <weather> * <pro> my mother <verb> is <city> New York <time> today It is stormy today.\n" +
+        String text = "Rule <S> <ACTION>\n" +
+                "Rule <ACTION> <LOCATION> | <SCHEDULE>\n" +
+                "Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION> | <TIMEEXPRESSION> which lectu\n" +
+                "Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>\n" +
+                "Rule <TIME> 9 | 12\n" +
+                "Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located\n" +
+                "Rule <PRO> I | you | he | she\n" +
+                "Rule <ROOM> DeepSpace | SpaceBox\n" +
+                "Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday\n" +
+                "Action <SCHEDULE> * <DAY> Saturday There are no lectures on Saturday\n" +
+                "Action <SCHEDULE> * <DAY> Monday <TIME> 9 We start the week with math\n" +
+                "Action <SCHEDULE> * <DAY> Monday <TIME> 12 On Monday noon we have Theoratical Computer S\n" +
+                "Action <LOCATION> * <ROOM> DeepSpace DeepSpace is the first room after the entrance\n" +
+                "Action <LOCATION> * <ROOM> SpaceBox SpaceBox is in the first floor\n" +
                 "Action I have no idea";
+
         String[] text2 = text.split("\n");
         List<String> input = new ArrayList<>();
         for (String row: text2) {
@@ -250,7 +255,6 @@ public class Format2CFG2PlayWithThis {
         c.add("today");
         c.add("New York");
 
-        List<String> b = formatTree.findSentences("<S>", c);
 
     }
 }

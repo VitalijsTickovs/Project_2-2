@@ -29,6 +29,7 @@ public class FormatTree2 {
         return sentences;
     }
 
+    private static List<String> sentences = new ArrayList<>();
 
     public void recursiveFind(List<String> medusa, List<String> excludeWords){
 
@@ -59,7 +60,6 @@ public class FormatTree2 {
 
         String firstNonTerminal = medusa.get(nonTerminalPosition);
 
-        /// HAZLO TU BRO POR QU ETE V A IR MEJOR ME REFIERO A LO DE TANTA LISTA AGURPA
 
         List<List<String>> values = division(PRODUCTIONS.get(firstNonTerminal));
 
@@ -75,45 +75,6 @@ public class FormatTree2 {
         }
     }
 
-    public List<String> findSentences(String start){
-        sentences = new ArrayList<>();
-        List<String> stack = new LinkedList<>();
-        stack.add(start);
-        recursiveExpansion(stack);
-        return sentences;
-    }
-
-    private static List<String> sentences = new ArrayList<>();
-
-    public void recursiveExpansion(List<String> medusa){
-
-        // base case
-        // no terminals
-        int nonTerminalPosition = findNonTerminalIndex(medusa);
-        if(nonTerminalPosition == -1){
-            String sentence = String.join(" ", medusa)
-                    .replaceAll("\\s+", " ")
-                    .trim();
-
-            //System.out.println(sentence);
-            sentences.add(sentence);
-            return;
-        }
-        String firstNonTerminal = medusa.get(nonTerminalPosition);
-
-        List<List<String>> values = division(PRODUCTIONS.get(firstNonTerminal));
-
-        // Now we expand the nodes and of course you use recursion because
-        // that is what medusa goes in the direction.
-        for (List<String> value : values) {
-
-            List<String> newMedusa = new ArrayList<>(medusa);
-            newMedusa.remove(nonTerminalPosition);
-            newMedusa.addAll(nonTerminalPosition, value);
-
-            recursiveExpansion(newMedusa);
-        }
-    }
 
     public List<List<String>>  division(String[] production){
 
