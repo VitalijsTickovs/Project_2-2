@@ -44,29 +44,47 @@ public class HelpScreen extends StageManager implements ICustomStage {
     public void addBackground(){
 
         Rectangle rectangle = new Rectangle(20,35,850,140);
-        rectangle.setFill(Color.rgb(159,182,189));
+        rectangle.setFill(Color.rgb(18,64,76));
+        rectangle.setStroke(Color.rgb(159,182,189));
+        rectangle.setStrokeWidth(5);
         UIpane.getChildren().add(rectangle);
 
         Rectangle rectangle2 = new Rectangle(20,235,850,210);
-        rectangle2.setFill(Color.rgb(159,182,189));
+        rectangle2.setFill(Color.rgb(18,64,76));
+        rectangle2.setStroke(Color.rgb(159,182,189));
+        rectangle2.setStrokeWidth(5);
         UIpane.getChildren().add(rectangle2);
 
         Rectangle rectangle3 = new Rectangle(20,505,850,150);
-        rectangle3.setFill(Color.rgb(159,182,189));
+        rectangle3.setFill(Color.rgb(18,64,76));
+        rectangle3.setStroke(Color.rgb(159,182,189));
+        rectangle3.setStrokeWidth(5);
         UIpane.getChildren().add(rectangle3);
     }
 
-public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize) {
+public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize,Color color) {
     //User input textField
     textArea = new Text();
     textArea.setTranslateX(x);
     textArea.setTranslateY(y);
-    textArea.setFont(Font.font("Calibri",FontWeight.BOLD, fontsize));
-    textArea.setFill(Color.WHITE);
+    textArea.setFont(Font.font("Calibri",FontWeight.EXTRA_BOLD, fontsize));
+    textArea.setFill(color);
     textArea.setText(text);
 
     UIpane.getChildren().add(textArea);
 }
+
+    public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize) {
+        //User input textField
+        textArea = new Text();
+        textArea.setTranslateX(x);
+        textArea.setTranslateY(y);
+        textArea.setFont(Font.font("Calibri",FontWeight.BOLD, fontsize));
+        textArea.setFill(Color.WHITE);
+        textArea.setText(text);
+
+        UIpane.getChildren().add(textArea);
+    }
     public void createButtons() {
         //exit Button
         exitButton = ButtonFactory.createButton("CLOSE", 770, 650);
@@ -83,7 +101,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
     }
     public void textContentDisplay(){
         //Title
-        createTextAreas("Interaction With Agent", 30, 30, 720, 155, new Text(),25);
+        createTextAreas("Interaction With Agent", 30, 30, 720, 155, new Text(),25,Color.rgb(159,182,189));
         //Content
         String agentPar1 = "In order to interact with our agent open the chat window. Here you can ask the agent any question you want and if the agent ";
         String agentPar11= "possesses the answer, it will provide a response in text format visible in scrollable pane. However, if it is unable to assist with ";
@@ -101,7 +119,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
         createTextAreas(agentPar31, 30, 165, 720, 155, new Text(),16);
 
         //Title
-        createTextAreas("Define New Skill", 30, 230, 720, 155, new Text(),25);
+        createTextAreas("Define New Skill", 30, 230, 720, 155, new Text(),25,Color.rgb(159,182,189));
         //Content
         agentPar1 = "To define a new skill in the Skill Editor window, you can follow these steps:";
         agentPar12 = "Navigate to the Skill Editor window and locate the option to define a new skill. Within the window, you will find the necessary ";
@@ -118,7 +136,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
         createTextAreas("It is important to surround the keywords with brackets", 30, 435, 720, 155, new Text(),16);
 
         //Title
-        createTextAreas("Access Existing Skills", 30, 500, 720, 155, new Text(),25);
+        createTextAreas("Access Existing Skills", 30, 500, 720, 155, new Text(),25,Color.rgb(159,182,189));
         //Content
         agentPar1 = "Navigate to the Skill Editor window and locate the \"Display Skills\" button. Clicking this button will take you to a new window";
         agentPar11="displaying a list of all available skills. From the list, choose the desired skill. Upon selecting the skill, a window will appear with ";

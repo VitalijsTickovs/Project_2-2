@@ -75,7 +75,8 @@ public class DisplaySkills extends StageManager implements ICustomStage {
         //help actions
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e ->{
-            //TODO : SET HELP WINDOW
+            HelpScreen helpScreen = new HelpScreen();
+            helpScreen.start();
         });
 
         //back button actions

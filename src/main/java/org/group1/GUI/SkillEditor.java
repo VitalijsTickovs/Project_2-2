@@ -101,7 +101,8 @@ public class SkillEditor extends StageManager implements ICustomStage {
         //help button action
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            //TODO : SET HELP WINDOW
+            HelpScreen helpScreen = new HelpScreen();
+            helpScreen.start();
         });
 
         //back button action

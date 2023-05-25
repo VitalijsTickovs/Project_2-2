@@ -145,7 +145,8 @@ public class SkillDetails extends StageManager implements ICustomStage {
         //help button
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            //TODO : SET HELP WINDOW
+            HelpScreen helpScreen = new HelpScreen();
+            helpScreen.start();
         });
 
         //addColumn

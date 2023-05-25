@@ -27,7 +27,7 @@ import static org.group1.back_end.utilities.GeneralFileService.*;
 
 public class DefineCFG extends StageManager implements ICustomStage {
     private Stage chatStage;
-    private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton,defineCFG,next;
+    private Button displaySkills,back,help,sendUserInput,defineSkills, slotButton,defineCFG,next;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
     private Text taskText;
@@ -111,7 +111,7 @@ public class DefineCFG extends StageManager implements ICustomStage {
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
             HelpScreen helpScreen = new HelpScreen();
-            helpScreen.setStage(UIstage);
+            helpScreen.start();
         });
 
         //back button action
