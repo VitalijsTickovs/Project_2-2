@@ -1,5 +1,6 @@
 package org.group1.GUI.stage.scenes;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -12,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
+import org.group1.back_end.Camera.CameraEndPoint;
 
 
 public class SceneLogin extends SceneManager implements ICustomScene {
@@ -92,20 +94,33 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         });
         loginButton.setOnAction(e -> {
             //close the existing stage
-            //TODO: transition with loading
-            //FOR NOW ITS LOADING STRAIGHT TO CHAT WINDOW
-//            SceneLogin sceneLogin = new SceneLogin();
-//            StageManager.setScene(sceneLogin);
+            if(CameraEndPoint.authenticate()) {
+                //create and display the loading scree
+                SceneLoading loadingScreen = new SceneLoading();
+                StageManager.setScene(loadingScreen);
 
-            SceneChat sceneChat = new SceneChat();
+                // Start a separate thread to load the models
+                Thread loadingThread = new Thread(() -> {
+                    // Delays the loading so it can display the new stage content
+                    try {
+                        Thread.sleep(6000); // Adjust the duration as needed
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    // Terminate loading screen and open the chatwindow
+                    Platform.runLater(() -> {
+                        SceneChat sceneChat = new SceneChat();
+                        StageManager.setScene(sceneChat);
+                    });
+                });
+                loadingThread.start();
 
-            StageManager.setScene(sceneChat);
-
-
-            //create and display the loading screen
-//            SceneLoading loadingScreen = new SceneLoading();
-//            loadingScreen.show();
+            }else{
+                loginButton.setText("Wrong Credentials");
+                loginButton.setStyle("-fx-background-color: rgba(255,0,0,1);");
+            }
         });
+
     }
 
     //@Override
@@ -116,11 +131,25 @@ public class SceneLogin extends SceneManager implements ICustomScene {
                     StageManager.close();
                     ke.consume();
                 }else if(ke.getCode() == KeyCode.ENTER){
-                    SceneChat sceneChat = null;
-//                    setPassword(passwordTextField.getText());
-//                    setUsername(loginTextField.getText());
-                    sceneChat = new SceneChat();
-                    StageManager.setScene(sceneChat);
+                    //create and display the loading scree
+                    SceneLoading loadingScreen = new SceneLoading();
+                    StageManager.setScene(loadingScreen);
+
+                    // Start a separate thread to load the models
+                    Thread loadingThread = new Thread(() -> {
+                        // Delays the loading so it can display the new stage content
+                        try {
+                            Thread.sleep(3000); // Adjust the duration as needed
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        // Terminate loading screen and open the chatwindow
+                        Platform.runLater(() -> {
+                            SceneChat sceneChat = new SceneChat();
+                            StageManager.setScene(sceneChat);
+                        });
+                    });
+                    loadingThread.start();
 
                 }
             }

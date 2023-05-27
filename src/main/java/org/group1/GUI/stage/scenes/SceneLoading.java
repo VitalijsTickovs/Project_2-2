@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.deeplearning4j.core.util.UIDProvider;
+import org.group1.GUI.stage.StageManager;
 
 public class SceneLoading extends SceneManager {
     StackPane loadingScreen;
@@ -32,9 +33,8 @@ public class SceneLoading extends SceneManager {
         ft.setAutoReverse(true);
         ft.play();
 
-        Scene scene = new Scene(loadingScreen, 900, 700);
         loadingScreen.setStyle("-fx-background-color: transparent");
-        scene.setFill(Color.rgb(18,64,76));
+        setRoot(loadingScreen);
     }
     private void setText(Text element, int posX, int posY){
         element.setFont(Font.font("Impact",100));
@@ -45,23 +45,4 @@ public class SceneLoading extends SceneManager {
         loadingScreen.getChildren().add(element);
     }
 
-
-    //TODO: MAKE LOADING
-    /*
-    // Start a separate thread to load the models
-    Thread loadingThread = new Thread(() -> {
-        // Delays the loading so it can display the new stage content
-        try {
-            Thread.sleep(6000); // Adjust the duration as needed
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        // Terminate loading screen and open the chatwindow
-        Platform.runLater(() -> {
-            loadingScreen.close();
-//                    openChatWindow();
-        });
-    });
-            loadingThread.start();
-     */
 }
