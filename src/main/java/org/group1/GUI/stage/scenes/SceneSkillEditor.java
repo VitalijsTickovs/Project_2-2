@@ -1,4 +1,4 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
@@ -8,27 +8,23 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.converter.DefaultStringConverter;
-import org.group1.GUI.utils.ButtonFactory;
-import org.group1.back_end.response.Response;
+import org.group1.GUI.stage.StageManager;
 import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.response.skills.dataframe.Cell;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.Rows;
 import org.group1.back_end.utilities.GeneralFileService;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkillDetails extends StageManager implements ICustomStage {
+public class SceneSkillEditor extends SceneManager implements ICustomScene {
     private String tableName;
     private final int id;
-    private Text text;
+    private Text text = new Text();
     private Button back,help,addAction, slots,delete,saveButton;
     private ScrollPane scrollPane;
     private final List<SkillData> dataFrames;
@@ -39,12 +35,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
     private final int ColNum, N_ROWS;
     private int currentRow;
     private boolean isSlot= false;
-    private final Response response;
 
-    public SkillDetails(int indexOfRule, Response responseGenerator) throws SQLException {
+    public SceneSkillEditor(int indexOfRule){
+        makeNewPane();
         id = indexOfRule;
-        response = responseGenerator;
-        dataFrames = responseGenerator.getSkillData();
+        dataFrames = StageManager.getConnection().getSkillData();
         columnNames = dataFrames.get(indexOfRule).getColumnNames();
         slotColumnNames = dataFrames.get(indexOfRule).getSlotNames();
         ColNum=dataFrames.get(indexOfRule).getActions().getColumnNames().size();
@@ -58,8 +53,6 @@ public class SkillDetails extends StageManager implements ICustomStage {
 
         collectDataFromDatabase();
 
-        initStage();
-
         design();
     }
 
@@ -72,23 +65,23 @@ public class SkillDetails extends StageManager implements ICustomStage {
     public void createButtons(){
         //save button
         saveButton = ButtonFactory.createButton("SAVE", 20,210);
-        UIpane.getChildren().add(saveButton);
+        UIPane.getChildren().add(saveButton);
         //back button
         back = ButtonFactory.createButton("BACK", 20, 170);
-        UIpane.getChildren().add(back);
+        UIPane.getChildren().add(back);
         //help button
         help = ButtonFactory.createButton("HELP", 20, 130);
-        UIpane.getChildren().add(help);
+        UIPane.getChildren().add(help);
         //addAction button
         addAction = ButtonFactory.createButton("ADD ROW", 380, 450);
-        UIpane.getChildren().add(addAction);
+        UIPane.getChildren().add(addAction);
         //slots button
         slots = ButtonFactory.createButton("SLOTS", 380, 500);
         slots.setPrefSize(400,50);
-        UIpane.getChildren().add(slots);
+        UIPane.getChildren().add(slots);
         //help button
         delete = ButtonFactory.createButton("DELETE", 650, 450);
-        UIpane.getChildren().add(delete);
+        UIPane.getChildren().add(delete);
 
     }
 
@@ -138,15 +131,14 @@ public class SkillDetails extends StageManager implements ICustomStage {
         //back button
         ButtonFactory.setDefaultActions(back);
         back.setOnAction(e -> {
-            DisplaySkills displaySkills = new DisplaySkills(response);
-            displaySkills.setStage(UIstage,chatStage);
+            SceneSkillList sceneSkillList = new SceneSkillList();
+            StageManager.setScene(sceneSkillList);
         });
 
         //help button
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            HelpScreen helpScreen = new HelpScreen();
-            helpScreen.start();
+            //TODO : SET HELP WINDOW
         });
 
         //addColumn
@@ -210,13 +202,11 @@ public class SkillDetails extends StageManager implements ICustomStage {
         scrollPane.setTranslateY(50);
         scrollPane.setPrefSize(470,400);
         // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
-        scrollPane.setStyle("-fx-background-color: transparent;"+"-fx-border-color: red" );
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; " +"-fx-border-color: red;");
         scrollPane.setContent(scrollChat);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        UIpane.getChildren().add(scrollPane);
-        UIstage.setOnShown(e ->
-                scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
+        UIPane.getChildren().add(scrollPane);
     }
 
 

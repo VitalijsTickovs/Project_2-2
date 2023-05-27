@@ -1,4 +1,4 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,40 +8,35 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.group1.GUI.utils.ButtonFactory;
-import org.group1.GUI.utils.ErrorHandling;
-import org.group1.back_end.response.Response;
+import org.group1.GUI.stage.StageManager;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
+import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 
 import static org.group1.back_end.utilities.GeneralFileService.*;
 
 
-public class SkillEditor extends StageManager implements ICustomStage {
-    private Stage chatStage;
+public class SceneDefineTemplate extends SceneManager implements ICustomScene {
     private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton, defineCFG;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
     private Text taskText;
-    private final Response response;
 
     private String skillInput="";
-    public  SkillEditor(Response response){
-        this.response = response;
-        initStage();
+    public SceneDefineTemplate(){
+        makeNewPane();
         design();
         keyboardHandler();
     }
 
     public void keyboardHandler(){
-        UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.ESCAPE) {
-                    ChatWindow chatWindow = new ChatWindow();
-                    chatWindow.setStage(UIstage);
+                    SceneChat chatWindow = new SceneChat();
+                    StageManager.setScene(chatWindow);
                     ke.consume();
                 }
             }
@@ -50,30 +45,30 @@ public class SkillEditor extends StageManager implements ICustomStage {
     public void createButtons(){
         //displaySkillsButton
         displaySkills = ButtonFactory.createButton("DISPLAY SKILLS", 20, 130);
-        UIpane.getChildren().add(displaySkills);
+        UIPane.getChildren().add(displaySkills);
 
         //help button
         help = ButtonFactory.createButton("HELP", 20, 250);
-        UIpane.getChildren().add(help);
+        UIPane.getChildren().add(help);
 
         //back button
         back = ButtonFactory.createButton("BACK", 20, 290);
-        UIpane.getChildren().add(back);
+        UIPane.getChildren().add(back);
 
         //define skills button
-        defineSkills = ButtonFactory.createButton("DEFINE SKILLS", 20, 170);
+        defineSkills = ButtonFactory.createButton("DEFINE TEMPLATE", 20, 170);
         defineSkills.setTextFill(Color.rgb(42,97,117));
-        UIpane.getChildren().add(defineSkills);
+        UIPane.getChildren().add(defineSkills);
 
         //define CFG button
         defineCFG = ButtonFactory.createButton("DEFINE CFG", 20, 210);
-        UIpane.getChildren().add(defineCFG);
+        UIPane.getChildren().add(defineCFG);
 
         //send user input button
         sendUserInput = ButtonFactory.createButton("SUBMIT QUESTION", 500, 380);
         sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setPrefSize(200,50);
-        UIpane.getChildren().add(sendUserInput);
+        UIPane.getChildren().add(sendUserInput);
 
         //slot button
         slotButton = ButtonFactory.createButton("SUBMIT SLOT", 500, 380);
@@ -89,8 +84,8 @@ public class SkillEditor extends StageManager implements ICustomStage {
         //displaySkillsAction
         ButtonFactory.setDefaultActions(displaySkills);
         displaySkills.setOnAction(e -> {
-            DisplaySkills displaySkills = new DisplaySkills(response);
-            displaySkills.setStage(UIstage, chatStage);
+            SceneSkillList sceneSkillList = new SceneSkillList();
+            StageManager.setScene(sceneSkillList);
         });
 
         //define skills action
@@ -101,22 +96,22 @@ public class SkillEditor extends StageManager implements ICustomStage {
         //help button action
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            HelpScreen helpScreen = new HelpScreen();
-            helpScreen.start();
+            SceneHelp sceneHelp = new SceneHelp();
+            StageManager.setScene(sceneHelp);
         });
 
         //back button action
         ButtonFactory.setDefaultActions(back);
         back.setOnAction(e -> {
-            ChatWindow chatWindow = new ChatWindow();
-            chatWindow.setStage(UIstage, chatStage);
+            SceneChat chatWindow = new SceneChat();
+            StageManager.setScene(chatWindow);
         });
 
         //define CFG action
         ButtonFactory.setDefaultActions(defineCFG);
         defineCFG.setOnAction(e -> {
-            DefineCFG chatWindow = new DefineCFG(response);
-            chatWindow.setStage(UIstage, chatStage);
+            SceneDefineCFG chatWindow = new SceneDefineCFG();
+            StageManager.setScene(chatWindow);
         });
 
         //send user input action
@@ -125,10 +120,10 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 String question = questionInput.getText();
                 skillInput += "Question " + toUpper(question);
 
-                UIpane.getChildren().remove(sendUserInput);
+                UIPane.getChildren().remove(sendUserInput);
                 taskText.setTranslateX(475);
                 taskText.setText("Add the slots");
-                UIpane.getChildren().add(slotButton);
+                UIPane.getChildren().add(slotButton);
 
                 previousQuestion = new TextArea(skillInput);
                 previousQuestion.setFont(Font.font("Impact", FontWeight.BOLD,20));
@@ -138,7 +133,7 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 previousQuestion.setLayoutY(450);
                 previousQuestion.setWrapText(true);
                 previousQuestion.setPrefSize(400,300);
-                UIpane.getChildren().add(previousQuestion);
+                UIPane.getChildren().add(previousQuestion);
             } else System.out.println("invalid message");
             questionInput.setText("");
             // TODO: go into this file to define slots and actions...
@@ -157,10 +152,10 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 String slot = questionInput.getText();
                 skillInput += addNamingSlot(toUpper(slot));
 
-                UIpane.getChildren().remove(slotButton);
+                UIPane.getChildren().remove(slotButton);
                 taskText.setText("Add the actions");
                 taskText.setTranslateX(460);
-                UIpane.getChildren().add(actionButton);
+                UIPane.getChildren().add(actionButton);
             } else System.out.println("invalid message");
             questionInput.setText("");
         });
@@ -179,8 +174,8 @@ public class SkillEditor extends StageManager implements ICustomStage {
                 alert.setHeaderText(null);
                 alert.setContentText("Skill edited sucessfuly");
                 alert.setOnCloseRequest( e ->{
-                            ChatWindow chatWindow = new ChatWindow();
-                            chatWindow.setStage(UIstage, chatStage);
+                            SceneChat chatWindow = new SceneChat();
+                            StageManager.setScene(chatWindow);
                         }
                 );
 
@@ -249,7 +244,7 @@ public class SkillEditor extends StageManager implements ICustomStage {
         questionInput.setWrapText(true);
         questionInput.setLayoutY(280);
         questionInput.setPrefSize(400,70);
-        UIpane.getChildren().add(questionInput);
+        UIPane.getChildren().add(questionInput);
 
         taskText = createText("Define Your Question", 420,250);
 

@@ -1,7 +1,7 @@
-package org.group1.GUI.utils;
+package org.group1.GUI.stage.scenes.utils;
 
 public class ErrorHandling {
-    public boolean stringLengthError(String string){
+    public static boolean stringLengthError(String string){
         return string.length() > 0;
     }
     //checks if a string has numbers

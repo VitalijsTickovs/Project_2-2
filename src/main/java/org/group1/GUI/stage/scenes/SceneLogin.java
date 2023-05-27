@@ -1,41 +1,28 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
-import javafx.animation.FadeTransition;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-import org.group1.GUI.utils.ButtonFactory;
-import org.group1.back_end.Camera.CameraEndPoint;
+import org.group1.GUI.stage.StageManager;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static org.group1.database.DatabaseCredentials.setPassword;
-import static org.group1.database.DatabaseCredentials.setUsername;
-
-public class LoginScreen extends StageManager implements ICustomStage {
+public class SceneLogin extends SceneManager implements ICustomScene {
     //VIEW SETTINGS
     public Button loginButton;
 
     private final TextField loginTextField, passwordTextField;
-    public LoginScreen(){
+    public SceneLogin(){
+        makeNewPane();
         loginTextField = new TextField();
         passwordTextField = new PasswordField();
-
-        initStage();
         design();
         keyboardHandler();
     }
@@ -45,7 +32,7 @@ public class LoginScreen extends StageManager implements ICustomStage {
         element.setFill(Color.WHITE);
         element.setTranslateX(posX);
         element.setTranslateY(posY);
-        UIpane.getChildren().add(element);
+        UIPane.getChildren().add(element);
     }
     private void setTextField(TextField textField, int posX, int posY){
         textField.setPrefWidth(250);
@@ -53,7 +40,7 @@ public class LoginScreen extends StageManager implements ICustomStage {
         textField.setTranslateX(posX);
         textField.setTranslateY(posY);
         textField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;");
-        UIpane.getChildren().add(textField);
+        UIPane.getChildren().add(textField);
     }
     Thread loadingThread = new Thread();
     private void setTextElements(){
@@ -83,20 +70,20 @@ public class LoginScreen extends StageManager implements ICustomStage {
         Line line = new Line(screenWidth/2.0,screenHeight/5.0,screenWidth/2.0,(screenHeight/5.0)*4);
         line.setStyle("-fx-stroke-width: 2px");
         line.setStroke(Color.rgb(159,182,189));
-        UIpane.getChildren().add(line);
+        UIPane.getChildren().add(line);
 
         Polygon triangle = new Polygon(150,340 ,150,310 ,120,340);
         triangle.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(triangle);
+        UIPane.getChildren().add(triangle);
         Polygon triangle1 = new Polygon(295,340 ,295,310 ,325,310);
         triangle1.setFill(Color.rgb(159,182,189));
-        UIpane.getChildren().add(triangle1);
+        UIPane.getChildren().add(triangle1);
 
         setTextElements();
 
         loginButton = ButtonFactory.createButton("Login", 550, 400);
         loginButton.setStyle("-fx-background-color: rgba(159,182,189,1);");
-        UIpane.getChildren().add(loginButton);
+        UIPane.getChildren().add(loginButton);
         loginButton.setOnMouseEntered(e -> {
             loginButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
         });
@@ -104,52 +91,36 @@ public class LoginScreen extends StageManager implements ICustomStage {
             loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
         });
         loginButton.setOnAction(e -> {
-            if(CameraEndPoint.authenticate()) {
-                //close the existing stage
-                UIstage.close();
-                //create and display the loading scree
-                LoadingScreen loadingScreen = new LoadingScreen();
-                loadingScreen.show();
+            //close the existing stage
+            //TODO: transition with loading
+            //FOR NOW ITS LOADING STRAIGHT TO CHAT WINDOW
+//            SceneLogin sceneLogin = new SceneLogin();
+//            StageManager.setScene(sceneLogin);
 
-                // Start a separate thread to load the models
-                Thread loadingThread = new Thread(() -> {
-                    // Delays the loading so it can display the new stage content
-                    try {
-                        Thread.sleep(6000); // Adjust the duration as needed
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    // Terminate loading screen and open the chatwindow
-                    Platform.runLater(() -> {
-                        loadingScreen.close();
-                        openChatWindow();
-                    });
-                });
-                loadingThread.start();
+            SceneChat sceneChat = new SceneChat();
 
-            }else{
-                loginButton.setText("Wrong Credentials");
-                loginButton.setStyle("-fx-background-color: rgba(255,0,0,1);");
-            }});
+            StageManager.setScene(sceneChat);
+
+
+            //create and display the loading screen
+//            SceneLoading loadingScreen = new SceneLoading();
+//            loadingScreen.show();
+        });
     }
 
     //@Override
     public void keyboardHandler() {
-        UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        this.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.ESCAPE) {
-                    UIstage.close();
+                    StageManager.close();
                     ke.consume();
                 }else if(ke.getCode() == KeyCode.ENTER){
-                    ChatWindow chatWindow= null;
-                    setPassword(passwordTextField.getText());
-                    setUsername(loginTextField.getText());
-                    try {
-                        chatWindow = new ChatWindow();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    chatWindow.setStage(UIstage);
+                    SceneChat sceneChat = null;
+//                    setPassword(passwordTextField.getText());
+//                    setUsername(loginTextField.getText());
+                    sceneChat = new SceneChat();
+                    StageManager.setScene(sceneChat);
 
                 }
             }

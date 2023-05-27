@@ -1,34 +1,18 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.group1.GUI.utils.ButtonFactory;
+import org.group1.GUI.stage.StageManager;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 
-public class HelpScreen extends StageManager implements ICustomStage {
+public class SceneHelp extends SceneManager implements ICustomScene {
     private Button exitButton;
-    protected int screenWidth = 900;
-    protected int screenHeight = 700;
-    protected AnchorPane UIpane = new AnchorPane();
-    protected Scene UIscene = new Scene(UIpane, screenWidth,screenHeight);
-    protected Stage UIstage = new Stage();
-    protected Stage chatStage = new Stage();
-
-    public HelpScreen() {
-        UIscene.setFill(Color.rgb(18,64,76));
-        UIpane.setStyle("-fx-background-color: transparent");
-        UIstage.setScene(UIscene);
+    public SceneHelp() {
+        makeNewPane();
         design();
     }
 
@@ -38,28 +22,25 @@ public class HelpScreen extends StageManager implements ICustomStage {
         addBackground();
         textContentDisplay();
     }
-    public void start(){
-        UIstage.show();
-    }
     public void addBackground(){
 
         Rectangle rectangle = new Rectangle(20,35,850,140);
         rectangle.setFill(Color.rgb(18,64,76));
         rectangle.setStroke(Color.rgb(159,182,189));
         rectangle.setStrokeWidth(5);
-        UIpane.getChildren().add(rectangle);
+        UIPane.getChildren().add(rectangle);
 
         Rectangle rectangle2 = new Rectangle(20,235,850,210);
         rectangle2.setFill(Color.rgb(18,64,76));
         rectangle2.setStroke(Color.rgb(159,182,189));
         rectangle2.setStrokeWidth(5);
-        UIpane.getChildren().add(rectangle2);
+        UIPane.getChildren().add(rectangle2);
 
         Rectangle rectangle3 = new Rectangle(20,505,850,150);
         rectangle3.setFill(Color.rgb(18,64,76));
         rectangle3.setStroke(Color.rgb(159,182,189));
         rectangle3.setStrokeWidth(5);
-        UIpane.getChildren().add(rectangle3);
+        UIPane.getChildren().add(rectangle3);
     }
 
 public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize,Color color) {
@@ -71,7 +52,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
     textArea.setFill(color);
     textArea.setText(text);
 
-    UIpane.getChildren().add(textArea);
+    UIPane.getChildren().add(textArea);
 }
 
     public void createTextAreas(String text, int x, int y, int width, int height, Text textArea,int fontsize) {
@@ -83,12 +64,12 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
         textArea.setFill(Color.WHITE);
         textArea.setText(text);
 
-        UIpane.getChildren().add(textArea);
+        UIPane.getChildren().add(textArea);
     }
     public void createButtons() {
         //exit Button
         exitButton = ButtonFactory.createButton("CLOSE", 770, 650);
-        UIpane.getChildren().add(exitButton);
+        UIPane.getChildren().add(exitButton);
 
         setActionForButtons();
     }
@@ -96,7 +77,7 @@ public void createTextAreas(String text, int x, int y, int width, int height, Te
         //exit button
         ButtonFactory.setDefaultActions(exitButton);
         exitButton.setOnAction(e -> {
-            UIstage.close();
+            StageManager.close();
         });
     }
     public void textContentDisplay(){

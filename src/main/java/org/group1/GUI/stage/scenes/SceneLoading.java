@@ -1,21 +1,22 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.deeplearning4j.core.util.UIDProvider;
 
-public class LoadingScreen extends Stage {
+public class SceneLoading extends SceneManager {
     StackPane loadingScreen;
-    public LoadingScreen() {
-
+    public SceneLoading() {
+        makeNewPane();
         loadingScreen = new StackPane();
         Text loading = new Text("Loading...");
         setText(loading,0, 0);
@@ -34,7 +35,6 @@ public class LoadingScreen extends Stage {
         Scene scene = new Scene(loadingScreen, 900, 700);
         loadingScreen.setStyle("-fx-background-color: transparent");
         scene.setFill(Color.rgb(18,64,76));
-        setScene(scene);
     }
     private void setText(Text element, int posX, int posY){
         element.setFont(Font.font("Impact",100));
@@ -44,4 +44,24 @@ public class LoadingScreen extends Stage {
         element.setTranslateY(posY);
         loadingScreen.getChildren().add(element);
     }
+
+
+    //TODO: MAKE LOADING
+    /*
+    // Start a separate thread to load the models
+    Thread loadingThread = new Thread(() -> {
+        // Delays the loading so it can display the new stage content
+        try {
+            Thread.sleep(6000); // Adjust the duration as needed
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        // Terminate loading screen and open the chatwindow
+        Platform.runLater(() -> {
+            loadingScreen.close();
+//                    openChatWindow();
+        });
+    });
+            loadingThread.start();
+     */
 }

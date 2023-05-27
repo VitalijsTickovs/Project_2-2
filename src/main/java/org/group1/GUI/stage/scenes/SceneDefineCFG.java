@@ -1,4 +1,4 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -10,38 +10,35 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.group1.GUI.utils.ButtonFactory;
-import org.group1.GUI.utils.ErrorHandling;
-import org.group1.back_end.response.Response;
+import org.group1.GUI.stage.StageManager;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
+import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 
-import java.util.Arrays;
 
 import static org.group1.back_end.utilities.GeneralFileService.*;
 
 
-public class DefineCFG extends StageManager implements ICustomStage {
+public class SceneDefineCFG extends SceneManager implements ICustomScene {
     private Stage chatStage;
     private Button displaySkills,back,help,sendUserInput,defineSkills, addAction,defineCFG, nextLine;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
     private Text taskText;
-    private final Response response;
     private String cfgCollection = "";
     //For each Rule/Action do some stuff
     private String sectionInput="";
-    public  DefineCFG(Response response){
-        this.response = response;
-        initStage();
+    public SceneDefineCFG(){
+        makeNewPane();
         design();
         keyboardHandler();
     }
 
     public void keyboardHandler(){
-        UIscene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+        addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.ESCAPE) {
-                    ChatWindow chatWindow = new ChatWindow();
-                    chatWindow.setStage(UIstage);
+                    SceneChat chatWindow = new SceneChat();
+                    StageManager.setScene(chatWindow);
                     ke.consume();
                 }
             }
@@ -50,36 +47,36 @@ public class DefineCFG extends StageManager implements ICustomStage {
     public void createButtons(){
         //displaySkillsButton
         displaySkills = ButtonFactory.createButton("DISPLAY SKILLS", 20, 130);
-        UIpane.getChildren().add(displaySkills);
+        UIPane.getChildren().add(displaySkills);
 
         //help button
         help = ButtonFactory.createButton("HELP", 20, 250);
-        UIpane.getChildren().add(help);
+        UIPane.getChildren().add(help);
 
         //back button
         back = ButtonFactory.createButton("BACK", 20, 290);
-        UIpane.getChildren().add(back);
+        UIPane.getChildren().add(back);
 
         //define skills button
-        defineSkills = ButtonFactory.createButton("DEFINE SKILLS", 20, 170);
-        UIpane.getChildren().add(defineSkills);
+        defineSkills = ButtonFactory.createButton("DEFINE TEMPLATE", 20, 170);
+        UIPane.getChildren().add(defineSkills);
 
         //define CFG button
         defineCFG = ButtonFactory.createButton("DEFINE CFG", 20, 210);
         defineCFG.setTextFill(Color.rgb(42,97,117));
-        UIpane.getChildren().add(defineCFG);
+        UIPane.getChildren().add(defineCFG);
 
         //send user input button
         sendUserInput = ButtonFactory.createButton("FINISH RULE", 385, 380);
         sendUserInput.setStyle("-fx-background-color: rgba(159,182,189,1)");
         sendUserInput.setPrefSize(200,50);
-        UIpane.getChildren().add(sendUserInput);
+        UIPane.getChildren().add(sendUserInput);
 
         //next button
         nextLine = ButtonFactory.createButton("NEXT RULE", 585, 380);
         nextLine.setStyle("-fx-background-color: rgba(159,182,189,1)");
         nextLine.setPrefSize(200,50);
-        UIpane.getChildren().add(nextLine);
+        UIPane.getChildren().add(nextLine);
 
         //slot button
         addAction = ButtonFactory.createButton("FINISH ACTION", 385, 380);
@@ -91,29 +88,29 @@ public class DefineCFG extends StageManager implements ICustomStage {
         //displaySkillsAction
         ButtonFactory.setDefaultActions(displaySkills);
         displaySkills.setOnAction(e -> {
-            DisplaySkills displaySkills = new DisplaySkills(response);
-            displaySkills.setStage(UIstage, chatStage);
+            SceneSkillList sceneSkillList = new SceneSkillList();
+            StageManager.setScene(sceneSkillList);
         });
 
         //define skills action
         ButtonFactory.setDefaultActions(defineSkills);
         defineSkills.setOnAction(e ->{
-            SkillEditor skillEditor = new SkillEditor(response);
-            skillEditor.setStage(UIstage,chatStage);
+            SceneDefineTemplate sceneDefineTemplate = new SceneDefineTemplate();
+            StageManager.setScene(sceneDefineTemplate);
         });
 
         //help button action
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e -> {
-            HelpScreen helpScreen = new HelpScreen();
-            helpScreen.start();
+            SceneHelp sceneHelp = new SceneHelp();
+            StageManager.setScene(sceneHelp);
         });
 
         //back button action
         ButtonFactory.setDefaultActions(back);
         back.setOnAction(e -> {
-            ChatWindow chatWindow = new ChatWindow();
-            chatWindow.setStage(UIstage, chatStage);
+            SceneChat chatWindow = new SceneChat();
+            StageManager.setScene(chatWindow);
         });
 
         //next action
@@ -145,11 +142,11 @@ public class DefineCFG extends StageManager implements ICustomStage {
                 cfgCollection += sectionInput;
                 sectionInput = "";
 
-                UIpane.getChildren().remove(sendUserInput);
+                UIPane.getChildren().remove(sendUserInput);
 
                 taskText.setTranslateX(475);
                 taskText.setText("Define Actions");
-                UIpane.getChildren().add(addAction);
+                UIPane.getChildren().add(addAction);
                 nextLine.setText("NEXT ACTION");
             } else System.out.println("invalid message");
             questionInput.setText("");
@@ -180,8 +177,8 @@ public class DefineCFG extends StageManager implements ICustomStage {
                 alert.setHeaderText(null);
                 alert.setContentText("CFG edited sucessfuly");
                 alert.setOnCloseRequest( e ->{
-                            ChatWindow chatWindow = new ChatWindow();
-                            chatWindow.setStage(UIstage, chatStage);
+                            SceneChat chatWindow = new SceneChat();
+                            StageManager.setScene(chatWindow);
                         }
                 );
 
@@ -252,7 +249,7 @@ public class DefineCFG extends StageManager implements ICustomStage {
         questionInput.setWrapText(true);
         questionInput.setLayoutY(280);
         questionInput.setPrefSize(400,70);
-        UIpane.getChildren().add(questionInput);
+        UIPane.getChildren().add(questionInput);
 
         taskText = createText("Define Your Question", 420,250);
 

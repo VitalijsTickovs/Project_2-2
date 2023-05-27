@@ -1,4 +1,4 @@
-package org.group1.GUI.utils;
+package org.group1.GUI.stage.scenes.utils;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;

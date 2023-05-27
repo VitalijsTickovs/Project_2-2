@@ -1,31 +1,24 @@
-package org.group1.GUI;
+package org.group1.GUI.stage.scenes;
 
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.group1.GUI.utils.ButtonFactory;
-import org.group1.back_end.response.Response;
+import org.group1.GUI.stage.StageManager;
+import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DisplaySkills extends StageManager implements ICustomStage {
+public class SceneSkillList extends SceneManager implements ICustomScene {
     ArrayList<String> ruleNames =new ArrayList<>();
     ArrayList<Button> buttons = new ArrayList<>();
 
-    private Stage chatStage;
-    private Button submit,displaySkills,back,help,defineSkills;
+    private Button submit,displaySkills,back,help,defineSkills, defineCFG;
     private final int skillSize;
-    private final Response response;
 
-    public DisplaySkills(Response response){
-        this.skillSize = response.getSkillData().size();
-        this.response = response;
+    public SceneSkillList(){
+        makeNewPane();
+        this.skillSize = StageManager.getConnection().getSkillData().size();
         loadSkills();
-        initStage();
         design();
     }
 
@@ -42,25 +35,29 @@ public class DisplaySkills extends StageManager implements ICustomStage {
         // displaySkills button
         displaySkills = ButtonFactory.createButton("DISPLAY SKILLS", 20, 130);
         displaySkills.setTextFill(Color.rgb(42,97,117));
-        UIpane.getChildren().add(displaySkills);
+        UIPane.getChildren().add(displaySkills);
 
         //defineSkills button
-        defineSkills = ButtonFactory.createButton("DEFINE SKILLS", 20, 170);
-        UIpane.getChildren().add(defineSkills);
+        defineSkills = ButtonFactory.createButton("DEFINE TEMPLATE", 20, 170);
+        UIPane.getChildren().add(defineSkills);
+
+        //define CFG button
+        defineCFG = ButtonFactory.createButton("DEFINE CFG", 20, 210);
+        UIPane.getChildren().add(defineCFG);
 
         //help button
-        help = ButtonFactory.createButton("HELP", 20, 210);
-        UIpane.getChildren().add(help);
+        help = ButtonFactory.createButton("HELP", 20, 250);
+        UIPane.getChildren().add(help);
 
         //back button
-        back = ButtonFactory.createButton("BACK", 20, 250);
-        UIpane.getChildren().add(back);
+        back = ButtonFactory.createButton("BACK", 20, 290);
+        UIPane.getChildren().add(back);
 
         //submit button
         submit = ButtonFactory.createButton("LOAD", 386, 520);
         submit.setStyle("-fx-background-color: rgba(159,182,189,1)");
         submit.setPrefSize(400,50);
-        UIpane.getChildren().add(submit);
+        UIPane.getChildren().add(submit);
 
 
     }
@@ -68,29 +65,36 @@ public class DisplaySkills extends StageManager implements ICustomStage {
         //define skills action
         ButtonFactory.setDefaultActions(defineSkills);
         defineSkills.setOnAction(e ->{
-            SkillEditor skillEditor = new SkillEditor(response);
-            skillEditor.setStage(UIstage,chatStage);
+            SceneDefineTemplate sceneDefineTemplate = new SceneDefineTemplate();
+            StageManager.setScene(sceneDefineTemplate);
+        });
+
+        //define CFG action
+        ButtonFactory.setDefaultActions(defineCFG);
+        defineCFG.setOnAction(e -> {
+            SceneDefineCFG chatWindow = new SceneDefineCFG();
+            StageManager.setScene(chatWindow);
         });
 
         //help actions
         ButtonFactory.setDefaultActions(help);
         help.setOnAction(e ->{
-            HelpScreen helpScreen = new HelpScreen();
-            helpScreen.start();
+            SceneHelp sceneHelp = new SceneHelp();
+            StageManager.setScene(sceneHelp);
         });
 
         //back button actions
         ButtonFactory.setDefaultActions(back);
 
         back.setOnAction(lam ->{
-            ChatWindow chatWindow = null;
-                try {
-                    response.reload();
-                    chatWindow = new ChatWindow();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                chatWindow.setStage(UIstage,chatStage);
+            SceneChat chatWindow = null;
+            try {
+                StageManager.getConnection().reload();
+                chatWindow = new SceneChat();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            StageManager.setScene(chatWindow);
         });
 
         //submit button action
@@ -115,14 +119,11 @@ public class DisplaySkills extends StageManager implements ICustomStage {
         scrollPane.setTranslateY(50);
         scrollPane.setPrefSize(470,460);
         // TODO: IF YOU NEED THE RED BORDER add " -fx-border-color: red"
-        scrollPane.setStyle("-fx-background-color: transparent;"+"-fx-border-color: red" );
+        scrollPane.setStyle("-fx-background-color: transparent;"+"-fx-border-color: red;" + "-fx-background: transparent;" );
         scrollPane.setContent(scrollChat);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        UIpane.getChildren().add(scrollPane);
-
-        UIstage.setOnShown(e ->
-                scrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
+        UIPane.getChildren().add(scrollPane);
 
         for (int i = 0, y=20; i < ruleNames.size(); i++) {
             int tempIndex = i;
@@ -135,12 +136,8 @@ public class DisplaySkills extends StageManager implements ICustomStage {
                 button.setTextFill(Color.WHITE);
             });
             button.setOnAction(e-> {
-                try {
-                    SkillDetails skillDetails= new SkillDetails(tempIndex ,response);
-                    skillDetails.setStage(UIstage,chatStage);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
+                SceneSkillEditor sceneSkillEditor = new SceneSkillEditor(tempIndex);
+                StageManager.setScene(sceneSkillEditor);
             });
             scrollChat.getChildren().add(button);
             buttons.add(button);
