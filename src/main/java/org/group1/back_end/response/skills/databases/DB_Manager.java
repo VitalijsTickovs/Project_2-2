@@ -21,6 +21,13 @@ public class DB_Manager{
         vectors.add(key, value);
         vectorsSeq.add(key, value);
     }
+
+    public void addCFG(String key, String value){
+        keywords.addCFG(key, value);
+        perfectMatch.addCFG(key, value);
+        vectors.addCFG(key, value);
+        vectorsSeq.addCFG(key, value);
+    }
     public String add(String key, String value, DB dataBase) {
 
         switch (dataBase){

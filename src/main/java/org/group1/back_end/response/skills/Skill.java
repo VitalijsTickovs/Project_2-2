@@ -108,12 +108,17 @@ public class Skill {
     public void generateCFGSkill() throws IOException {
         List<String> cfgSkills = SERVICE.readCFG();
         for(String skill: cfgSkills) {
-            ContextFreeGrammar cfg = new ContextFreeGrammar(skill);
-            List<String[]> pairSet = cfg.getREAL_DATA();
+            String[] text2 = skill.split("\n");
+            List<String> input = new ArrayList<>();
+            for (String row: text2) {
+                input.add(row);
+            }
+            ContextFreeGrammar cfg = new ContextFreeGrammar(input);
+            List<String[]> pairSet = cfg.getRealData();
 
             for (String[] pair : pairSet) {
                 addVocabulary(pair[0]);
-                DATABASE_MANAGER.add(pair[0], pair[1]);
+                DATABASE_MANAGER.addCFG(pair[0], pair[1]);
             }
         }
     }

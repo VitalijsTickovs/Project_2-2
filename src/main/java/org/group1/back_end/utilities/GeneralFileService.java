@@ -9,6 +9,7 @@ import javax.xml.crypto.Data;
 import java.io.*;
 import java.util.List;
 
+import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_CFG_SKILLS;
 import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_SKILLS;
 
 public class GeneralFileService {
@@ -29,6 +30,24 @@ public class GeneralFileService {
     public static void write(String text){
         String id = Integer.toString(new File((path + DATA_TXT_SKILLS.path)).listFiles().length+1);
         String filePath = path + DATA_TXT_SKILLS.path + FILES_NAMES + id + FILES_EXTENSION;
+
+        try{
+            File file = new File(filePath);
+
+            FileWriter writer = new FileWriter(file);
+
+            writer.append(text);
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeCFG(String text){
+        System.out.println("Path: "+ path+ DATA_TXT_CFG_SKILLS.path);
+        String id = Integer.toString(new File((path +DATA_TXT_CFG_SKILLS.path)).listFiles().length+1);
+        String filePath = path + DATA_TXT_CFG_SKILLS.path + "cfg_" + id + FILES_EXTENSION;
 
         try{
             File file = new File(filePath);

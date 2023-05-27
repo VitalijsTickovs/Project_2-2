@@ -44,6 +44,15 @@ public class DB_VectorsSequence
     }
 
     @Override
+    public void addCFG(String key, String value) {
+        List<String> a = process(key);
+        if(a.size() > 0){
+            QUERY_VECTOR_MATCHING.put(a , value);
+            queryData.insert(new Rows(Arrays.asList(new Cell<>(a), new Cell<>(value))));
+        }
+    }
+
+    @Override
     public String getFirst(String key) {
 
         double closestKey = Double.MAX_VALUE;

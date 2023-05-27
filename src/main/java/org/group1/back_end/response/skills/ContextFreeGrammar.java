@@ -5,211 +5,274 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ContextFreeGrammar {
-    private static final Pattern PATTERN = Pattern.compile("<[^>]+>");
-    private final Map<String, List<List<String>>> rules;
-    private final Map<String, Map<List<String>, String>> actions;
+        private static final Pattern PATTERN = Pattern.compile("<[^>]+>");
+        private static final String OR = ".*\\|.*";
 
-    Map<String, String> DATABASE = new HashMap<>();
-    private final Map<String, Set<String>> validCombinations;
+        public static HashMap<String, String> REAL_DATA;
 
-    private final String[] lines;
-    private final Set<String> sentences = new HashSet<>();
+        public static List<String[]> REAL_REAL_DATA = new ArrayList<>();
 
-    private static final Map<String, Set<String>> grammar = new HashMap<>();
+        static List<String> questions;
 
-    public ContextFreeGrammar(String grammar) {
-        rules = new HashMap<>();
-        actions = new HashMap<>();
-        validCombinations = new HashMap<>();
-        lines = grammar.split("\\n");
-        generateProductionRules();
-        generateSentences("<S>");
-        generateAnswers();
-        miMetoido();
-    }
+        // each row, which contains terminals and non-terminals
+        public List<String[]> rightHandSide = new ArrayList<>();
+        // maps non-terminals to the values
+        private HashMap<String,String> mapping= new HashMap<>();
+        // list of each non-terminals
+        public List<String> leftHandSide = new ArrayList<>();
 
-    public static boolean hasFormat(String word) {
-        return PATTERN.matcher(word).matches();
-    }
 
-    public void generateAnswers(){
+        public static Set<String> terminals = new HashSet<>();
 
-        for (String line : lines){
-            String[] parts = line.split(" ", 2);
+        static FormatTree formatTree;
 
-            //parts = Action , lo de mas
-            if(parts[0].equals("Action")){
+        public ContextFreeGrammar(List<String> data) {
+            REAL_DATA = new HashMap<>();
+            SplitRuleAction(data);
 
-                //quitamos la * nos quedamos formato <D> --> algo
-                String[] placeHolder_action  = parts[1].split("\\*");
+            createListData();
+        }
 
-                // si existe <D>
-                if(placeHolder_action.length>1){
+        public void  createListData(){
+            for (Map.Entry<String, String> entrada : REAL_DATA.entrySet()) {
+                REAL_REAL_DATA.add(new String[]{entrada.getKey(), entrada.getValue()});
+            }
+        }
 
-                    //devuelveme las variables despues de <D>
-                    String[] palabritas = placeHolder_action[1].split(" ");
-                    List<String> variables = new ArrayList<>();
-                    //Si tiene formato devuelve la siguente
-                    for (int i = 0; i < palabritas.length; i++) {
-                        if(hasFormat(palabritas[i])){
-                            variables.add(palabritas[i+1]);
-                        }
+        public List<String[]> getRealData(){
+            return REAL_REAL_DATA;
+        }
+
+        public void SplitRuleAction(List<String> data){
+            List<String> rules = new ArrayList<>();
+            List<String> actions = new ArrayList<>();
+            for (String row : data) {
+                String[] ruleParts = row.split(" ", 2);
+                if(ruleParts[0].contains("Rule")){
+                    rules.add(ruleParts[1]);
+                }else{
+                    actions.add(ruleParts[1]);
+                }
+            }
+
+            processRules(rules);
+            formatTree = new FormatTree(leftHandSide, rightHandSide);
+            processActions(actions);
+        }
+
+        public void processRules(List<String> data){
+            List<String[]> strippedMapping = new ArrayList<>();
+            for (String row : data) {
+                String[] ruleParts = row.split(" ", 2);
+                String LHS = ruleParts[0].trim();
+                leftHandSide.add(LHS);
+                String RHS = ruleParts[1].trim();
+                createVocabulary(RHS);
+                mapping.put(LHS, RHS);
+                strippedMapping.add(getRealMapping(LHS));
+            }
+            rightHandSide = addEmptySpace(strippedMapping);
+        }
+
+        public List<String[]> addEmptySpace(List<String[]> input){
+            List<String[]> output = new ArrayList<>();
+            for (int i = 0; i < input.size(); i++) {
+                String[] row = input.get(i);
+                boolean hasNonTerminals = true;
+                for (int j = 0; j < row.length; j++) {
+                    String rowComponent = row[j];
+                    if(isPlaceHolder(rowComponent)) {
+                        hasNonTerminals = false;
                     }
+                }
+                if(hasNonTerminals) {
+                    String[] temp = new String[input.get(i).length + 1];
+                    temp[0] = ""; /// THE EMPTY SPACE SHOULD BE \s
+                    for (int j = 0; j < row.length; j++) {
+                        temp[j + 1] = row[j];
+                    }
+                    output.add(temp);
+                }else {
+                    String[] temp = new String[input.get(i).length];
+                    for (int j = 0; j < row.length; j++) {
+                        temp[j] = row[j];
+                    }
+                    output.add(temp);
+                }
+            }
+            return output;
+        }
 
-                    String sentence = findPhraseWithKeywords(new ArrayList<>(sentences), variables);
 
-                    DATABASE.put(sentence, placeHolder_action[1]);
+        public void processActions(List<String> data){
+            List<String> LHS = new ArrayList<>();
+            List<String> RHS = new ArrayList<>();
+            for(String row: data){
+                String[] ruleParts = row.split("\\*");
+                if(ruleParts.length>1) {
+                    // cases that * is present
+                    // getting which rule is going to be substituted
+                    ruleParts[0] = ruleParts[0].trim();
+                    LHS.add(ruleParts[0]);
+
+                    // RHS is the product
+                    ruleParts[1] = ruleParts[1].trim();
+                    RHS.add(ruleParts[1]);
+
+                }else{
+                    //I have no idea case
+                    RHS.add(ruleParts[0]);
                 }
 
             }
+            questions = formatTree.findSentences("<S>");
+            populate();
+
+            for (int i = 0; i < LHS.size(); i++) {
+                createAction(LHS.get(i), RHS.get(i));
+            }
         }
 
+        public void populate(){
+            for (String a : questions) {
+                REAL_DATA.put(a, "I have no idea");
+            }
+        }
 
-        for (String line : lines){
-            String[] parts = line.split(" ", 2);
-            String type = parts[0].trim();
+        public void createAction(String LHS, String RHS){
 
-            if(type.equals("Action")){
+            Set<String> variables = new HashSet<>();
+            while (isPlaceHolder(RHS)){
+                //Removing placeholder
+                String placeHolder = getFirstPlaceHolder(RHS);
+                RHS = RHS.replaceFirst(placeHolder, "").trim();
 
-                String[] placeHolder_action  = parts[1].split("\\*");
-                if(placeHolder_action.length>1){
-                    String placeHolder = placeHolder_action[0];
-                    String action = placeHolder_action[1].split(" ")[2];
-                    ArrayList<String> placeHolders = extractTags(placeHolder_action[1]);
+                // getting placeholder variable
+                String variable = removeVariable(RHS);
+                variables.add(variable);
+                RHS = RHS.replaceFirst(variable, "").trim();
+            }
+            //variables.forEach(System.out::println);
 
-                    List<List<String>> variables = rules.get(action);
+            mapCorrectActions(findPositives(LHS, variables), RHS);
 
-                    String sentence = findPhraseWithKeywords(new ArrayList<>(sentences), placeHolders);
-                    DATABASE.put(sentence, action);
+        }
+
+        public void mapCorrectActions(List<String> keys, String value){
+            for(String key: keys){
+                REAL_DATA.put(key,value);
+            }
+
+        }
+
+        public List<String> findPositives(String start, Set<String> placeholders){
+            Set<String> UNIVERSE = new HashSet<>(terminals);
+            UNIVERSE.removeAll(placeholders);
+            return formatTree.findSentences(start, new ArrayList<>(UNIVERSE), placeholders);
+        }
+
+        public String removeVariable(String RHS){
+            RHS = RHS.trim();
+            String key = "";
+            int counter = 0;
+            terminals.remove("");
+            do{
+                key += RHS.charAt(counter++);
+            } while (!terminals.contains(key));
+            return key;
+        }
+
+        public String getFirstPlaceHolder(String placeHolder){
+            Pattern pattern = Pattern.compile("<([^>]+)>");
+            Matcher matcher = pattern.matcher(placeHolder);
+            if (matcher.find()) {
+                return matcher.group();
+            }
+            return "";
+        }
+        public String[] getRealMapping(String key){
+            String[] output;
+            String value = mapping.get(key);
+            if (value.matches(OR)){
+                output = value.split("\\|");
+                for (int i=0; i< output.length; i++) {
+                    output[i] = output[i].trim();
+                }
+
+            }else {
+                output = new String[]{value};
+            }
+            return output;
+        }
+        public void createVocabulary(String row){
+            String[] rowComponent = row.split("\\|");
+            for (String component : rowComponent){
+                component = component.trim();
+                if(!isPlaceHolder(component)){
+                    terminals.add(component);
+                }else {
+
+
                 }
             }
-        }
-    }
-
-    private static ArrayList<String> extractTags(String input) {
-        ArrayList<String> tags = new ArrayList<>();
-        Pattern pattern = Pattern.compile("<(.*?)>");
-        Matcher matcher = pattern.matcher(input);
-
-        while (matcher.find()) {
-            tags.add("<" + matcher.group(1) + ">");
+            // terminals.add("");
         }
 
-        return tags;
-    }
 
-    public static String findPhraseWithKeywords(List<String> phrases, List<String> keywords) {
-        for (String phrase : phrases) {
-            boolean allKeywordsPresent = true;
-
-            for (String keyword : keywords) {
-                if (!phrase.contains(keyword)) {
-                    allKeywordsPresent = false;
-                    break;
+        public boolean isPlaceHolder(String word) {
+            String[] components = word.split(" ");
+            for (String component : components) {
+                if(PATTERN.matcher(component).matches()){
+                    return true;
                 }
             }
+            return false;
+        }
 
-            if (allKeywordsPresent) {
-                return phrase;
+        public static void main(String[] args) {
+            String text = "Rule <S> <action>\n" +
+                    "Rule <action> <weather>\n" +
+                    "Rule <weather> How is the weather in <location> | <pro> <verb> in <location> . What is the weather?\n" +
+                    "Rule <location> <city> <time>\n" +
+                    "Rule <city> New York | Berlin\n" +
+                    "Rule <time> tomorrow | today\n" +
+                    "Rule <pro> I | she | he| my mother\n" +
+                    "Rule <verb> am| is\n" +
+                    "Action <weather> * <city> New York <time> tomorrow It will be sunny.\n" +
+                    "Action <weather> * <city> Berlin It is rainy.\n" +
+                    "Action <weather> * <pro> my mother <verb> is <city> New York <time> today It is stormy today.\n" +
+                    "Action I have no idea";
+
+            String input1 =
+                    "Rule <S> <ACTION>\n" +
+                    "Rule <ACTION> <LOCATION> | <SCHEDULE>\n" +
+                    "Rule <SCHEDULE> Which lectures are there <TIMEEXPRESSION> | <TIMEEXPRESSION> which lectu\n" +
+                    "Rule <TIMEEXPRESSION> on <DAY> at <TIME> | at <TIME> on <DAY>\n" +
+                    "Rule <TIME> 9 | 12\n" +
+                    "Rule <LOCATION> Where is <ROOM> | How do <PRO> get to <ROOM> | Where is <ROOM> located\n" +
+                    "Rule <PRO> I | you | he | she\n" +
+                    "Rule <ROOM> DeepSpace | SpaceBox\n" +
+                    "Rule <DAY> Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday\n" +
+                    "Action <SCHEDULE> * <DAY> Saturday There are no lectures on Saturday\n" +
+                    "Action <SCHEDULE> * <DAY> Monday <TIME> 9 We start the week with math\n" +
+                    "Action <SCHEDULE> * <DAY> Monday <TIME> 12 On Monday noon we have Theoratical Computer S\n" +
+                    "Action <LOCATION> * <ROOM> DeepSpace DeepSpace is the first room after the entrance\n" +
+                    "Action <LOCATION> * <ROOM> SpaceBox is in the first floor\n" +
+                    "Action I have no idea";
+
+            String[] text2 = input1.split("\n");
+            List<String> input = new ArrayList<>();
+            for (String row: text2) {
+                input.add(row);
             }
-        }
 
-        return "I have no idea";
-    }
+            ContextFreeGrammar a = new ContextFreeGrammar(input);
 
-    public void generateProductionRules(){
+            List<String> c = new ArrayList<>();
+            c.add("Berlin");
+            c.add("today");
+            c.add("New York");
 
-        for (String line : lines) {
-            String[] parts = line.split(" ", 2);
-            String type = parts[0].trim();
-
-            if (type.equals("Rule")) {
-                String[] ruleParts = parts[1].split(" ", 2);
-                String nonTerminal = ruleParts[0].trim();
-                String[] productions = ruleParts[1].split("\\|");
-
-                List<List<String>> productionList = new ArrayList<>();
-                for (String production : productions) {
-                    List<String> symbols = Arrays.asList(production.trim().split(" "));
-                    productionList.add(symbols);
-                }
-
-                rules.put(nonTerminal, productionList);
-                //System.out.println(nonTerminal + "____" + productionList);
-            }
-        }
-    }
-
-    List<String[]> REAL_DATA = new ArrayList<>();
-    public void miMetoido(){
-        List<String> mapping = new ArrayList<>(sentences);
-        for (int i = 0; i < mapping.size(); i++) {
-            String value = DATABASE.getOrDefault(mapping.get(i), "I have no idea");
-
-            String[] keys = {mapping.get(i), value};
-
-            REAL_DATA.add(keys);
 
         }
-    }
-
-    public List<String[]> getREAL_DATA() {
-        return REAL_DATA;
-    }
-
-    public void generateSentences(String startSymbol) {
-        List<String> stack = new LinkedList<>();
-        stack.add(startSymbol);
-        generateSentencesHelper(stack);
-    }
-
-    private void generateSentencesHelper(List<String> stack) {
-
-        int firstNonTerminalIndex = findFirstNonTerminalIndex(stack);
-
-        if (firstNonTerminalIndex == -1) {
-            //String response = findResponse(stack);
-            //System.out.println("Frase: " + String.join(" ", stack));
-            sentences.add(String.join(" ", stack));
-            //System.out.println("Respuesta: " + response);
-            return;
-        }
-
-        String nonTerminal = stack.get(firstNonTerminalIndex);
-        List<List<String>> productions = rules.get(nonTerminal);
-
-        for (List<String> production : productions) {
-            List<String> newStack = new ArrayList<>(stack);
-            newStack.remove(firstNonTerminalIndex);
-            newStack.addAll(firstNonTerminalIndex, production);
-            generateSentencesHelper(newStack);
-        }
-    }
-
-
-
-    private int findFirstNonTerminalIndex(List<String> symbols) {
-        for (int i = 0; i < symbols.size(); i++) {
-            if (rules.containsKey(symbols.get(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private String findResponse(List<String> sentence) {
-        String joinedSentence = String.join(" ", sentence);
-
-        for (String nonTerminal : validCombinations.keySet()) {
-            Set<String> nonTerminalCombinations = validCombinations.get(nonTerminal);
-
-            for (String combination : nonTerminalCombinations) {
-                if (joinedSentence.contains(combination)) {
-                    return "Found valid combination: " + combination;
-                }
-            }
-        }
-
-        return "I have no idea";
-    }
 }

@@ -36,6 +36,13 @@ public class DB_PerfectMatching
         data.insert(new Rows(Arrays.asList(new Cell<>(newKey), new Cell<>(value))));
     }
 
+    public void addCFG(String key, String value){
+        String newKey = process(key);
+        QUERY_PERFECT_MATCHING.put(newKey, value);
+    }
+
+
+
     @Override
     public String getFirst(String key) {
 

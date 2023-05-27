@@ -34,6 +34,12 @@ public class DB_Keywords implements iDataBase<String, String>{
     }
 
     @Override
+    public void addCFG(String key, String value) {
+        Set<String> keySet = ComplexProcess.process(SimpleProcess.process(key));
+        QUERY_KEYWORD_MATCHING.put(keySet, value);
+    }
+
+    @Override
     public String getFirst(String key) {
 
 //        System.out.println("KEY: " + key);

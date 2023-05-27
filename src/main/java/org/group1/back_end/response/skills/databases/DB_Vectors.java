@@ -54,6 +54,16 @@ public class DB_Vectors implements iDataBase<String, String>{
     }
 
     @Override
+    public void addCFG(String key, String value) {
+        List<String> newKey = Arrays.stream(process(key).split(" ")).toList();
+        double[] vector = ResponseLibrary.VECTOR_SIF.getVector(newKey);
+        QUERY_VECTOR_MATCHING.put(vector, value);
+        queryData.insert(new Rows(Arrays.asList(new Cell<>(vector), new Cell<>(key))));
+        RETRIEVE_QUERY.put(vector, newKey.toString());
+        retrieveData.insert(new Rows(Arrays.asList(new Cell<>(vector), new Cell<>(newKey.toString()))));
+    }
+
+    @Override
     public String getFirst(String key) {
 
         double closestKey = 0;

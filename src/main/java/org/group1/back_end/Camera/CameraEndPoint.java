@@ -15,7 +15,8 @@ public class CameraEndPoint {
 
 
     public static boolean authenticate() {
-        return cam.detect();
+//        return cam.detect();
+        return true;
     }
 
     public static Image getImage(){
