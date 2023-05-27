@@ -1,0 +1,5 @@
+Rule <S> <SENT>
+Rule <SENT> How is <PERSON>
+Rule <PERSON> Pie
+Action <SENT> * <PERSON> Pie Pie is gucci
+Action I have no idea
