@@ -37,6 +37,7 @@ public class SceneSkillEditor extends SceneManager implements ICustomScene {
     private boolean isSlot= false;
 
     public SceneSkillEditor(int indexOfRule){
+        startCameraAvailabilityCheck();
         makeNewPane();
         id = indexOfRule;
         dataFrames = StageManager.getConnection().getSkillData();

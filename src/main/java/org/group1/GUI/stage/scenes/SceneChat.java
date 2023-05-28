@@ -42,6 +42,12 @@ public class SceneChat extends SceneManager implements ICustomScene {
         makeNewPane();
         design();
         keyboardHandler();
+        try {
+            display(10,450,240);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        startCameraAvailabilityCheck();
     }
     public void crateTextArea(){
         //User input textField

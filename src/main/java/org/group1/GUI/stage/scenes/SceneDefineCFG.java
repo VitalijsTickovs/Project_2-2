@@ -28,6 +28,7 @@ public class SceneDefineCFG extends SceneManager implements ICustomScene {
     //For each Rule/Action do some stuff
     private String sectionInput="";
     public SceneDefineCFG(){
+        startCameraAvailabilityCheck();
         makeNewPane();
         design();
         keyboardHandler();

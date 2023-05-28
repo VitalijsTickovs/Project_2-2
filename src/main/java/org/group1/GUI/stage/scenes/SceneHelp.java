@@ -10,8 +10,10 @@ import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 
 public class SceneHelp extends SceneManager implements ICustomScene {
+
     private Button exitButton;
     public SceneHelp() {
+        startCameraAvailabilityCheck();
         makeNewPane();
         design();
     }

@@ -11,9 +11,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
+
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 import org.group1.back_end.Camera.CameraEndPoint;
+import org.opencv.core.Mat;
 
 
 public class SceneLogin extends SceneManager implements ICustomScene {
@@ -22,11 +25,17 @@ public class SceneLogin extends SceneManager implements ICustomScene {
 
     private final TextField loginTextField, passwordTextField;
     public SceneLogin(){
+        detect=1;
         makeNewPane();
         loginTextField = new TextField();
         passwordTextField = new PasswordField();
         design();
         keyboardHandler();
+        try {
+            display(10,10,300);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void setText(Text element, int posX, int posY){
         element.setFont(Font.font("Impact",20));
@@ -90,7 +99,8 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         loginButton.setOnMouseExited(e -> loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)"));
         loginButton.setOnAction(e -> {
             //close the existing stage
-            if(CameraEndPoint.authenticate()) {
+            Mat mat = cameraEndPoint.cam.getImage();
+            if(cameraEndPoint.authenticator.detect(mat)) {
                 //create and display the loading scree
                 SceneLoading loadingScreen = new SceneLoading();
                 StageManager.setScene(loadingScreen);

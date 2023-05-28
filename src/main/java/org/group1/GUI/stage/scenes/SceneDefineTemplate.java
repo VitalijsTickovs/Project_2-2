@@ -26,6 +26,7 @@ public class SceneDefineTemplate extends SceneManager implements ICustomScene {
 
     private String skillInput="";
     public SceneDefineTemplate(){
+        startCameraAvailabilityCheck();
         makeNewPane();
         design();
         keyboardHandler();
