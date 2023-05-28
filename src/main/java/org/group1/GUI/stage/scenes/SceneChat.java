@@ -198,9 +198,9 @@ public class SceneChat extends SceneManager implements ICustomScene {
     public void createScroolList(){
 
         //This is the blank rectangle to the left of the arrow
-        Rectangle rectangle = new Rectangle(40,260,100,25);
+        Rectangle rectangle = new Rectangle(40,260,150,25);
         rectangle.setFill(Color.WHITE);
-        Text textMessage = new Text("NameOfList");
+        Text textMessage = new Text("Perfect Matching");
         textMessage.setX(50);
         textMessage.setY(280);
         textMessage.setFill(Color.LIGHTGRAY);
@@ -214,7 +214,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         listView.getItems().addAll("Perfect Matching", "Keywords", "Vectors", "Vector Sequences");
 
         // Enable vertical scrolling for the ListView
-        listView.setPrefSize(100, 125);
+        listView.setPrefSize(150, 125);
 
         // Initially hide the list
         listView.setVisible(false);
@@ -229,7 +229,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         rectangle.setOnMouseClicked(event -> {
             listView.setVisible(!listView.isVisible());
         });
-        bar.setTranslateX(140);
+        bar.setTranslateX(190);
         bar.setTranslateY(260);
         UIPane.getChildren().add(bar);
         UIPane.getChildren().add(listView);
@@ -241,6 +241,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                                         String old_val, String new_val) {
                         switch (new_val){
                             case ("Perfect Matching"):
+                                textMessage.setText("Perfect Matching");
                                 StageManager.getConnection().setDatabase(DB.DB_PERFECT_MATCHING);
                                 try {
                                     StageManager.getConnection().reload();
@@ -249,6 +250,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                                 }
                                 break;
                             case ("Keywords"):
+                                textMessage.setText("Keywords");
                                 StageManager.getConnection().setDatabase(DB.DB_KEYWORDS);
                                 try {
                                     StageManager.getConnection().reload();
@@ -257,6 +259,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                                 }
                                 break;
                             case ("Vectors"):
+                                textMessage.setText("Vectors");
                                 StageManager.getConnection().setDatabase(DB.DB_VECTORS);
                                 try {
                                     StageManager.getConnection().reload();
@@ -265,6 +268,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                                 }
                                 break;
                             case ("Vector Sequences"):
+                                textMessage.setText("Vector Sequences");
                                 StageManager.getConnection().setDatabase(DB.DB_VECTORS_SEQ);
                                 try {
                                     StageManager.getConnection().reload();
