@@ -44,7 +44,7 @@ public class MAIN {
 
             for (int j = 0; j < diffWays.length; j++) {
 
-                Response.setDatabase(db[i]);
+//                Response.setDatabase(db[i]);
                 String response = s.getResponse(diffWays[j]).trim();
                 System.out.println("QUERY: " + diffWays[j] + " ----> RESPONSE: " + response);
 

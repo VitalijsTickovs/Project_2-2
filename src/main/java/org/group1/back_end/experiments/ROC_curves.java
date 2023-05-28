@@ -68,7 +68,7 @@ public class ROC_curves {
         ROC_curves a = new ROC_curves();
         List<String[]> list = a.read("src/main/java/org/group1/back_end/experiments/Robustness.txt", "->");
 
-        Response.setDatabase(DB.DB_VECTORS_SEQ);
+//        Response.setDatabase(DB.DB_VECTORS_SEQ);
         double[] vaues = a.computeROC(list);
 
         for (double s : vaues ) {

@@ -1,14 +1,14 @@
 package org.group1.GUI.stage.scenes;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group1.GUI.stage.StageManager;
@@ -36,26 +36,26 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         element.setTranslateY(posY);
         UIPane.getChildren().add(element);
     }
-    private void setTextField(TextField textField, int posX, int posY){
+    private void setTextField(TextField textField, int posY){
         textField.setPrefWidth(250);
         textField.setPrefHeight(30);
-        textField.setTranslateX(posX);
+        textField.setTranslateX(550);
         textField.setTranslateY(posY);
         textField.setStyle("-fx-background-color: transparent;" +"-fx-border-width: 2px;" + "-fx-border-color:rgba(159,182,189,1);"+ "-fx-text-fill: white;");
         UIPane.getChildren().add(textField);
     }
-    Thread loadingThread = new Thread();
+
     private void setTextElements(){
         Text username = new Text("Username: ");
         setText(username,550, 270);
 
-        setTextField(loginTextField, 550, 280);
+        setTextField(loginTextField, 280);
 
 
         Text password = new Text("Password: ");
         setText(password, 550, 340);
 
-        setTextField(passwordTextField, 550, 350);
+        setTextField(passwordTextField, 350);
 
         Text logo1 = new Text("UM ");
         setText(logo1, 160, 340);
@@ -86,12 +86,8 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         loginButton = ButtonFactory.createButton("Login", 550, 400);
         loginButton.setStyle("-fx-background-color: rgba(159,182,189,1);");
         UIPane.getChildren().add(loginButton);
-        loginButton.setOnMouseEntered(e -> {
-            loginButton.setStyle("-fx-background-color: rgba(42,97,117,1)");
-        });
-        loginButton.setOnMouseExited(e -> {
-            loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)");
-        });
+        loginButton.setOnMouseEntered(e -> loginButton.setStyle("-fx-background-color: rgba(42,97,117,1)"));
+        loginButton.setOnMouseExited(e -> loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)"));
         loginButton.setOnAction(e -> {
             //close the existing stage
             if(CameraEndPoint.authenticate()) {
@@ -101,13 +97,13 @@ public class SceneLogin extends SceneManager implements ICustomScene {
 
                 // Start a separate thread to load the models
                 Thread loadingThread = new Thread(() -> {
-                    // Delays the loading so it can display the new stage content
+                    // Delays the loading, so it can display the new stage content
                     try {
                         Thread.sleep(6000); // Adjust the duration as needed
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
-                    // Terminate loading screen and open the chatwindow
+                    // Terminate loading screen and open the chat window
                     Platform.runLater(() -> {
                         SceneChat sceneChat = new SceneChat();
                         StageManager.setScene(sceneChat);
@@ -125,33 +121,31 @@ public class SceneLogin extends SceneManager implements ICustomScene {
 
     //@Override
     public void keyboardHandler() {
-        this.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.ESCAPE) {
-                    StageManager.close();
-                    ke.consume();
-                }else if(ke.getCode() == KeyCode.ENTER){
-                    //create and display the loading scree
-                    SceneLoading loadingScreen = new SceneLoading();
-                    StageManager.setScene(loadingScreen);
+        this.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+            if (ke.getCode() == KeyCode.ESCAPE) {
+                StageManager.close();
+                ke.consume();
+            }else if(ke.getCode() == KeyCode.ENTER){
+                //create and display the loading scree
+                SceneLoading loadingScreen = new SceneLoading();
+                StageManager.setScene(loadingScreen);
 
-                    // Start a separate thread to load the models
-                    Thread loadingThread = new Thread(() -> {
-                        // Delays the loading so it can display the new stage content
-                        try {
-                            Thread.sleep(3000); // Adjust the duration as needed
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                        // Terminate loading screen and open the chatwindow
-                        Platform.runLater(() -> {
-                            SceneChat sceneChat = new SceneChat();
-                            StageManager.setScene(sceneChat);
-                        });
+                // Start a separate thread to load the models
+                Thread loadingThread = new Thread(() -> {
+                    // Delays the loading, so it can display the new stage content
+                    try {
+                        Thread.sleep(3000); // Adjust the duration as needed
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    // Terminate loading screen and open the chat window
+                    Platform.runLater(() -> {
+                        SceneChat sceneChat = new SceneChat();
+                        StageManager.setScene(sceneChat);
                     });
-                    loadingThread.start();
+                });
+                loadingThread.start();
 
-                }
             }
         });
     }

@@ -1,18 +1,25 @@
 package org.group1.GUI.stage.scenes;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 import org.group1.GUI.stage.scenes.utils.ErrorHandling;
+import org.group1.back_end.utilities.enums.DB;
 
 import java.util.*;
 
@@ -67,7 +74,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         UIPane.getChildren().add(logoutButton);
 
         //exit Button
-        exitButton = ButtonFactory.createButton("EXIT", 20, 250);
+        exitButton = ButtonFactory.createButton("EXIT", 20, 580);
         UIPane.getChildren().add(exitButton);
 
         // send button
@@ -182,6 +189,89 @@ public class SceneChat extends SceneManager implements ICustomScene {
         UIPane.getChildren().add(scrollPane);
     }
 
+    public void createScroolList(){
+
+        //This is the blank rectangle to the left of the arrow
+        Rectangle rectangle = new Rectangle(40,260,100,25);
+        rectangle.setFill(Color.WHITE);
+        Text textMessage = new Text("NameOfList");
+        textMessage.setX(50);
+        textMessage.setY(280);
+        textMessage.setFill(Color.LIGHTGRAY);
+        textMessage.setFont(Font.font("Ariel",16));
+        //textMessage.setStyle("-fx-font-weight: bold");
+        UIPane.getChildren().add(rectangle);
+        UIPane.getChildren().add(textMessage);
+
+        //Here we add the content of the list
+        ListView<String> listView = new ListView<>();
+        listView.getItems().addAll("Perfect Matching", "Keywords", "Vectors", "Vector Sequences");
+
+        // Enable vertical scrolling for the ListView
+        listView.setPrefSize(100, 125);
+
+        // Initially hide the list
+        listView.setVisible(false);
+        listView.setTranslateX(40);
+        listView.setTranslateY(260);
+
+        // Listeners to show and hide list
+        Button bar = new Button("\\/");
+        bar.setOnMouseClicked(event -> {
+            listView.setVisible(!listView.isVisible());
+        });
+        rectangle.setOnMouseClicked(event -> {
+            listView.setVisible(!listView.isVisible());
+        });
+        bar.setTranslateX(140);
+        bar.setTranslateY(260);
+        UIPane.getChildren().add(bar);
+        UIPane.getChildren().add(listView);
+
+        // THIS IS WHERE WE DETECT IF AN ITEM IN THE LIST HAS BEEN SELECTED
+        listView.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<String>() {
+                    public void changed(ObservableValue<? extends String> ov,
+                                        String old_val, String new_val) {
+                        switch (new_val){
+                            case ("Perfect Matching"):
+                                StageManager.getConnection().setDatabase(DB.DB_PERFECT_MATCHING);
+                                try {
+                                    StageManager.getConnection().reload();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                break;
+                            case ("Keywords"):
+                                StageManager.getConnection().setDatabase(DB.DB_KEYWORDS);
+                                try {
+                                    StageManager.getConnection().reload();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                break;
+                            case ("Vectors"):
+                                StageManager.getConnection().setDatabase(DB.DB_VECTORS);
+                                try {
+                                    StageManager.getConnection().reload();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                break;
+                            case ("Vector Sequences"):
+                                StageManager.getConnection().setDatabase(DB.DB_VECTORS_SEQ);
+                                try {
+                                    StageManager.getConnection().reload();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                break;
+                        }
+                        // You can use the if statements to match the enum names to item names
+                    }
+                });
+    }
+
     /**
      * Main method to design the javaFX scene (magic go booom)
      */
@@ -192,6 +282,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         crateTextArea();
         createButtons();
         createScrollPane();
+        createScroolList();
     }
     public void keyboardHandler(){
         addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {

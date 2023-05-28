@@ -47,11 +47,11 @@ public class Response {
     }
 
 
-    public static DB getDatabase() {
+    public DB getDatabase() {
         return database;
     }
 
-    public static void setDatabase(DB s) {
+    public void setDatabase(DB s) {
         database = s;
     }
 
