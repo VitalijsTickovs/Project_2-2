@@ -27,7 +27,7 @@ public class SceneManager extends Scene {
             while (detect == 1) {
                 Mat mat = cameraEndPoint.cam.getImage();
                 //System.out.println(cameraEndPoint.authenticator.detect(mat));
-                System.out.println(detect);
+                //System.out.println(detect);
                 if (cameraEndPoint.authenticator.detect(mat)==false) {
                     detect=0;
                 }

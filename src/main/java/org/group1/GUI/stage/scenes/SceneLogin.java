@@ -32,7 +32,7 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         design();
         keyboardHandler();
         try {
-            display(10,10,300);
+            display(530,65,300);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -198,7 +198,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
     public void createScroolList(){
 
         //This is the blank rectangle to the left of the arrow
-        Rectangle rectangle = new Rectangle(40,260,150,25);
+        Rectangle rectangle = new Rectangle(40,260,155,25);
         rectangle.setFill(Color.WHITE);
         Text textMessage = new Text("Perfect Matching");
         textMessage.setX(50);
@@ -214,7 +214,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         listView.getItems().addAll("Perfect Matching", "Keywords", "Vectors", "Vector Sequences");
 
         // Enable vertical scrolling for the ListView
-        listView.setPrefSize(150, 125);
+        listView.setPrefSize(155, 125);
 
         // Initially hide the list
         listView.setVisible(false);
