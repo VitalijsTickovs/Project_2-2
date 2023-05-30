@@ -13,7 +13,6 @@ public class SceneHelp extends SceneManager implements ICustomScene {
 
     private Button exitButton;
     public SceneHelp() {
-        startCameraAvailabilityCheck();
         makeNewPane();
         design();
     }

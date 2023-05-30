@@ -4,10 +4,7 @@ package org.group1.GUI.stage.scenes;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -20,6 +17,7 @@ import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 import org.group1.back_end.utilities.enums.DB;
+import org.opencv.core.Mat;
 
 import java.util.*;
 
@@ -42,12 +40,12 @@ public class SceneChat extends SceneManager implements ICustomScene {
         makeNewPane();
         design();
         keyboardHandler();
-        try {
-            display(10,450,240);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        startCameraAvailabilityCheck();
+//        try {
+//            display(10,450,240);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        //startCameraAvailabilityCheck();
     }
     public void crateTextArea(){
         //User input textField
@@ -119,15 +117,24 @@ public class SceneChat extends SceneManager implements ICustomScene {
         //user chat
         ButtonFactory.setDefaultActions(sendUserInput);
         sendUserInput.setOnAction(e -> {
-            if(errorHandling.stringLengthError(userInput.getText())) {
-                //user input
-                setUserInput(userInput.getText());
-                setChatText(currentUserInput, false);
-                //Getting response from the bot
-                setBotChatText(StageManager.getResponse(currentUserInput));
-                setChatText(currentBotInput, true);
-                userInput.setText("");
-            }else System.out.println("invalid message");
+            Mat mat = cameraEndPoint.cam.getImage();
+            if (cameraEndPoint.authenticator.detect(mat)) {
+                if(errorHandling.stringLengthError(userInput.getText())) {
+                        //user input
+                        setUserInput(userInput.getText());
+                        setChatText(currentUserInput, false);
+                        //Getting response from the bot
+                        setBotChatText(StageManager.getResponse(currentUserInput));
+                        setChatText(currentBotInput, true);
+                        userInput.setText("");
+                } else System.out.println("invalid message");
+            }else{
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Alert Dialog");
+                alert.setHeaderText("No User Detected");
+                alert.setContentText("Sorry, your presence was not detected on the camera. The program cannot proceed with the request.");
+                alert.showAndWait();
+            }
         });
     }
 

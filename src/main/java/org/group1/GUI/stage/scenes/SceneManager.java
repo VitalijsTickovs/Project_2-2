@@ -23,19 +23,24 @@ public class SceneManager extends Scene {
     CameraEndPoint cameraEndPoint = new CameraEndPoint();
     int detect=1;
     public void startCameraAvailabilityCheck() {
+
         Thread cameraThread = new Thread(() -> {
-            while (detect == 1) {
+            int count = 0;
+            while (detect == 1 && count <= 20) {
                 Mat mat = cameraEndPoint.cam.getImage();
                 //System.out.println(cameraEndPoint.authenticator.detect(mat));
-                //System.out.println(detect);
+                System.out.println(detect);
                 if (cameraEndPoint.authenticator.detect(mat)==false) {
                     detect=0;
+                    count++;
+                }else{
+                    count = 0;
                 }
             }
             Platform.runLater(() -> {
-                System.out.println(" fudhfsjhfsdkj");
-                SceneLogin sceneLogin = new SceneLogin();
-                StageManager.setScene(sceneLogin);
+//                System.out.println(" fudhfsjhfsdkj");
+//                SceneLogin sceneLogin = new SceneLogin();
+//                StageManager.setScene(sceneLogin);
             });
         });
 

@@ -16,7 +16,6 @@ public class SceneSkillList extends SceneManager implements ICustomScene {
     private final int skillSize;
 
     public SceneSkillList(){
-        startCameraAvailabilityCheck();
         makeNewPane();
         this.skillSize = StageManager.getConnection().getSkillData().size();
         loadSkills();

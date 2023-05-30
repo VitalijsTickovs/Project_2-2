@@ -31,11 +31,11 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         passwordTextField = new PasswordField();
         design();
         keyboardHandler();
-        try {
-            display(530,65,300);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            display(530,65,300);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
     private void setText(Text element, int posX, int posY){
         element.setFont(Font.font("Impact",20));
