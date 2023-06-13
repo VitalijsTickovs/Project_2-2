@@ -2,7 +2,7 @@ from gtts import gTTS
 import os
 
 # Specify the text to be converted to speech
-text = "Saman, you are very hot and sexy. "
+text = "Loris, you are a chill guy."
 
 # Set the language
 language = 'en'

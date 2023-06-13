@@ -12,8 +12,8 @@ hop_length = 512
 n_components = 1
 
 # Define the paths to the training audio files for each speaker
-pie_file = '/Users/piedeboer/Desktop/project-2-2/speecrecognition/audio/training_data/train_pie_001.wav'
-tom_file = '/Users/piedeboer/Desktop/project-2-2/speecrecognition/audio/training_data/train_tom_001.wav'
+# pie_file = 
+# tom_file = '/Users/piedeboer/Desktop/project-2-2/speecrecognition/audio/training_data/train_tom_001.wav'
 
 # Define a function to extract the pitch and MFCC features from an audio signal
 def extract_features(audio, sr):

@@ -1,0 +1,6 @@
+"Hello, my name is Peter"
+"Today's weather is sunny and warm."
+"I enjoy playing sports, especially basketball."
+"My favorite book is Harry Potter
+"I am excited to be a part of this program."
+ 
