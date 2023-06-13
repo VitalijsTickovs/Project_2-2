@@ -43,3 +43,9 @@ Speaker Dirazation:
 
 State of the Art for Speech Recognition:
 - https://arxiv.org/pdf/2006.13979.pdf
+
+
+MODEL LINKS
+
+Speech recognition (fine tuned state of the art): 
+- https://huggingface.co/jonatasgrosman/wav2vec2-large-xlsr-53-english
