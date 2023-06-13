@@ -15,7 +15,14 @@ https://docs.google.com/document/d/1hhSv-smdDedklGq7IuoMa9LNsARUSqNJ6LPze1sE3eg/
 
 
 
-PAPERS
+PAPERS & MORE
+
+Extensive Guide Speech Processing
+- https://malaya-speech.readthedocs.io/en/latest/index.html
+
+NVIDIA - Speech Processing
+- https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/asr/intro.html
+
 
 Speech Recognition Overview
 - https://en.wikipedia.org/wiki/Speech_recognition
@@ -40,4 +47,13 @@ Speaker Recognition:
 
 Speaker Dirazation: 
 - https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/asr/speaker_diarization/intro.html
+
+Speech Recognition Noisy Environments
+- https://www.sciencedirect.com/science/article/abs/pii/B9780123747082000061
+
+Noise Sources and Supression
+https://www.sciencedirect.com/science/article/abs/pii/B9780128181300000039
+
+IBM Speech Recognition
+https://tldp.org/HOWTO/Speech-Recognition-HOWTO/inside.html
 

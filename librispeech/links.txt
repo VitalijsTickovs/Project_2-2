@@ -1,0 +1,11 @@
+LIBRISPEECH 
+
+(1) Clean
+- https://www.openslr.org/resources/12/dev-clean.tar.gz
+
+(2) Other
+- https://www.openslr.org/resources/12/dev-other.tar.gz
+
+Download both datasets and add the following lines to your .gitignore
+- librispeech/clean/
+- librispeech/other/
