@@ -1,7 +1,8 @@
 Speech Recognition 
 
 
-
+- Speech recognition = recognize speach
+- Speaker recognition = recognize who is speaking
 
 
 LINKS
