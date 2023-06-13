@@ -48,6 +48,7 @@ Speaker Recognition:
 Speaker Dirazation: 
 - https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/asr/speaker_diarization/intro.html
 
+<<<<<<< HEAD
 Speech Recognition Noisy Environments
 - https://www.sciencedirect.com/science/article/abs/pii/B9780123747082000061
 
@@ -57,3 +58,13 @@ https://www.sciencedirect.com/science/article/abs/pii/B9780128181300000039
 IBM Speech Recognition
 https://tldp.org/HOWTO/Speech-Recognition-HOWTO/inside.html
 
+=======
+State of the Art for Speech Recognition:
+- https://arxiv.org/pdf/2006.13979.pdf
+
+
+MODEL LINKS
+
+Speech recognition (fine tuned state of the art): 
+- https://huggingface.co/jonatasgrosman/wav2vec2-large-xlsr-53-english
+>>>>>>> ca66c8ae5db0fbe091c57f65ee027c8e8fcd36f9
