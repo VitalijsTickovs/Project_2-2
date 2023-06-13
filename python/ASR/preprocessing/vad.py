@@ -1,11 +1,12 @@
 import pyaudio
 import os
-import gTTS
+
 import numpy as np
 import webrtcvad
 import io
 import wave
 from threading import Thread
+from gtts import gTTS
 
 #
 # @LINKS: 
