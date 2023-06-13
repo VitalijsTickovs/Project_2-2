@@ -41,3 +41,5 @@ Speaker Recognition:
 Speaker Dirazation: 
 - https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/stable/asr/speaker_diarization/intro.html
 
+State of the Art for Speech Recognition:
+- https://arxiv.org/pdf/2006.13979.pdf
