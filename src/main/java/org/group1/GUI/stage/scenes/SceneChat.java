@@ -117,8 +117,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         //user chat
         ButtonFactory.setDefaultActions(sendUserInput);
         sendUserInput.setOnAction(e -> {
-            Mat mat = cameraEndPoint.cam.getImage();
-            if (cameraEndPoint.authenticator.detect(mat)) {
+            if (cameraEndPoint.authenticate()) {
                 if(errorHandling.stringLengthError(userInput.getText())) {
                         //user input
                         setUserInput(userInput.getText());

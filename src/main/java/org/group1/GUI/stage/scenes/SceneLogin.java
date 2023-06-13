@@ -99,9 +99,12 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         loginButton.setOnMouseExited(e -> loginButton.setStyle("-fx-background-color: rgba(159,182,189,1)"));
         loginButton.setOnAction(e -> {
             //close the existing stage
-            Mat mat = cameraEndPoint.cam.getImage();
-            if(cameraEndPoint.authenticator.detect(mat)) {
+
+            if(cameraEndPoint.authenticate()) {
                 //create and display the loading scree
+                System.out.println(cameraEndPoint.authenticate());
+                System.out.println("Login successful");
+                System.out.println("Welcome: " + cameraEndPoint.detect());
                 SceneLoading loadingScreen = new SceneLoading();
                 StageManager.setScene(loadingScreen);
 

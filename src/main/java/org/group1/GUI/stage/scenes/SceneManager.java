@@ -9,76 +9,57 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.bytedeco.javacv.CanvasFrame;
 import org.group1.GUI.stage.StageManager;
 import org.group1.back_end.Camera.CameraEndPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 
 public class SceneManager extends Scene {
     public static int screenWidth = 900;
     public static int screenHeight = 700;
     protected AnchorPane UIPane;
     protected AnchorPane scrollChat = new AnchorPane();
-    CameraEndPoint cameraEndPoint = new CameraEndPoint();
+    CameraEndPoint cameraEndPoint;
     int detect=1;
-    public void startCameraAvailabilityCheck() {
 
-        Thread cameraThread = new Thread(() -> {
-            int count = 0;
-            while (detect == 1 && count <= 20) {
-                Mat mat = cameraEndPoint.cam.getImage();
-                //System.out.println(cameraEndPoint.authenticator.detect(mat));
-                System.out.println(detect);
-                if (cameraEndPoint.authenticator.detect(mat)==false) {
-                    detect=0;
-                    count++;
-                }else{
-                    count = 0;
-                }
-            }
-            Platform.runLater(() -> {
-//                System.out.println(" fudhfsjhfsdkj");
-//                SceneLogin sceneLogin = new SceneLogin();
-//                StageManager.setScene(sceneLogin);
-            });
-        });
-
-        cameraThread.setDaemon(true);
-        cameraThread.start();
-    }
     //Create Image Display
     public void display(int x,int y,int width) throws Exception {
         //Creating the image view
         ImageView imageView = new ImageView();
         //Setting image to the image view
-        imageView.setImage(cameraEndPoint.getImage());
+        imageView.setImage(mat2Image(cameraEndPoint.paint()));
         //Setting the image view parameters
         imageView.setX(x);
         imageView.setY(y);
         imageView.setFitWidth(width);
         imageView.setPreserveRatio(true);
+
         UIPane.getChildren().add(imageView);
-
-        Thread cameraThread = new Thread(() -> {
-            while (true) {
-                Image image = cameraEndPoint.getImage();
-                if (image != null) {
-                    Mat mat = cameraEndPoint.cam.getImage();
-                    //System.out.println(cameraEndPoint.authenticator.detect(mat));
-                    mat = cameraEndPoint.manager.detect(mat);
-                    imageView.setImage(image);
-                }
-            }
-        });
-
-        cameraThread.setDaemon(true);
-        cameraThread.start();
     }
+
+    public Image mat2Image(Mat frame) {
+        // create a temporary buffer
+        MatOfByte buffer = new MatOfByte();
+        // encode the frame in the buffer, according to the PNG format
+        Imgcodecs.imencode(".png", frame, buffer);
+        // build and return an Image created from the image encoded in the buffer
+        return new Image(new ByteArrayInputStream(buffer.toArray()));
+    }
+
 
     public SceneManager(){
         super(new AnchorPane(), screenWidth, screenHeight);
         setFill(Color.rgb(18,64,76));
+        try{
+            cameraEndPoint = new CameraEndPoint();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public void createSideMenu(){
         Rectangle sideMenu = new Rectangle(0,0,250,screenHeight);
