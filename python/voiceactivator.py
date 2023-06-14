@@ -56,7 +56,7 @@ def detect_voice():
             # Check if energy level surpasses the threshold
             if energy > ENERGY_THRESHOLD:
                 # Print 'loud' to indicate exceeding energy threshold
-                print('Loud')
+                # print('Loud')
 
                 if not capturing_audio:
                     capturing_audio = True
@@ -65,7 +65,7 @@ def detect_voice():
                 audio_buffer.append(data)
 
                 try:
-                    print('Speech')
+                    # print('Speech')
 
                     # Convert the audio data into a WAV file
                     with wave.open('audio.wav', 'wb') as wav_file:
@@ -85,7 +85,7 @@ def detect_voice():
                     # with sr.AudioFile('audio.wav') as source:
                         # audio = recognizer.record(source)
                         # text = recognizer.recognize_google(audio)
-                    print('Transcribed Text:', text)
+                    print('text', text)
 
                     # Check if the activation phrase is detected
                     if activation_phrase in text.lower() and not is_activated:
@@ -112,47 +112,6 @@ def detect_voice():
 detect_voice()
 
 print('Welcome to chatbott')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ======================================
