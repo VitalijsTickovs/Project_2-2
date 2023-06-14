@@ -125,26 +125,21 @@ public class Skill {
             ContextFreeGrammar cfg = new ContextFreeGrammar(input);
             //TODO: FOR NATALIA
             Map<String, String[]> productions = cfg.formatTree.PRODUCTIONS;
-            Map<String, List<String>> slotsInRules = new HashMap<>();
+            Map<String, Set<String>> slotsInRules = new HashMap<>();
             Pattern pattern = Pattern.compile("<(.*?)>");
-
             for(String key: productions.keySet()){
                 String[] values = productions.get(key);
-                int max = 0;
-                List<String> slots = new ArrayList<>();
+                Set<String> slotset = new HashSet<>();
                 for(String value: values){
                     int slotsUsed = RegexUtilities.countRegexOccurrences(value, "<.*?>" );
                     if(slotsUsed>0){
-                        if(slotsUsed>max) {
-                            max = slotsUsed;
-                            Matcher matcher = pattern.matcher(value);
-                            while (matcher.find()) {
-                                slots.add(matcher.group());
-                            }
+                        Matcher matcher = pattern.matcher(value);
+                        while (matcher.find()) {
+                            slotset.add(matcher.group());
                         }
                     }
                 }
-                slotsInRules.put(key, slots);
+                slotsInRules.put(key, slotset);
             }
 
             ///// TODO: slotInRules is a hash map which has key as <LOCATION> and in the for loop
