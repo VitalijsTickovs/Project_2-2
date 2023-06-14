@@ -16,3 +16,5 @@ class SpeechRecognizer:
 
         predicted_ids = torch.argmax(logits, dim=-1)
         return self.processor.decode(predicted_ids[0])
+    
+    
