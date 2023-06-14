@@ -27,7 +27,7 @@ public class ContextFreeGrammar {
 
         public static Set<String> terminals = new HashSet<>();
 
-        static FormatTree formatTree;
+        public FormatTree formatTree;
 
         public ContextFreeGrammar(List<String> data) {
             REAL_DATA = new HashMap<>();

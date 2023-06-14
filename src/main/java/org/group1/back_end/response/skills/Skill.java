@@ -8,9 +8,12 @@ import org.group1.back_end.response.skills.databases.DB_Manager;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.textprocessing.SimpleProcess;
 import org.group1.back_end.utilities.enums.DB;
+import org.group1.back_end.utilities.strings.RegexUtilities;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.group1.back_end.textprocessing.ComplexProcess.lemmas;
 
@@ -120,6 +123,32 @@ public class Skill {
                 input.add(row);
             }
             ContextFreeGrammar cfg = new ContextFreeGrammar(input);
+            //TODO: FOR NATALIA
+            Map<String, String[]> productions = cfg.formatTree.PRODUCTIONS;
+            Map<String, List<String>> slotsInRules = new HashMap<>();
+            Pattern pattern = Pattern.compile("<(.*?)>");
+
+            for(String key: productions.keySet()){
+                String[] values = productions.get(key);
+                int max = 0;
+                List<String> slots = new ArrayList<>();
+                for(String value: values){
+                    int slotsUsed = RegexUtilities.countRegexOccurrences(value, "<.*?>" );
+                    if(slotsUsed>0){
+                        if(slotsUsed>max) {
+                            max = slotsUsed;
+                            Matcher matcher = pattern.matcher(value);
+                            while (matcher.find()) {
+                                slots.add(matcher.group());
+                            }
+                        }
+                    }
+                }
+                slotsInRules.put(key, slots);
+            }
+
+            ///// TODO: slotInRules is a hash map which has key as <LOCATION> and in the for loop
+            //// i get the largest set of slots used
             List<String[]> pairSet = cfg.getRealData();
 
             for (String[] pair : pairSet) {

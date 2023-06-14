@@ -9,9 +9,11 @@ import java.util.Set;
 
 public class Input {
     private List<Entry> entries;
+    private List<String> examples;
 
     public Input() {
         this.entries = new ArrayList<>();
+        examples = new ArrayList<>();
     }
 
     public void addEntry(String[][] data, String query) {
@@ -34,6 +36,14 @@ public class Input {
             Entry entry = new Entry(query, intent, entities);
             entries.add(entry);
         }
+    }
+
+    public void addExample(String query){
+
+    }
+
+    public void addStory(String output){
+
     }
 
     public void setEntries(List<Entry> common_examples) {
