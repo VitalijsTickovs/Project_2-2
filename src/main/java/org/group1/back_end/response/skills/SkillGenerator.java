@@ -1,5 +1,6 @@
 package org.group1.back_end.response.skills;
 
+import org.group1.back_end.response.skills.NLU.Input;
 import org.group1.back_end.response.skills.dataframe.Cell;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.response.skills.dataframe.Rows;
@@ -18,6 +19,7 @@ public class SkillGenerator {
     private String deafault;
     private Set<String> slotSet;
     private List<String> questions;
+    public Input input;
 
     List<String> combinations = new ArrayList<>();
 
@@ -44,6 +46,7 @@ public class SkillGenerator {
         questions = new LinkedList<>();
         actions = new LinkedList<>();
         skillData = new SkillData();
+        input = new Input();
     }
 
 
@@ -207,14 +210,10 @@ public class SkillGenerator {
                 data[j][0] = slot;
             }
 
-
+            input.addEntry(data, originalQuestion);
             makeDataFrame(data, line);
         }
-
-
         format.setProblem_action(false);
-
-
     }
 
 

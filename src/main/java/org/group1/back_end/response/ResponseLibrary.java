@@ -21,7 +21,6 @@ public class ResponseLibrary {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-
         VECTOR_SIF = new VectorSIF();
         VECTOR_SIF.createFrequencyTable();
     }

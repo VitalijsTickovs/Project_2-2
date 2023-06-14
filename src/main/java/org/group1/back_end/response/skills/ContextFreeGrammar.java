@@ -11,7 +11,10 @@ public class ContextFreeGrammar {
         public static HashMap<String, String> REAL_DATA;
 
         public static List<String[]> REAL_REAL_DATA = new ArrayList<>();
-
+        //TODO: FOR NATALIA
+        public List<String> beforeKleeneStar = new ArrayList<>();
+        public List<List<String[]>> slotsUsed = new ArrayList<>();
+        public List<String> actionsToSlots = new ArrayList<>();
         static List<String> questions;
 
         // each row, which contains terminals and non-terminals
@@ -118,7 +121,6 @@ public class ContextFreeGrammar {
                     // RHS is the product
                     ruleParts[1] = ruleParts[1].trim();
                     RHS.add(ruleParts[1]);
-
                 }else{
                     //I have no idea case
                     RHS.add(ruleParts[0]);
@@ -142,6 +144,7 @@ public class ContextFreeGrammar {
         public void createAction(String LHS, String RHS){
 
             Set<String> variables = new HashSet<>();
+            List<String[]> action = new ArrayList<>();
             while (isPlaceHolder(RHS)){
                 //Removing placeholder
                 String placeHolder = getFirstPlaceHolder(RHS);
@@ -151,9 +154,13 @@ public class ContextFreeGrammar {
                 String variable = removeVariable(RHS);
                 variables.add(variable);
                 RHS = RHS.replaceFirst(variable, "").trim();
+                String[] slotsUsed = new String[]{placeHolder,variable};
+                action.add(slotsUsed);
             }
             //variables.forEach(System.out::println);
-
+            beforeKleeneStar.add(LHS);
+            slotsUsed.add(action);
+            actionsToSlots.add(RHS);
             mapCorrectActions(findPositives(LHS, variables), RHS);
 
         }

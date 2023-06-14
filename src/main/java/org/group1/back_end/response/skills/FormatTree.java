@@ -3,13 +3,40 @@ package org.group1.back_end.response.skills;
 import java.util.*;
 
 public class FormatTree {
+    //TODO: TO GET SLOTS FOR CFG (in for loop ignore placeholders)
     Map<String, String[]> PRODUCTIONS = new HashMap<>();
+    boolean flag = false;
+    public ArrayList<String[]> getCFGSlots(){
+        ArrayList<String[]> temp = new ArrayList<>();
+        for (String keys: PRODUCTIONS.keySet()) {
+            //System.out.println("Productions: " + Arrays.toString(PRODUCTIONS.get(keys)));
+            //Looping through list containing all products
+            for (int i = 0; i < PRODUCTIONS.get(keys).length; i++) {
+                //looping through each individual string
+                for (int j = 0; j < PRODUCTIONS.get(keys)[i].length(); j++) {
+                    //if we find this symbol: '<' we break from the loop otherwise we will add this list to array
+                    if (PRODUCTIONS.get(keys)[i].charAt(j)=='<'){
+                        break;
+                    }else if (j==PRODUCTIONS.get(keys)[i].length()-1){
+                        flag=true;
+                        break;
+                    }
+                }
+            }
+            if (flag==true){
+                //System.out.println("Chosen: " + Arrays.toString(PRODUCTIONS.get(keys)));
+                temp.add(PRODUCTIONS.get(keys));
+                flag = false;
+            }
+        }
+        return temp;
+    }
+
 
     public FormatTree(List<String> LHS, List<String[]> RHS) {
         generateProductions(LHS, RHS);
-
+        getCFGSlots();
     }
-
 
     public void generateProductions(List<String> LHS, List<String[]> RHS){
         for (int i = 0; i < LHS.size(); i++) {

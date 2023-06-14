@@ -4,6 +4,7 @@ Slot <CITY> Amsterdam
 Slot <CITY> Sittard
 Slot <CITY> Eind
 Slot <CITY> Utrecht
+Slot <CITY> Szczecin
 Slot <DAY> Monday
 Slot <DAY> Tuesday
 Slot <DAY> Wednesday
@@ -30,3 +31,4 @@ Action <CITY> Eind <DAY> Saturday <TIME> 255:00 Save
 Action <CITY> Sittard <DAY> Tuesday <TIME> 10:00 Hi
 Action <DAY> Tuesday <TIME> 10:00 fdasfdasfsd
 Action <DAY> Tuesday <TIME> 09:00 Hello to every City
+Action <CITY> Amsterdam <DAY> Wednesday <TIME> 15:00 golf

@@ -3,6 +3,7 @@ package org.group1.back_end.response.skills;
 import org.apache.ibatis.jdbc.SQL;
 import org.group1.back_end.response.Response;
 import org.group1.back_end.response.ResponseLibrary;
+import org.group1.back_end.response.skills.NLU.JSONConverter;
 import org.group1.back_end.response.skills.databases.DB_Manager;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
 import org.group1.back_end.textprocessing.SimpleProcess;
@@ -50,10 +51,13 @@ public class Skill {
     public void generateSkills() throws Exception {
         List<String> texts = SERVICE.readAll();
         List<String[]> pairSet = new ArrayList<>();
+        JSONConverter jsonConverter = new JSONConverter();
         for (String text : texts){
             System.out.println("=====================================");
             System.out.println("Skill: \n" + text + "\n");
             SkillGenerator sp = new SkillGenerator(text);
+
+            jsonConverter.addInput(sp.input);
 
             List<String> questions = sp.getQuestions();
             List<String> actions = sp.getActions();
@@ -97,6 +101,8 @@ public class Skill {
 
             System.out.println("===================================== \n\n");
         }
+
+        jsonConverter.makeJSON();
 
         for (String[] pair : pairSet) {
             DATABASE_MANAGER.add(pair[0], pair[1]);
