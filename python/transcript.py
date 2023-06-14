@@ -3,7 +3,7 @@ import speech_recognition as sr
 # DESCRIPTION:
 #   this script generates string transcripts of audio files
 
-filename = "speech_test_002.wav"
+filename = "/Users/piedeboer/Documents/GitHub/Project_2-2/datasets/unsorted/aaron_001.wav"
 
 # initialize the recognizer
 r = sr.Recognizer()
