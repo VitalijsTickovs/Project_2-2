@@ -1,0 +1,31 @@
+import sounddevice as sd
+import soundfile as sf
+import numpy as np
+# So the SAMPLERATE variable (eg : 48000,16000) is not pachine dependent anymore
+class AudioRecorder:
+    def __init__(self):
+        self.samplerate = int(sd.query_devices(kind='input')['default_samplerate'])
+        self.channels = 1
+
+    def record_audio(self, duration):
+        print("Recording...")
+        recording = sd.rec(int(duration * self.samplerate), 
+                           samplerate=self.samplerate, 
+                           channels=self.channels)
+        sd.wait()  # Wait until recording is finished
+        print("Recording finished")
+        return recording
+
+    def save_as_wav(self, filename, data):
+        sf.write(filename, data, self.samplerate)
+
+recorder = AudioRecorder()
+
+# Record for 5 seconds
+audio_data = recorder.record_audio(5)
+
+# The output might need to be normalized to -1,1 range for it to be correctly read by librosa
+audio_data = audio_data / np.abs(audio_data).max()
+
+# Save as .wav file
+recorder.save_as_wav('recording.wav', audio_data)
