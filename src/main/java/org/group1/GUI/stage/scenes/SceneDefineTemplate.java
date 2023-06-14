@@ -19,7 +19,7 @@ import static org.group1.back_end.utilities.GeneralFileService.*;
 
 
 public class SceneDefineTemplate extends SceneManager implements ICustomScene {
-    private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton, defineCFG;
+    private Button displaySkills,back,help,sendUserInput,defineSkills,actionButton, slotButton, defineCFG, displayCFG;
     private final ErrorHandling errorHandling = new ErrorHandling();
     private TextArea questionInput, previousQuestion;
     private Text taskText;
@@ -43,6 +43,11 @@ public class SceneDefineTemplate extends SceneManager implements ICustomScene {
         });
     }
     public void createButtons(){
+
+        //displayCFGutton
+        displayCFG = ButtonFactory.createButton("DISPLAY CFG", 20, 90);
+        UIPane.getChildren().add(displayCFG);
+
         //displaySkillsButton
         displaySkills = ButtonFactory.createButton("DISPLAY SKILLS", 20, 130);
         UIPane.getChildren().add(displaySkills);
@@ -81,6 +86,14 @@ public class SceneDefineTemplate extends SceneManager implements ICustomScene {
     }
 
     public void defineButtonActions() {
+
+        //displayCFGAction
+        ButtonFactory.setDefaultActions(displayCFG);
+        displayCFG.setOnAction(e -> {
+            SceneCFGList sceneCFGList = new SceneCFGList();
+            StageManager.setScene(sceneCFGList);
+        });
+
         //displaySkillsAction
         ButtonFactory.setDefaultActions(displaySkills);
         displaySkills.setOnAction(e -> {

@@ -52,7 +52,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mybatis/mybatis
     implementation 'org.mybatis:mybatis:3.5.13'
     // https://mvnrepository.com/artifact/org.tensorflow/tensorflow
-    implementation group: 'org.tensorflow', name: 'tensorflow', version: '1.15.0'
+    implementation group: 'org.tensorflow', name: 'tensorflow-core-platform', version: '0.3.3'
 }
 
 test {

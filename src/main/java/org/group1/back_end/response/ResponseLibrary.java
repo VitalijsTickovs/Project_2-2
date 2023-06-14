@@ -3,6 +3,7 @@ package org.group1.back_end.response;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.group1.back_end.ML.model_vectorization.VectorSIF;
 import org.group1.back_end.ML.model_vectorization.VectorWord2Vec;
+import org.group1.back_end.response.skills.ContextFreeGrammar;
 import org.group1.back_end.response.skills.Skill;
 import org.group1.back_end.response.skills.SkillData;
 
@@ -56,6 +57,8 @@ public class ResponseLibrary {
     public List<Set<String>> getSets(){
         return skills.getSlots();
     }
+    public ArrayList<ContextFreeGrammar> getAllCFGs() {return skills.getAllCFGs();}
+    public ContextFreeGrammar getCurrentCFG(int index) {return skills.getCurrentCFG(index);}
 
     public static class Manager {
     }

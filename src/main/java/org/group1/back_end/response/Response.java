@@ -1,5 +1,6 @@
 package org.group1.back_end.response;
 
+import org.group1.back_end.response.skills.ContextFreeGrammar;
 import org.group1.back_end.response.skills.Skill;
 import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.textprocessing.ComplexProcess;
@@ -64,4 +65,9 @@ public class Response {
     public List<Set<String>> getSlots(){
         return responseLibrary.getSets();
     }
+    //cfg related
+    public ArrayList<ContextFreeGrammar> getAllCFGs() {return responseLibrary.getAllCFGs();}
+    public ContextFreeGrammar getCurrentCFG(int index) {return responseLibrary.getCurrentCFG(index);}
+    public List<String> getActionToSlots(ContextFreeGrammar contextFreeGrammar){return contextFreeGrammar.actionsToSlots;}
+    public List<List<String[]>> getSlotsUsed(ContextFreeGrammar contextFreeGrammar){return contextFreeGrammar.slotsUsed;}
 }

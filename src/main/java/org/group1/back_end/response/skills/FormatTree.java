@@ -9,7 +9,7 @@ public class FormatTree {
     public ArrayList<String[]> getCFGSlots(){
         ArrayList<String[]> temp = new ArrayList<>();
         for (String keys: PRODUCTIONS.keySet()) {
-            //System.out.println("Productions: " + Arrays.toString(PRODUCTIONS.get(keys)));
+            System.out.println("Productions: " + Arrays.toString(PRODUCTIONS.get(keys)));
             //Looping through list containing all products
             for (int i = 0; i < PRODUCTIONS.get(keys).length; i++) {
                 //looping through each individual string
@@ -24,11 +24,12 @@ public class FormatTree {
                 }
             }
             if (flag==true){
-                //System.out.println("Chosen: " + Arrays.toString(PRODUCTIONS.get(keys)));
+                System.out.println("Chosen: " + Arrays.toString(PRODUCTIONS.get(keys)));
                 temp.add(PRODUCTIONS.get(keys));
                 flag = false;
             }
         }
+        System.out.println(" ");
         return temp;
     }
 

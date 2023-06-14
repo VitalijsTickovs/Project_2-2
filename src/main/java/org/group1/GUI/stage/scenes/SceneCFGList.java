@@ -18,7 +18,7 @@ public class SceneCFGList extends SceneManager implements ICustomScene {
     public SceneCFGList(){
         makeNewPane();
         //GET REAL DATA
-        this.skillSize = StageManager.getConnection().getSkillData().size();
+        this.skillSize = StageManager.getConnection().getCFGData().size();
         loadSkills();
         design();
     }
@@ -28,7 +28,7 @@ public class SceneCFGList extends SceneManager implements ICustomScene {
      */
     public void loadSkills(){
         for (int i = 1; i < this.skillSize+1; i++) {
-            ruleNames.add("Rule "+i);
+            ruleNames.add("CFG "+i);
         }
     }
 
@@ -137,8 +137,8 @@ public class SceneCFGList extends SceneManager implements ICustomScene {
                 button.setTextFill(Color.WHITE);
             });
             button.setOnAction(e-> {
-                SceneSkillEditor sceneSkillEditor = new SceneSkillEditor(tempIndex);
-                StageManager.setScene(sceneSkillEditor);
+                SceneCFGEditor sceneCFGEditor = new SceneCFGEditor(tempIndex);
+                StageManager.setScene(sceneCFGEditor);
             });
             scrollChat.getChildren().add(button);
             buttons.add(button);

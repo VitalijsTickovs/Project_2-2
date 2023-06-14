@@ -27,6 +27,7 @@ public class Skill {
     public List<SkillData> skillDatas;
     public List<String> questions;
     public List<Set<String>> slots;
+    public ArrayList<ContextFreeGrammar> storeIndividualCFGs;
 
 
     public DataFrame skill;
@@ -150,6 +151,7 @@ public class Skill {
                 addVocabulary(pair[0]);
                 DATABASE_MANAGER.addCFG(pair[0], pair[1]);
             }
+            storeIndividualCFGs.add(cfg);
         }
     }
 
@@ -176,4 +178,7 @@ public class Skill {
         return questions;
     }
 
+    //cfg related
+    public ArrayList<ContextFreeGrammar> getAllCFGs() {return storeIndividualCFGs;}
+    public ContextFreeGrammar getCurrentCFG(int index) {return storeIndividualCFGs.get(index);}
 }
