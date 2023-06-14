@@ -7,7 +7,7 @@ import os
 import speech_recognition as sr
 import sounddevice as sd
 import noisereduce as nr
-from SpeechRecog import SpeechRecognizer
+from SpeecRecog import SpeechRecognizer
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
 from gtts import gTTS
 from io import BytesIO
