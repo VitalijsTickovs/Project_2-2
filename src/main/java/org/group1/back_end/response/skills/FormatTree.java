@@ -6,10 +6,10 @@ public class FormatTree {
     //TODO: TO GET SLOTS FOR CFG (in for loop ignore placeholders)
     Map<String, String[]> PRODUCTIONS = new HashMap<>();
     boolean flag = false;
-    public ArrayList<String[]> getCFGSlots(){
-        ArrayList<String[]> temp = new ArrayList<>();
+    public Map<String, String[]> getCFGSlots(){
+        Map<String, String[]> temp = new HashMap<>();
         for (String keys: PRODUCTIONS.keySet()) {
-            System.out.println("Productions: " + Arrays.toString(PRODUCTIONS.get(keys)));
+            //System.out.println("Productions: " + Arrays.toString(PRODUCTIONS.get(keys)));
             //Looping through list containing all products
             for (int i = 0; i < PRODUCTIONS.get(keys).length; i++) {
                 //looping through each individual string
@@ -24,13 +24,22 @@ public class FormatTree {
                 }
             }
             if (flag==true){
-                System.out.println("Chosen: " + Arrays.toString(PRODUCTIONS.get(keys)));
-                temp.add(PRODUCTIONS.get(keys));
+//                System.out.println("Chosen: " + Arrays.toString(PRODUCTIONS.get(keys)));
+//                System.out.println("Corresponding Key: " + getKeyByValue(PRODUCTIONS.get(keys),PRODUCTIONS));
+                temp.put(getKeyByValue(PRODUCTIONS.get(keys),PRODUCTIONS),PRODUCTIONS.get(keys));
                 flag = false;
             }
         }
         System.out.println(" ");
         return temp;
+    }
+    public String getKeyByValue(String[] value, Map<String, String[]> hashmap){
+        for (String key : hashmap.keySet()) {
+            if(hashmap.get(key).equals(value)){
+                return key;
+            }
+        }
+        return null;
     }
 
 

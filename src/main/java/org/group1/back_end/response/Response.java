@@ -70,4 +70,6 @@ public class Response {
     public ContextFreeGrammar getCurrentCFG(int index) {return responseLibrary.getCurrentCFG(index);}
     public List<String> getActionToSlots(ContextFreeGrammar contextFreeGrammar){return contextFreeGrammar.actionsToSlots;}
     public List<List<String[]>> getSlotsUsed(ContextFreeGrammar contextFreeGrammar){return contextFreeGrammar.slotsUsed;}
+    public ArrayList<ContextFreeGrammar> getCFGData(){return responseLibrary.getAllCFGs();}
+
 }

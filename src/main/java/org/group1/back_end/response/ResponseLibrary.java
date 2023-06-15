@@ -59,7 +59,7 @@ public class ResponseLibrary {
     }
     public ArrayList<ContextFreeGrammar> getAllCFGs() {return skills.getAllCFGs();}
     public ContextFreeGrammar getCurrentCFG(int index) {return skills.getCurrentCFG(index);}
-
+    public ArrayList<ContextFreeGrammar> getCFGData(){return skills.getAllCFGs();}
     public static class Manager {
     }
 }

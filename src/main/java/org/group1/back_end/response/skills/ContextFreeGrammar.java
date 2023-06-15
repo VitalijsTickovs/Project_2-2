@@ -23,6 +23,7 @@ public class ContextFreeGrammar {
         private HashMap<String,String> mapping= new HashMap<>();
         // list of each non-terminals
         public List<String> leftHandSide = new ArrayList<>();
+        Map<String, List<String>> extendedList;
 
 
         public static Set<String> terminals = new HashSet<>();
@@ -35,6 +36,9 @@ public class ContextFreeGrammar {
 
             createListData();
         }
+        public Map<String, String[]> getSlotValues(){return formatTree.getCFGSlots();}
+        public void setColumnNamesTable(Map<String, List<String>> hashMap){extendedList = hashMap;}
+        public Map<String, List<String>> getColumnNamesTable(){return extendedList;}
 
         public void  createListData(){
             for (Map.Entry<String, String> entrada : REAL_DATA.entrySet()) {

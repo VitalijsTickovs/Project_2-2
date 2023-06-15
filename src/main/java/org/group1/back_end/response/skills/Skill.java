@@ -38,6 +38,7 @@ public class Skill {
      * @throws IOException
      */
     public Skill() throws Exception {
+        storeIndividualCFGs = new ArrayList<>();
         DATABASE_MANAGER = new DB_Manager();
         SERVICE = new SkillFileService();
         skillDatas = new ArrayList<>();
@@ -128,6 +129,7 @@ public class Skill {
             Map<String, String[]> productions = cfg.formatTree.PRODUCTIONS;
             Map<String, Set<String>> slotsInRules = new HashMap<>();
             Pattern pattern = Pattern.compile("<(.*?)>");
+
             for(String key: productions.keySet()){
                 String[] values = productions.get(key);
                 Set<String> slotset = new HashSet<>();
@@ -143,6 +145,24 @@ public class Skill {
                 slotsInRules.put(key, slotset);
             }
 
+            boolean flag=true;
+
+            //JUST TO TEST
+//            System.out.println("slot representative Location: " + slotsInRules.get("<LOCATION>"));
+//            System.out.println("slot representative SCHEDULE: " + slotsInRules.get("<SCHEDULE>"));
+//            System.out.println("slot representative TIMEEXPRESSION: " + slotsInRules.get("<TIMEEXPRESSION>"));
+            System.out.println("");
+            Map<String, List<String>> expandedRules = new HashMap<>();
+
+            Set<String> uniqueActions = new HashSet<>(cfg.beforeKleeneStar);
+
+            for(String action : uniqueActions){
+                //expands everything
+                List<String> expandedSlot = getEnd(action, slotsInRules, new ArrayList<>());
+                expandedRules.put(action, expandedSlot);
+            }
+            System.out.println("slot expanded SCHEDULE: " + expandedRules.get("<SCHEDULE>"));
+            System.out.println("slot expanded LOCATION: " + expandedRules.get("<LOCATION>"));
             ///// TODO: slotInRules is a hash map which has key as <LOCATION> and in the for loop
             //// i get the largest set of slots used
             List<String[]> pairSet = cfg.getRealData();
@@ -152,8 +172,32 @@ public class Skill {
                 DATABASE_MANAGER.addCFG(pair[0], pair[1]);
             }
             storeIndividualCFGs.add(cfg);
+            cfg.setColumnNamesTable(expandedRules);
         }
     }
+
+
+    public boolean isKey(String slot, Map<String, Set<String>> slotsInRules){
+        boolean isKey = false;
+        for(String value: slotsInRules.get(slot)){
+            if(slotsInRules.get(value).size()>0){
+                isKey=true;
+            }
+        }
+        return isKey;
+    }
+
+    public List<String> getEnd(String slot, Map<String, Set<String>> slotsInRules, List<String> expansions){
+        if(!isKey(slot,slotsInRules)) {
+            expansions.addAll(slotsInRules.get(slot));
+            return expansions;
+        }
+        for(String str: slotsInRules.get(slot)) {
+            expansions.addAll(getEnd(str, slotsInRules, new ArrayList<>()));
+        }
+        return expansions;
+    }
+
 
     public void addVocabulary(String words){
         List<String> vocabulary = SimpleProcess.processForVocabulary(words);
