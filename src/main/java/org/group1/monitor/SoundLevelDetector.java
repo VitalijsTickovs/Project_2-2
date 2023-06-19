@@ -159,6 +159,12 @@ public class SoundLevelDetector {
 
     }
 
+    public void botTextToSpeech(String botAnswer, String outputPath) {
+        sr.textToSpeech(botAnswer,outputPath);
+        Utils.playWav(outputPath);
+    }
+
+
 
         // Create dispatcher for mic
     public AudioDispatcher makeDispatcher() throws LineUnavailableException {
@@ -287,6 +293,7 @@ public class SoundLevelDetector {
 
         // Transcribe
         String transcription  = sr.transcribe("out16.wav");
+
 
         return transcription;
     }

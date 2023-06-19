@@ -26,6 +26,7 @@ import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 import org.group1.back_end.utilities.enums.DB;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.group1.javapython.SpeechRecognizerV3;
 import org.opencv.core.Mat;
 import org.group1.monitor.SoundLevelDetector;
 
@@ -207,6 +208,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 // Stop recording
                 try {
                     transcription = sd.recordStop();
+
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -220,6 +222,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
                 setChatText(currentBotInput, true); // set text on chat equal to bot response
                 userInput.setText(""); // reset user input text
+                sd.botTextToSpeech(currentBotInput,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControltts_Loris.wav");
             } else {
                 // Turn mic on
                 System.out.println("on");
