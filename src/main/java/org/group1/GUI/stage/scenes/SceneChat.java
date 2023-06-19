@@ -27,13 +27,21 @@ import org.group1.back_end.utilities.enums.DB;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
+import org.group1.monitor.SoundLevelDetector;
 
+import javax.sound.sampled.LineUnavailableException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 
 
 
 public class SceneChat extends SceneManager implements ICustomScene {
+
+    // SpeechRecognition
+    SoundLevelDetector sd = new SoundLevelDetector();
+    String transcription = "";
+
     ArrayList<TextArea> listText= new ArrayList<>();
     String chat = "";
     String currentUserInput="";
@@ -189,25 +197,41 @@ public class SceneChat extends SceneManager implements ICustomScene {
             }
         });
         mic.setOnAction( e -> {
-           //TODO: SET ACTION
-            //turn mic off
-            if(micOnOff) {
+            // TODO: SET ACTION
+            if (micOnOff) {
+                // Turn mic off
                 System.out.println("off");
-                micOnOff=false;
-                //turn mic on, insert mic logic here:
-            }else {
-                micOnOff=true;
-                System.out.println("on");
-                //turn on mic detection
+                micOnOff = false;
+                System.out.println("micStatus " + micOnOff);
 
-                //user input
-                setUserInput(userInput.getText()); // get from mic detection string
-                setChatText(currentUserInput, false); // set tex on chat equal to user input
+                // Stop recording
+                try {
+                    transcription = sd.recordStop();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.out.println("chatmic transcribed" + transcription);
 
-                //Getting response from the bot
+                // User input
+                setUserInput(transcription); // get from mic detection string
+                setChatText(currentUserInput, false); // set text on chat equal to user input
+
+                // Getting response from the bot
                 setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
-                setChatText(currentBotInput, true); // set tex on chat equal to bot response
+                setChatText(currentBotInput, true); // set text on chat equal to bot response
                 userInput.setText(""); // reset user input text
+            } else {
+                // Turn mic on
+                System.out.println("on");
+                micOnOff = true;
+                System.out.println("micStatus " + micOnOff);
+
+                // Start recording
+                try {
+                    sd.recordStart();
+                } catch (LineUnavailableException | IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
