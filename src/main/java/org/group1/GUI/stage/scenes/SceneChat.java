@@ -4,7 +4,14 @@ package org.group1.GUI.stage.scenes;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -17,8 +24,11 @@ import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
 import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 import org.group1.back_end.utilities.enums.DB;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.opencv.core.Mat;
 
+import java.awt.*;
 import java.util.*;
 
 
@@ -33,7 +43,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
     // javafx elements
     private TextArea userInput;
     private Stage menuStage;
-    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton;
+    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, mic;
     private int chatYPos =0;
 
     public SceneChat(){
@@ -64,6 +74,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
 
         UIPane.getChildren().add(userInput);
     }
+    Boolean micOnOff=false;
     public void createButtons(){
         //help button
         helpButton = ButtonFactory.createButton("HELP", 20, 170);
@@ -82,9 +93,25 @@ public class SceneChat extends SceneManager implements ICustomScene {
         UIPane.getChildren().add(exitButton);
 
         // send button
-        sendUserInput = ButtonFactory.createButton("SEND", 810, 590);
+        sendUserInput = ButtonFactory.createButton("SEND", 810, 570);
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         UIPane.getChildren().add(sendUserInput);
+
+        // mic button
+        Image microphone = new Image("redMic.png");
+        ImageView viewMic = new ImageView(microphone);
+        viewMic.setFitWidth(30);
+        viewMic.setFitHeight(30);
+
+
+        mic = new Button();
+        mic.setTranslateX(820);
+        mic.setTranslateY(600);
+        mic.setGraphic(viewMic);
+        mic.setBackground(null);
+        mic.setStyle("-fx-background-color: transparent");
+        UIPane.getChildren().add(mic);
+
 
         setActionForButtons();
     }
@@ -113,19 +140,71 @@ public class SceneChat extends SceneManager implements ICustomScene {
         exitButton.setOnAction( e -> {
             StageManager.close();
         });
+        //mic button
+        mic.setOnMouseEntered(e ->{
+            if(!micOnOff){
+                Image microphone = new Image("redMic.png");
+                ImageView viewMic = new ImageView(microphone);
+                viewMic.setFitWidth(35);
+                viewMic.setFitHeight(35);
+                mic.setGraphic(viewMic);
+            }else {
+                Image microphone = new Image("greenMic.png");
+                ImageView viewMic = new ImageView(microphone);
+                viewMic.setFitWidth(35);
+                viewMic.setFitHeight(35);
+                ColorAdjust colorAdjust = new ColorAdjust();
+                colorAdjust.setBrightness(1.0);
+                viewMic.setEffect(colorAdjust);
+                mic.setGraphic(viewMic);
+            }
+        });
+        mic.setOnMouseExited(e ->{
+            if(!micOnOff){
+                Image microphone = new Image("redMic.png");
+                ImageView viewMic = new ImageView(microphone);
+                viewMic.setFitWidth(30);
+                viewMic.setFitHeight(30);
+                mic.setGraphic(viewMic);
+            }else {
+                Image microphone = new Image("greenMic.png");
+                ImageView viewMic = new ImageView(microphone);
+                viewMic.setFitWidth(30);
+                viewMic.setFitHeight(30);
+                ColorAdjust colorAdjust = new ColorAdjust();
+                colorAdjust.setBrightness(1.0);
+                viewMic.setEffect(colorAdjust);
+                mic.setGraphic(viewMic);
+            }
+        });
+        mic.setOnAction( e -> {
+           //TODO: SET ACTION
+            //turn mic off
+            if(micOnOff) {
+                System.out.println("off");
+                micOnOff=false;
+                //turn mic on, insert mic logic here:
+            }else {
+                micOnOff=true;
+                System.out.println("on");
+            }
+        });
 
         //user chat
         ButtonFactory.setDefaultActions(sendUserInput);
         sendUserInput.setOnAction(e -> {
-            if (cameraEndPoint.authenticate()) {
+            if (true) {
                 if(errorHandling.stringLengthError(userInput.getText())) {
+
                         //user input
                         setUserInput(userInput.getText());
                         setChatText(currentUserInput, false);
+
                         //Getting response from the bot
                         setBotChatText(StageManager.getResponse(currentUserInput));
                         setChatText(currentBotInput, true);
                         userInput.setText("");
+
                 } else System.out.println("invalid message");
             }else{
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -329,6 +408,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
             }
             return count;
         }
+
         public int countCharAtLongestLine(String string){
         int count=0;
             String[] lines = string.split("\r\n|\r|\n");
@@ -337,7 +417,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                     count = lines[i].length();
                 }
             }
-
             return count;
         }
+
 }
