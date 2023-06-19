@@ -11,7 +11,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.bytedeco.javacv.CanvasFrame;
 import org.group1.GUI.stage.StageManager;
-import org.group1.back_end.Camera.CameraEndPoint;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -24,7 +23,6 @@ public class SceneManager extends Scene {
     public static int screenHeight = 700;
     protected AnchorPane UIPane;
     protected AnchorPane scrollChat = new AnchorPane();
-    CameraEndPoint cameraEndPoint;
     int detect=1;
 
     //Create Image Display
@@ -32,7 +30,6 @@ public class SceneManager extends Scene {
         //Creating the image view
         ImageView imageView = new ImageView();
         //Setting image to the image view
-        imageView.setImage(mat2Image(cameraEndPoint.paint()));
         //Setting the image view parameters
         imageView.setX(x);
         imageView.setY(y);
@@ -56,7 +53,6 @@ public class SceneManager extends Scene {
         super(new AnchorPane(), screenWidth, screenHeight);
         setFill(Color.rgb(18,64,76));
         try{
-            cameraEndPoint = new CameraEndPoint();
         }catch (Exception e){
             e.printStackTrace();
         }

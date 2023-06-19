@@ -43,7 +43,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
     // javafx elements
     private TextArea userInput;
     private Stage menuStage;
-    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, mic;
+    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, mic, auto;
     private int chatYPos =0;
 
     public SceneChat(){
@@ -74,7 +74,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
 
         UIPane.getChildren().add(userInput);
     }
-    Boolean micOnOff=false;
+    static Boolean micOnOff=false;
     public void createButtons(){
         //help button
         helpButton = ButtonFactory.createButton("HELP", 20, 170);
@@ -96,6 +96,11 @@ public class SceneChat extends SceneManager implements ICustomScene {
         sendUserInput = ButtonFactory.createButton("SEND", 810, 570);
         sendUserInput.setFont(Font.font("Impact", FontWeight.BOLD,20));
         UIPane.getChildren().add(sendUserInput);
+
+        // auto button
+        auto = ButtonFactory.createButton("AUTO", 270, 590);
+        auto.setFont(Font.font("Impact", FontWeight.BOLD,20));
+        UIPane.getChildren().add(auto);
 
         // mic button
         Image microphone = new Image("redMic.png");
@@ -140,6 +145,12 @@ public class SceneChat extends SceneManager implements ICustomScene {
         exitButton.setOnAction( e -> {
             StageManager.close();
         });
+        //auto button
+        ButtonFactory.setDefaultActions(auto);
+        auto.setOnAction( e -> {
+            //todo: auto button action
+        });
+
         //mic button
         mic.setOnMouseEntered(e ->{
             if(!micOnOff){
@@ -187,6 +198,16 @@ public class SceneChat extends SceneManager implements ICustomScene {
             }else {
                 micOnOff=true;
                 System.out.println("on");
+                //turn on mic detection
+
+                //user input
+                setUserInput(userInput.getText()); // get from mic detection string
+                setChatText(currentUserInput, false); // set tex on chat equal to user input
+
+                //Getting response from the bot
+                setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
+                setChatText(currentBotInput, true); // set tex on chat equal to bot response
+                userInput.setText(""); // reset user input text
             }
         });
 

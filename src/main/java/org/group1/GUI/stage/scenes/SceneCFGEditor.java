@@ -544,15 +544,12 @@ public class SceneCFGEditor extends SceneManager implements ICustomScene {
 
     @Override
     public void design() {
-//        createText(tableName, 540, 40);
         createSideMenu();
         createButtons();
         setButtonActions();
         //ADDING TABLE TO SCROLLPANE MAKE BUTON TO DELETE FROM SCROLLPANE
         createScrollPane();
         createMultipleTables();
-//        createTable("<LOCATION>");
-//        createSlotTable();
 
 
     }

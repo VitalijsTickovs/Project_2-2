@@ -11,11 +11,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
-import org.group1.back_end.Camera.CameraEndPoint;
 import org.opencv.core.Mat;
 
 
@@ -100,11 +97,11 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         loginButton.setOnAction(e -> {
             //close the existing stage
 
-            if(cameraEndPoint.authenticate()) {
+            if(true) {
                 //create and display the loading scree
-                System.out.println(cameraEndPoint.authenticate());
+
                 System.out.println("Login successful");
-                System.out.println("Welcome: " + cameraEndPoint.detect());
+
                 SceneLoading loadingScreen = new SceneLoading();
                 StageManager.setScene(loadingScreen);
 

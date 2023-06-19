@@ -25,7 +25,7 @@ public class SceneSkillEditor extends SceneManager implements ICustomScene {
     private String tableName;
     private final int id;
     private Text text = new Text();
-    private Button back,help,addAction, slots,delete,saveButton;
+    private Button back,help,addAction,slots,delete,saveButton;
     private ScrollPane scrollPane;
     private final List<SkillData> dataFrames;
     private TableView<ObservableList<String>> table,table2;
@@ -267,7 +267,7 @@ public class SceneSkillEditor extends SceneManager implements ICustomScene {
     private void populateTable() {
         List<String> tempObservable = new ArrayList<>();
         for (int i = 0; i < N_ROWS; i++) {
-            for (int j = 0; j < ColNum; j++) {
+            for (int j = 0; j < ColNum; j++) { // adding row 1 col 1 2 3
                 tempObservable.add(dataPerColumn.get(j).get(i));
             }
             table.getItems().add(FXCollections.observableArrayList(tempObservable));
