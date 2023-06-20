@@ -7,6 +7,7 @@ import org.group1.back_end.response.skills.dataframe.Rows;
 
 import javax.xml.crypto.Data;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.group1.back_end.utilities.enums.Paths.DATA_TXT_CFG_SKILLS;
@@ -73,6 +74,43 @@ public class GeneralFileService {
             FileWriter writer = new FileWriter(file);
             writer.append(line+"\n"+text);
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void overWriteCFG(List<String> newActions, int id){
+        String filePath = path + DATA_TXT_CFG_SKILLS.path + "cfg_" + id + FILES_EXTENSION;
+
+        try {
+            // Read the contents of the text file
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            List<String> lines = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+
+            // Remove existing "Action" lines
+            List<String> modifiedLines = new ArrayList<>();
+            for (String currentLine : lines) {
+                if (!currentLine.startsWith("Action")) {
+                    modifiedLines.add(currentLine);
+                }
+            }
+
+            modifiedLines.addAll(newActions);
+
+            // Write the modified contents back to the text file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+            for (String modifiedLine : modifiedLines) {
+                writer.write(modifiedLine);
+                writer.newLine();
+            }
+            writer.close();
+
+            System.out.println("Action lines replaced successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }
