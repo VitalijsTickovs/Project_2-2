@@ -13,6 +13,10 @@ public class Visualizer {
 
     CameraEndPoint endpoint;
 
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 480;
+
+
     public static final int FPS = 30;
     public Visualizer(CameraEndPoint endpoint) throws Exception {
         this.endpoint = endpoint;
@@ -30,7 +34,7 @@ public class Visualizer {
 
         // Create a CanvasFrame for displaying video.
         CanvasFrame canvasFrame = new CanvasFrame("Web Cam", 1);
-        canvasFrame.setCanvasSize(640, 480);
+        canvasFrame.setCanvasSize(WIDTH, HEIGHT);
         canvasFrame.setVisible(false);
         panel.add(canvasFrame.getCanvas());
 
@@ -67,7 +71,6 @@ public class Visualizer {
         while (true) {
             Mat mat = endpoint.paint();
             canvasFrame.showImage(new OpenCVFrameConverter.ToMat().convert(mat));
-            Thread.sleep(1000 / FPS);
         }
     }
 

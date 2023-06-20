@@ -6,6 +6,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.videoio.VideoCapture;
 import org.group1.back_end.Camera.Classifiers.*;
+import org.opencv.videoio.Videoio;
 
 public class CameraEndPoint{
 
@@ -20,13 +21,17 @@ public class CameraEndPoint{
 
     public CameraEndPoint(boolean useFaceNet) throws Exception{
         nu.pattern.OpenCV.loadLocally();
-        cascade = new Cascade("/Users/tombakker/Documents/Projects/GR/FaceAuthentication/src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
+        cascade = new Cascade("src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
         faceNet = new FaceNet(cascade);
         this.useFaceNet = useFaceNet;
 
         // Camera setup
         camera = new VideoCapture(0);
         this.camera.open(0); // open the camera
+        if (camera.isOpened()) {
+            camera.set(Videoio.CAP_PROP_FRAME_WIDTH, Visualizer.WIDTH);
+            camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, Visualizer.HEIGHT);
+        }
     }
 
     public Mat paint(){
