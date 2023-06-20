@@ -134,7 +134,44 @@ public class SceneCFGEditor extends SceneManager implements ICustomScene {
         //tableCollection.get(currentTable).get(0); - action table
         ButtonFactory.setDefaultActions(saveButton);
         saveButton.setOnAction(e -> {
+            List<String> allActions = new ArrayList<>();
+            for(String key: tableCollection.keySet()){
+                //Doing rules
+                List<String> rules = new ArrayList<>();
 
+
+                //Doing actions
+                TableView<ObservableList<String>> action = tableCollection.get(key).get(0);
+                //Getting column names and theirs namings
+                int columnSize = action.getColumns().size();
+                String[] columnName = new String[columnSize];
+                for(int i=0; i<columnSize; i++){
+                    String column = action.getColumns().get(i).getText();
+                    columnName[i]=column;
+                }
+
+                //Getting each input in the table
+                int inputSize = action.getItems().size();
+                List<String> ruleActions = new ArrayList<>();
+                for(int i=0; i<inputSize; i++) {
+                    // Initial Action composition
+                    String actionInput = "Action " + key + " * ";
+                    // Adding used non-terminal name and value
+                    for (int j = 0; j < columnSize; j++) {
+                        if (!columnName[j].equalsIgnoreCase("action")) {
+                            if (!action.getItems().get(i).get(j).equals("")) {
+                                actionInput += columnName[j] + " " + (action.getItems().get(i).get(j)) + " ";
+                            }
+                        }else {
+                            actionInput += action.getItems().get(i).get(j);
+                        }
+                    }
+                    ruleActions.add(actionInput);
+                }
+                allActions.addAll(ruleActions);
+            }
+            int actualID = id +1;
+            GeneralFileService.overWriteCFG(allActions, actualID);
         });
         //back button
         ButtonFactory.setDefaultActions(back);
