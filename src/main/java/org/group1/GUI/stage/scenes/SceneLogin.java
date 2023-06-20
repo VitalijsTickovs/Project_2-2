@@ -1,6 +1,7 @@
 package org.group1.GUI.stage.scenes;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -13,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
+import org.group1.monitor.SoundLevelDetector;
 import org.opencv.core.Mat;
 
 
@@ -72,8 +74,47 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         setText(logo, 210, 340);
         logo.setFont(Font.font("Impact",40));
     }
+
     @Override
     public void design(){
+        Button startButton = new Button("Start Thread");
+        Task<Void> emptyTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+
+                SoundLevelDetector detector = new SoundLevelDetector();
+                detector.monitorMicAudio();
+                // make sure to close the speech recognizer at the end
+                Runtime.getRuntime().addShutdownHook(new Thread(detector::close));
+
+                // Task completed
+                updateMessage("Task completed");
+                return null;
+            }
+        };
+        startButton.setOnAction(event -> {
+            if (emptyTask.isRunning()) {
+                emptyTask.cancel();
+            } else {
+                emptyTask.setOnSucceeded(taskEvent -> {
+                    startButton.setText("Start Thread");
+                });
+
+                emptyTask.setOnCancelled(taskEvent -> {
+                    startButton.setText("Start Thread");
+                });
+
+                emptyTask.setOnFailed(taskEvent -> {
+                    startButton.setText("Start Thread");
+                });
+
+                startButton.setText("Cancel Thread");
+                new Thread(emptyTask).start();
+            }
+        });
+        startButton.setTranslateX(50);
+        startButton.setTranslateY(50);
+        UIPane.getChildren().add(startButton);
 
         Line line = new Line(screenWidth/2.0,screenHeight/5.0,screenWidth/2.0,(screenHeight/5.0)*4);
         line.setStyle("-fx-stroke-width: 2px");

@@ -21,6 +21,10 @@ public class SoundLevelDetector {
     // MicMonitoring
     boolean micMonitor;
 
+    // TTSenaged
+    boolean ttsEngaged = false;
+    int answerCount = 0;
+
     // Dispatcher
     private AudioDispatcher dispatcher;
 
@@ -121,16 +125,59 @@ public class SoundLevelDetector {
                             // Generate the .WAV
 
                             // Play the .WAV, but only continue with the program one second after the .wav finished
-
-
                             conversation.push(transcribedText);
                             recordedBuffers.clear();
 
+
+
                             // TTS
-                            String chatBotResponse = "Peter, you a great person.";
-                            String outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControltts_Loris.wav";
-                            sr.textToSpeech(chatBotResponse,outputPath);
-                            Utils.playWav(outputPath);
+                            String chatBotResponse = "";
+                            String outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silentbot.wav";
+
+                            boolean silentBot = false;
+
+                            if(chatBotResponse.equals("")) {
+                                System.out.println("silent bot engaged");
+
+                                outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silentbot.wav";
+
+                                silentBot=true;
+
+
+                            } else {
+                                outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/tts_Loris.wav";
+                            }
+
+
+                            if(silentBot) {
+
+                                System.out.println("silentResponse...");
+
+                                ttsEngaged = true;
+                                while(ttsEngaged) {
+                                    Utils.playWav("/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silent.wav");
+                                    System.out.println("answer given");
+                                    ttsEngaged = false;
+                                }
+
+                                silentBot=false;
+
+                            } else      {
+
+                                sr.textToSpeech(chatBotResponse,outputPath);
+
+                                ttsEngaged = true;
+                                while(ttsEngaged) {
+                                    Utils.playWav(outputPath);
+                                    System.out.println("answer given");
+                                    ttsEngaged = false;
+                                }
+                            }
+
+
+
+
+                            System.out.println("Program continues");
 
 
 
@@ -165,8 +212,7 @@ public class SoundLevelDetector {
     }
 
 
-
-        // Create dispatcher for mic
+    // Create dispatcher for mic
     public AudioDispatcher makeDispatcher() throws LineUnavailableException {
         // Define the mic as input stream of audio
         AudioFormat format = new AudioFormat(44100, 16, 1, true, false);

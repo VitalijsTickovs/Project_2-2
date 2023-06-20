@@ -222,7 +222,8 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
                 setChatText(currentBotInput, true); // set text on chat equal to bot response
                 userInput.setText(""); // reset user input text
-                sd.botTextToSpeech(currentBotInput,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControltts_Loris.wav");
+                // For TTS (set the path for the output)
+                sd.botTextToSpeech(currentBotInput,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/tts_Loris.wav");
             } else {
                 // Turn mic on
                 System.out.println("on");
