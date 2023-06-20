@@ -72,7 +72,6 @@ public class SoundLevelDetector {
             // Measure the loudness using a processor and display in real-time
             dispatcher.addAudioProcessor(new AudioProcessor() {
 
-
                 float[] processedBuffer = new float[BLOCK_SIZE];
 
                 // Count silence duration additional to gate release
