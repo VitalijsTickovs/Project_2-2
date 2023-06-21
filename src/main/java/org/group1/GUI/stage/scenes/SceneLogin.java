@@ -14,13 +14,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group1.GUI.stage.StageManager;
 import org.group1.GUI.stage.scenes.utils.ButtonFactory;
-import org.group1.monitor.SoundLevelDetector;
-import org.opencv.core.Mat;
+//import org.group1.monitor.MicMonitor;
+
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class SceneLogin extends SceneManager implements ICustomScene {
     //VIEW SETTINGS
     public Button loginButton;
+
+
 
     private final TextField loginTextField, passwordTextField;
     public SceneLogin(){
@@ -30,6 +34,7 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         passwordTextField = new PasswordField();
         design();
         keyboardHandler();
+
 //        try {
 //            display(530,65,300);
 //        } catch (Exception e) {
@@ -74,47 +79,37 @@ public class SceneLogin extends SceneManager implements ICustomScene {
         setText(logo, 210, 340);
         logo.setFont(Font.font("Impact",40));
     }
+    //MicMonitor mc;
 
     @Override
     public void design(){
+        /* // SoundLevelDetector detector = new SoundLevelDetector();
         Button startButton = new Button("Start Thread");
-        Task<Void> emptyTask = new Task<>() {
-            @Override
-            protected Void call() throws Exception {
+        AtomicBoolean qutoOnOff = new AtomicBoolean(false);
 
-                SoundLevelDetector detector = new SoundLevelDetector();
-                detector.monitorMicAudio();
-                // make sure to close the speech recognizer at the end
-                Runtime.getRuntime().addShutdownHook(new Thread(detector::close));
 
-                // Task completed
-                updateMessage("Task completed");
-                return null;
-            }
-        };
-        startButton.setOnAction(event -> {
-            if (emptyTask.isRunning()) {
-                emptyTask.cancel();
-            } else {
-                emptyTask.setOnSucceeded(taskEvent -> {
-                    startButton.setText("Start Thread");
-                });
+        startButton.setOnAction( e -> {
+            if (qutoOnOff.get()) {
+                if(mc != null){
+                    mc.dispatcher.stop();
+                }
+                mc = null;
+                System.out.println("Pressed STOP");
+                startButton.setText("start thread");
+                qutoOnOff.set(false);
 
-                emptyTask.setOnCancelled(taskEvent -> {
-                    startButton.setText("Start Thread");
-                });
 
-                emptyTask.setOnFailed(taskEvent -> {
-                    startButton.setText("Start Thread");
-                });
-
-                startButton.setText("Cancel Thread");
-                new Thread(emptyTask).start();
+            }else {
+                System.out.println("start method");
+                startButton.setText("close thread");
+                mc = new MicMonitor();
+                qutoOnOff.set(true);
             }
         });
+
         startButton.setTranslateX(50);
         startButton.setTranslateY(50);
-        UIPane.getChildren().add(startButton);
+        UIPane.getChildren().add(startButton);*/
 
         Line line = new Line(screenWidth/2.0,screenHeight/5.0,screenWidth/2.0,(screenHeight/5.0)*4);
         line.setStyle("-fx-stroke-width: 2px");

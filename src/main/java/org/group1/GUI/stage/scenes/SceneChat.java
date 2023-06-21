@@ -208,11 +208,12 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 // Stop recording
                 try {
                     transcription = sd.recordStop();
+                    System.out.println("Transcription -> "+transcription);
 
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                System.out.println("chatmic transcribed" + transcription);
+
 
                 // User input
                 setUserInput(transcription); // get from mic detection string
@@ -222,8 +223,9 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
                 setChatText(currentBotInput, true); // set text on chat equal to bot response
                 userInput.setText(""); // reset user input text
-                // For TTS (set the path for the output)
-                sd.botTextToSpeech(currentBotInput,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/tts_Loris.wav");
+                // For TTS (s)
+                String botAsnwer = sd.botGetSpeakerID() +"   "+ currentBotInput;
+                sd.botTextToSpeech(botAsnwer,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControltts_Loris.wav");
             } else {
                 // Turn mic on
                 System.out.println("on");

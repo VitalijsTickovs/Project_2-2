@@ -50,6 +50,7 @@ public class SpeechRecognizerV3 {
             writer.newLine();
             writer.flush();
 
+
             // Read the output of the script
             String line;
             while (!(line = reader.readLine()).startsWith("Transcription:")) {
@@ -59,20 +60,54 @@ public class SpeechRecognizerV3 {
             // Get the transcription result
             transcribedText = line.substring("Transcription:".length()).trim();
 
-            System.out.println("Transcription: " + transcribedText);
+            //System.out.println("Transcription: " + transcribedText);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return transcribedText;
     }
+
+    public String getSpeakerID(String audioFilePath) {
+        String identifiedSpeaker = "";
+
+        try {
+            String pythonScriptPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
+            String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
+
+            String[] cmd = {
+                    pythonExecutablePath,
+                    pythonScriptPath,
+                    audioFilePath
+            };
+
+            ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                identifiedSpeaker = line.trim();
+            }
+
+            process.waitFor();
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return identifiedSpeaker;
+    }
+
+
 
     public void textToSpeech(String text, String outputPath) {
         try {
             //TODO Change the path
             String pythonScriptPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/TTS.py";
             String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
-
+            // String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
             // Command to run your Python script with the text and output file as arguments
             String[] cmd = {
                     pythonExecutablePath,

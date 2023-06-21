@@ -17,23 +17,26 @@ import java.util.Stack;
 
 public class SoundLevelDetector {
 
-
     // MicMonitoring
     boolean micMonitor;
 
-    // TTSenaged
+    // AutoMicThread
+    public Thread autoMicThread;
+    public boolean micOn = true;
+
+    // TextToSpeech
     boolean ttsEngaged = false;
-    int answerCount = 0;
 
     // Dispatcher
     private AudioDispatcher dispatcher;
 
-    // Recorderd buffers
+    // Recorded buffers
     private ArrayList<float[]> recordedBuffers = new ArrayList<>();
 
     // History of transcribed text
     Stack<String> conversation = new Stack<>();
 
+    // WAV
     private static final int BLOCK_SIZE = 1024;
 
     // LoPie Audio Suite
@@ -43,16 +46,23 @@ public class SoundLevelDetector {
     // SpeechRecognition Model
     SpeechRecognizerV3 sr;
 
-    // Threshold passed for first ti,e
+    // Threshold passed for first time
     boolean firstRec = false;
 
     // Silence counter (extra gate control)
     long silenceCounter = 10;
 
-    // Threshold (VAD) based recording
+    // Hopefully
     public void monitorMicAudio() {
 
-        // Load a SpeechRecognizer model
+        while(!micOn)  {
+
+            // stop
+
+        }
+
+
+            // Load a SpeechRecognizer model
         sr = new SpeechRecognizerV3();
 
         try {
@@ -71,6 +81,7 @@ public class SoundLevelDetector {
 
             // Measure the loudness using a processor and display in real-time
             dispatcher.addAudioProcessor(new AudioProcessor() {
+
 
                 float[] processedBuffer = new float[BLOCK_SIZE];
 
@@ -103,8 +114,7 @@ public class SoundLevelDetector {
                         try {
 
                             // TODO:
-                            // - (optional) trim pre_post silence
-                            // - (optional) identify speaker
+                            //      - Identify Speaker
 
                             // Make .WAV from recorded buffers
                             cnv.makeWAV(recordedBuffers);
@@ -117,54 +127,36 @@ public class SoundLevelDetector {
                             // Transcribe
                             String transcribedText = sr.transcribe("out16.wav");
 
-                            // Send text to ChatBot
-
-                            // Ask for response
-
-                            // Generate the .WAV
-
-                            // Play the .WAV, but only continue with the program one second after the .wav finished
+                            // Conversation
                             conversation.push(transcribedText);
                             recordedBuffers.clear();
-
-
 
                             // TTS
                             String chatBotResponse = "";
                             String outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silentbot.wav";
-
                             boolean silentBot = false;
 
+                            // Check silentBot
                             if(chatBotResponse.equals("")) {
-                                System.out.println("silent bot engaged");
-
                                 outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silentbot.wav";
-
                                 silentBot=true;
-
-
                             } else {
                                 outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/tts_Loris.wav";
                             }
 
-
+                            // SilentBot
                             if(silentBot) {
-
-                                System.out.println("silentResponse...");
-
                                 ttsEngaged = true;
                                 while(ttsEngaged) {
                                     Utils.playWav("/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silent.wav");
                                     System.out.println("answer given");
                                     ttsEngaged = false;
                                 }
-
                                 silentBot=false;
 
-                            } else      {
+                            } else  {
 
                                 sr.textToSpeech(chatBotResponse,outputPath);
-
                                 ttsEngaged = true;
                                 while(ttsEngaged) {
                                     Utils.playWav(outputPath);
@@ -172,8 +164,6 @@ public class SoundLevelDetector {
                                     ttsEngaged = false;
                                 }
                             }
-
-
 
 
                             System.out.println("Program continues");
@@ -185,7 +175,15 @@ public class SoundLevelDetector {
                         }
                     }
 
-                    return true;
+                    // Check Thread Situation
+                    if (autoMicThread.isInterrupted()) {
+                        // stop processing and cleanup if needed
+                        return false;
+                    } else {
+                        return true;
+                    }
+
+
                 }
 
                 @Override
@@ -193,43 +191,46 @@ public class SoundLevelDetector {
                 }
             });
 
-            new Thread(dispatcher::run).start();
+            // Thread (
+            //new Thread(dispatcher::run).start();
+            autoMicThread = new Thread(dispatcher::run);
+            autoMicThread.start();
 
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
     }
 
-
+    // Constructor
     public SoundLevelDetector() {
 
     }
 
+
+    // Stop the autoMicThread
+    public void stopAutoMic() {
+
+        System.out.println("Stopping autoMic");
+        if (autoMicThread != null) {
+            autoMicThread.interrupt();
+        }
+    }
+
+
+
+    // ================================
+
+    // TextToSpeech
     public void botTextToSpeech(String botAnswer, String outputPath) {
         sr.textToSpeech(botAnswer,outputPath);
         Utils.playWav(outputPath);
     }
 
 
-    // Create dispatcher for mic
-    public AudioDispatcher makeDispatcher() throws LineUnavailableException {
-        // Define the mic as input stream of audio
-        AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
-        TargetDataLine line = AudioSystem.getTargetDataLine(format);
-        line.open(format);
-        line.start();
-
-        // Use AudioDispatcher for block size 1024
-        int overlap = 0;
-        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(BLOCK_SIZE, overlap);
-
-        System.out.println("dispatcher made");
-        return dispatcher;
-    }
 
 
 
-    // Engage recording using GUI Button & return a string
+    // NOTE: THIS GAVE ISSUE WITH JAVAFX THREADS
     public String record(boolean recording) throws LineUnavailableException, IOException {
 
         micMonitor = recording;
@@ -288,7 +289,27 @@ public class SoundLevelDetector {
         return transcription;
     }
 
-    // Start recording
+    // =============================
+    // @NOTE:
+    //      THIS IS BOT PART
+
+    // Create dispatcher for mic
+    public AudioDispatcher makeDispatcher() throws LineUnavailableException {
+        // Define the mic as input stream of audio
+        AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
+        TargetDataLine line = AudioSystem.getTargetDataLine(format);
+        line.open(format);
+        line.start();
+
+        // Use AudioDispatcher for block size 1024
+        int overlap = 0;
+        AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(BLOCK_SIZE, overlap);
+
+        System.out.println("dispatcher made");
+        return dispatcher;
+    }
+
+    // Start Recording
     public void recordStart() throws LineUnavailableException, IOException {
         // Reset the recorded buffers
         recordedBuffers.clear();
@@ -325,25 +346,27 @@ public class SoundLevelDetector {
         new Thread(dispatcher::run).start();
     }
 
-    // Stop recording and return transcribed text
+    ////////CHANGE HERE!
+    // make a method to
+    ////////CHANGE HERE!
+
+    // Stop Recording - Return Transcribed Text
+
+
     public String recordStop() throws IOException {
+        // Dispatcher Stop
         dispatcher.stop();
-
-        // Transcribe
-
         // Make .WAV
         System.out.println("Building .wav");
-
         cnv.makeWAV(recordedBuffers);
-
         // Transcribe
-        String transcription  = sr.transcribe("out16.wav");
-
-
+        String transcription = sr.transcribe("out16.wav");
         return transcription;
     }
 
-
+    public String botGetSpeakerID() {
+        return sr.getSpeakerID("out16.wav");
+    }
 
     public void close() {
         sr.close();
