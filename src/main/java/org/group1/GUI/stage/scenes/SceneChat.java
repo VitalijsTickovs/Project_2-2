@@ -4,13 +4,10 @@ package org.group1.GUI.stage.scenes;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -26,12 +23,9 @@ import org.group1.GUI.stage.scenes.utils.ErrorHandling;
 import org.group1.back_end.utilities.enums.DB;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.group1.javapython.SpeechRecognizerV3;
-import org.opencv.core.Mat;
 import org.group1.monitor.SoundLevelDetector;
 
 import javax.sound.sampled.LineUnavailableException;
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 

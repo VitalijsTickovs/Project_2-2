@@ -5,7 +5,6 @@ import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
-import org.group1.javapython.SpeechRecognizerV3;
 import org.group1.utils.Converter;
 import org.group1.utils.Utils;
 
