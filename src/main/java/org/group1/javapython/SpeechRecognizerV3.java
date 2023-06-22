@@ -1,9 +1,4 @@
 package org.group1.javapython;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.*;
 
 public class SpeechRecognizerV3 {
@@ -12,6 +7,7 @@ public class SpeechRecognizerV3 {
     private BufferedReader reader;
     private Process process;
 
+    //TODO : Change these paths ( I couldn't use the source relative paths)
     String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
     String pythonPathSR3 = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/SR3.py";
     String pythonPathSV = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
@@ -19,25 +15,18 @@ public class SpeechRecognizerV3 {
 
     public SpeechRecognizerV3() {
         try {
-
-
-
             // Create the Python script command with the absolute path
             String[] cmd = {
                     pythonExecutablePath,
                     pythonPathSR3
             };
-
             // Create a new process builder
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-
             // Redirect error stream to avoid deadlocks and consume the output stream from the subprocess
             processBuilder.redirectErrorStream(true);
             process = processBuilder.start();
-
             // Create writer to send input to the script
             writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-
             // Create reader to read output from the script
             reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         } catch (IOException e) {
@@ -47,20 +36,16 @@ public class SpeechRecognizerV3 {
 
     public String transcribe(String audioFilePath) {
         String transcribedText = "";
-
         try {
-
             writer.write(audioFilePath);
             writer.newLine();
             writer.flush();
-
             String line;
             while (!(line = reader.readLine()).startsWith("Transcription:")) {
                 // wait until we receive the transcription result
             }
             // Get the transcription result
             transcribedText = line.substring("Transcription:".length()).trim();
-
             //System.out.println("Transcription: " + transcribedText);
         } catch (IOException e) {
             e.printStackTrace();
