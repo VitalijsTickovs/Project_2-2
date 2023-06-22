@@ -6,6 +6,7 @@ import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import org.group1.utils.Converter;
+import org.group1.utils.SpellingCorrector;
 import org.group1.utils.Utils;
 
 import javax.sound.sampled.*;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
+
+import static org.group1.utils.Language.AMERICAN;
 
 public class SoundLevelDetector {
 
@@ -44,6 +47,8 @@ public class SoundLevelDetector {
 
     // SpeechRecognition Model
     SpeechRecognizerV3 sr;
+    // Spelling corrector object
+    SpellingCorrector spellingCorrector = new SpellingCorrector(AMERICAN);
 
     // Threshold passed for first time
     boolean firstRec = false;
@@ -356,7 +361,9 @@ public class SoundLevelDetector {
         cnv.makeWAV(recordedBuffers);
         // Transcribe
         String transcription = sr.transcribe("out16.wav");
-        return transcription;
+        System.out.println("Original trans ->"+transcription);
+        System.out.print("Corrected trans ->" );
+        return spellingCorrector.correctSentence(transcription);
     }
 
     public String botGetSpeakerID() {

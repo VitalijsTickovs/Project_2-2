@@ -61,6 +61,8 @@ dependencies {
     implementation group: 'org.tensorflow', name: 'tensorflow-core-platform', version: '0.3.3'
 
 
+
+
     // AUDIO RELATED DEPENDANCIES
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -75,6 +77,10 @@ dependencies {
     implementation 'org.mozilla.deepspeech:libdeepspeech:0.5.1'
     // https://mvnrepository.com/artifact/net.sf.jni4net/jni4net.j
     implementation 'net.sf.jni4net:jni4net.j:0.8.8.0'
+    implementation ('org.languagetool:language-en:6.1') {
+        exclude group: 'com.google.guava'
+    }
+    implementation 'com.google.guava:guava:28.2-jre'
 
 
 }

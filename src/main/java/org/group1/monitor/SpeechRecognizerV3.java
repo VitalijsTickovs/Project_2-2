@@ -7,7 +7,7 @@ public class SpeechRecognizerV3 {
     private BufferedReader reader;
     private Process process;
 
-    //TODO : Change these paths ( I couldn't use the source relative paths)
+    //TODO : Change these paths ( I couldn't use the relative paths)
     String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
     String pythonPathSR3 = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/SR3.py";
     String pythonPathSV = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
@@ -16,10 +16,8 @@ public class SpeechRecognizerV3 {
     public SpeechRecognizerV3() {
         try {
             // Create the Python script command with the absolute path
-            String[] cmd = {
-                    pythonExecutablePath,
-                    pythonPathSR3
-            };
+            // We directly call the SR3 script from the constructor to call/load the model only once
+            String[] cmd = {pythonExecutablePath, pythonPathSR3};
             // Create a new process builder
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
             // Redirect error stream to avoid deadlocks and consume the output stream from the subprocess
@@ -58,11 +56,7 @@ public class SpeechRecognizerV3 {
 
         try {
 
-            String[] cmd = {
-                    pythonExecutablePath,
-                    pythonPathSV,
-                    audioFilePath
-            };
+            String[] cmd = {pythonExecutablePath, pythonPathSV, audioFilePath};
 
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
             processBuilder.redirectErrorStream(true);
@@ -88,12 +82,7 @@ public class SpeechRecognizerV3 {
 
     public void textToSpeech(String text, String outputPath) {
         try {
-            String[] cmd = {
-                    pythonExecutablePath,
-                    pythonPathTTS,
-                    text,
-                    outputPath
-            };
+            String[] cmd = {pythonExecutablePath, pythonPathTTS, text, outputPath};
 
 
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
