@@ -346,12 +346,8 @@ public class SoundLevelDetector {
         new Thread(dispatcher::run).start();
     }
 
-    ////////CHANGE HERE!
-    // make a method to
-    ////////CHANGE HERE!
 
     // Stop Recording - Return Transcribed Text
-
 
     public String recordStop() throws IOException {
         // Dispatcher Stop

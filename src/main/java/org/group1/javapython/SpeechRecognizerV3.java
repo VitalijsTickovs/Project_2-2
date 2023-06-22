@@ -12,16 +12,20 @@ public class SpeechRecognizerV3 {
     private BufferedReader reader;
     private Process process;
 
+    String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
+    String pythonPathSR3 = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/SR3.py";
+    String pythonPathSV = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
+    String pythonPathTTS = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/TTS.py";
+
     public SpeechRecognizerV3() {
         try {
-            // Get the absolute path of the Python script
-            String pythonScriptPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/SR3.py";
-            String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
+
+
 
             // Create the Python script command with the absolute path
             String[] cmd = {
                     pythonExecutablePath,
-                    pythonScriptPath
+                    pythonPathSR3
             };
 
             // Create a new process builder
@@ -45,18 +49,15 @@ public class SpeechRecognizerV3 {
         String transcribedText = "";
 
         try {
-            // Send the audio file path to the Python script
+
             writer.write(audioFilePath);
             writer.newLine();
             writer.flush();
 
-
-            // Read the output of the script
             String line;
             while (!(line = reader.readLine()).startsWith("Transcription:")) {
                 // wait until we receive the transcription result
             }
-
             // Get the transcription result
             transcribedText = line.substring("Transcription:".length()).trim();
 
@@ -71,12 +72,10 @@ public class SpeechRecognizerV3 {
         String identifiedSpeaker = "";
 
         try {
-            String pythonScriptPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
-            String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
 
             String[] cmd = {
                     pythonExecutablePath,
-                    pythonScriptPath,
+                    pythonPathSV,
                     audioFilePath
             };
 
@@ -104,29 +103,23 @@ public class SpeechRecognizerV3 {
 
     public void textToSpeech(String text, String outputPath) {
         try {
-            //TODO Change the path
-            String pythonScriptPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/TTS.py";
-            String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
-            // String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
-            // Command to run your Python script with the text and output file as arguments
             String[] cmd = {
                     pythonExecutablePath,
-                    pythonScriptPath,
+                    pythonPathTTS,
                     text,
                     outputPath
             };
 
-            // Run the Python script
+
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
-            process.waitFor();  // Wait for the script to finish
+            process.waitFor();
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-
     public void close() {
         try {
             // Send EOF to indicate we're done
