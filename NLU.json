@@ -347,6 +347,203 @@
   {
     "entries": [
       {
+        "text": "How long does it take to travel by Car from Paris to Paris?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 38,
+            "value": "Car",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 44,
+            "end": 49,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 4,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Car from Paris to Paris?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 38,
+            "value": "Car",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 44,
+            "end": 49,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 7,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Car from Brussels to Brussels?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 38,
+            "value": "Car",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 44,
+            "end": 52,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 4,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Car from Brussels to Brussels?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 38,
+            "value": "Car",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 44,
+            "end": 52,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 7,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Plane from Paris to Paris?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 40,
+            "value": "Plane",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 46,
+            "end": 51,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 4,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Plane from Paris to Paris?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 40,
+            "value": "Plane",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 46,
+            "end": 51,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 7,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Plane from Brussels to Brussels?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 40,
+            "value": "Plane",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 46,
+            "end": 54,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 4,
+            "value": "Paris",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How long does it take to travel by Plane from Brussels to Brussels?",
+        "intent": "do_travel_on",
+        "entities": [
+          {
+            "start": 35,
+            "end": 40,
+            "value": "Plane",
+            "entity": "\u003cMEANSOFTRANSPORTATION\u003e"
+          },
+          {
+            "start": 46,
+            "end": 54,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          },
+          {
+            "start": -1,
+            "end": 7,
+            "value": "Brussels",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      }
+    ],
+    "examples": []
+  },
+  {
+    "entries": [
+      {
         "text": "How is Natalia\u0027S day?",
         "intent": "day",
         "entities": [
@@ -355,6 +552,231 @@
             "end": 14,
             "value": "Natalia",
             "entity": "\u003cPERSON\u003e"
+          }
+        ]
+      }
+    ],
+    "examples": []
+  },
+  {
+    "entries": [
+      {
+        "text": "What is the forecast for Monday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 31,
+            "value": "Monday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 35,
+            "end": 45,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Tuesday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 32,
+            "value": "Tuesday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 36,
+            "end": 46,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Wednesday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 34,
+            "value": "Wednesday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 38,
+            "end": 48,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Thursday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 33,
+            "value": "Thursday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 37,
+            "end": 47,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Friday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 31,
+            "value": "Friday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 35,
+            "end": 45,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Saturday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 33,
+            "value": "Saturday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 37,
+            "end": 47,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What is the forecast for Sunday in Maastricht?",
+        "intent": "forecast",
+        "entities": [
+          {
+            "start": 25,
+            "end": 31,
+            "value": "Sunday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 35,
+            "end": 45,
+            "value": "Maastricht",
+            "entity": "\u003cLOCATION\u003e"
+          }
+        ]
+      }
+    ],
+    "examples": []
+  },
+  {
+    "entries": [
+      {
+        "text": "What event do I have planned on Tuesday at 14:00 in Maastricht?",
+        "intent": "plane_event",
+        "entities": [
+          {
+            "start": 32,
+            "end": 39,
+            "value": "Tuesday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 43,
+            "end": 48,
+            "value": "14:00",
+            "entity": "\u003cTIME\u003e"
+          },
+          {
+            "start": 52,
+            "end": 62,
+            "value": "Maastricht",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      },
+      {
+        "text": "What event do I have planned on Monday at 09:00 in Amsterdam?",
+        "intent": "plane_event",
+        "entities": [
+          {
+            "start": 32,
+            "end": 38,
+            "value": "Monday",
+            "entity": "\u003cDAY\u003e"
+          },
+          {
+            "start": 42,
+            "end": 47,
+            "value": "09:00",
+            "entity": "\u003cTIME\u003e"
+          },
+          {
+            "start": 51,
+            "end": 60,
+            "value": "Amsterdam",
+            "entity": "\u003cCITY\u003e"
+          }
+        ]
+      }
+    ],
+    "examples": []
+  },
+  {
+    "entries": [
+      {
+        "text": "How hard is Lab_1 for TCS?",
+        "intent": "be",
+        "entities": [
+          {
+            "start": 12,
+            "end": 17,
+            "value": "Lab_1",
+            "entity": "\u003cASSIGNMENT\u003e"
+          },
+          {
+            "start": 22,
+            "end": 25,
+            "value": "TCS",
+            "entity": "\u003cSUBJECT\u003e"
+          }
+        ]
+      },
+      {
+        "text": "How hard is Homework_2 for HCI?",
+        "intent": "be",
+        "entities": [
+          {
+            "start": 12,
+            "end": 22,
+            "value": "Homework_2",
+            "entity": "\u003cASSIGNMENT\u003e"
+          },
+          {
+            "start": 27,
+            "end": 30,
+            "value": "HCI",
+            "entity": "\u003cSUBJECT\u003e"
           }
         ]
       }

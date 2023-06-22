@@ -99,7 +99,7 @@ public class SceneLogin extends SceneManager implements ICustomScene {
                 qutoOnOff.set(false);
 
 
-            }else {
+            }else { rgba(42, 97, 117, 1)
                 System.out.println("start method");
                 startButton.setText("close thread");
                 mc = new MicMonitor();

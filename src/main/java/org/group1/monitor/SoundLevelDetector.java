@@ -152,7 +152,7 @@ public class SoundLevelDetector {
                             if(silentBot) {
                                 ttsEngaged = true;
                                 while(ttsEngaged) {
-                                    Utils.playWav("/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silent.wav");
+                                    Utils.playWav("silent.wav");
                                     System.out.println("answer given");
                                     ttsEngaged = false;
                                 }

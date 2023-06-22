@@ -3,6 +3,29 @@ import numpy as np
 import torch
 import librosa
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+import subprocess
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+dependencies = [
+    'wave',
+    'pickle',
+    'pyaudio',
+    'numpy',
+    'matplotlib',
+    'sklearn',
+    'scipy',
+    'python_speech_features',
+    'torch',
+    'librosa',
+    'transformers',
+    'gtts',
+    'pydub'
+]
+
+for dependency in dependencies:
+    install(dependency)
 
 class SpeechRecognizer:
     def __init__(self, model_id):

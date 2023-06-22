@@ -1,15 +1,16 @@
 package org.group1.back_end.Camera;
 
-
 import org.bytedeco.javacv.CanvasFrame;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.opencv.core.Mat;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Visualizer {
+public class Visualizer implements Runnable {
 
     CameraEndPoint endpoint;
 
@@ -30,19 +31,30 @@ public class Visualizer {
 
         // Creating a JPanel to hold all components
         JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
         frame.add(panel);
 
         // Create a CanvasFrame for displaying video.
         CanvasFrame canvasFrame = new CanvasFrame("Web Cam", 1);
-        canvasFrame.setCanvasSize(WIDTH, HEIGHT);
+        canvasFrame.setCanvasSize(WIDTH/2, HEIGHT/2);
         canvasFrame.setVisible(false);
-        panel.add(canvasFrame.getCanvas());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(canvasFrame.getCanvas(), c);
 
         // Creating a button and text field
         JButton button = new JButton("Add User");
         JTextField textField = new JTextField(20);
-        panel.add(textField);
-        panel.add(button);
+        Dimension textDimension = textField.getPreferredSize();
+        button.setPreferredSize(new Dimension(textDimension.width, button.getPreferredSize().height));
+        c.gridy = 1;
+        panel.add(textField, c);
+        c.gridy = 2;
+        panel.add(button, c);
+
+        frame.setResizable(false);
+        frame.setUndecorated(true);
 
         // Adding an ActionListener to the button
         button.addActionListener(new ActionListener() {
@@ -62,10 +74,18 @@ public class Visualizer {
             }
         });
 
-        // Adjusting the layout
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         frame.pack();
-        frame.setLocation(0,0);
+        Color general = new Color(42, 97, 117);
+        panel.setBackground(general);
+        frame.setBackground(general);
+        canvasFrame.setBackground(general);
+        button.setForeground(Color.WHITE);
+        button.setBackground(general);
+        textField.setBackground(general);
+        Border border = BorderFactory.createLineBorder(Color.WHITE, 2);
+        // set the border of this component
+        textField.setBorder(border);
+        frame.setLocation(250, 200);
         frame.setVisible(true);
 
         while (true) {
@@ -81,6 +101,15 @@ public class Visualizer {
             visualizer.display();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.display();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

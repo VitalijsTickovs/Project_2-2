@@ -8,10 +8,10 @@ public class SpeechRecognizerV3 {
     private Process process;
 
     //TODO : Change these paths ( I couldn't use the relative paths)
-    String pythonExecutablePath = "/opt/homebrew/opt/python@3.10/libexec/bin/python3";
-    String pythonPathSR3 = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/SR3.py";
-    String pythonPathSV = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/speakerVerification.py";
-    String pythonPathTTS = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/python/TTS.py";
+    String pythonExecutablePath = "/usr/bin/python3";
+    String pythonPathSR3 = "python/SR3.py";
+    String pythonPathSV = "python/speakerVerification.py";
+    String pythonPathTTS = "python/TTS.py";
 
     public SpeechRecognizerV3() {
         try {
@@ -45,8 +45,8 @@ public class SpeechRecognizerV3 {
             // Get the transcription result
             transcribedText = line.substring("Transcription:".length()).trim();
             //System.out.println("Transcription: " + transcribedText);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            return "";
         }
         return transcribedText;
     }

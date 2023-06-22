@@ -219,7 +219,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 userInput.setText(""); // reset user input text
                 // For TTS (s)
                 String botAsnwer = sd.botGetSpeakerID() +"   "+ currentBotInput;
-                sd.botTextToSpeech(botAsnwer,"/Users/lorispodevyn/Desktop/pie_is_cool/VersionControltts_Loris.wav");
+                sd.botTextToSpeech(botAsnwer,"tts_Loris.wav");
             } else {
                 // Turn mic on
                 System.out.println("on");
