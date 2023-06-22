@@ -44,9 +44,10 @@ public class SpeechRecognizerV3 {
             }
             // Get the transcription result
             transcribedText = line.substring("Transcription:".length()).trim();
-            //System.out.println("Transcription: " + transcribedText);
+            System.out.println("Transcription: " + transcribedText);
         } catch (Exception e) {
-            return "";
+            System.out.println(e);
+            return "Bananse";
         }
         return transcribedText;
     }

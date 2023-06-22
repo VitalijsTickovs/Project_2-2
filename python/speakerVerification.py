@@ -49,7 +49,7 @@ def extract_features(audio,rate):
     return combined
 
 def identify_speaker(file_path):
-    modelpath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/src/main/resources/trained_models"
+    modelpath = "src/main/resources/trained_models"
 
     gmm_files = [os.path.join(modelpath, fname) for fname in os.listdir(modelpath) if fname.endswith('.gmm')]
 

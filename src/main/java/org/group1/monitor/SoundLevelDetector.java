@@ -142,10 +142,10 @@ public class SoundLevelDetector {
 
                             // Check silentBot
                             if(chatBotResponse.equals("")) {
-                                outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/silentbot.wav";
+                                outputPath = "silentbot.wav";
                                 silentBot=true;
                             } else {
-                                outputPath = "/Users/lorispodevyn/Desktop/pie_is_cool/VersionControl/tts_Loris.wav";
+                                outputPath = "tts_Loris.wav";
                             }
 
                             // SilentBot
