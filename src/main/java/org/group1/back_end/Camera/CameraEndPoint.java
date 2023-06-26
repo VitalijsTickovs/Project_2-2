@@ -29,7 +29,7 @@ public class CameraEndPoint{
     public CameraEndPoint(boolean useFaceNet) throws Exception{
         nu.pattern.OpenCV.loadLocally();
         cascade = new Cascade("src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
-        if(useFaceNet && !isAppleM1OrM2()) {
+        if(useFaceNet) {
             faceNet = new FaceNet(cascade);
             this.useFaceNet = true;
         }else{
@@ -45,27 +45,7 @@ public class CameraEndPoint{
         }
     }
 
-    public static boolean isAppleM1OrM2() {
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "sysctl -n machdep.cpu.brand_string");
-        Process process;
-        try {
-            process = processBuilder.start();
 
-            InputStream is = process.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.contains("Apple M1") || line.contains("Apple M2")) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public Mat paint(){
         Mat img = new Mat();

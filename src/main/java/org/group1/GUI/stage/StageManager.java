@@ -21,19 +21,44 @@ public class StageManager {
 
     static {
         try {
-            endPoint = new CameraEndPoint(false);
+            if(!isAppleM1OrM2()) {
+                endPoint = new CameraEndPoint(false);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    public static boolean isAppleM1OrM2() {
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "sysctl -n machdep.cpu.brand_string");
+        Process process;
+        try {
+            process = processBuilder.start();
+
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("Apple M1") || line.contains("Apple M2")) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     private static Visualizer visualizer;
 
     static {
         try {
+            if(!isAppleM1OrM2()) {
                 visualizer = new Visualizer(endPoint);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -44,8 +69,10 @@ public class StageManager {
     public StageManager(){
         try {
             connection = new Response();
+            if(!isAppleM1OrM2()) {
                 faceIdentification = new Thread(visualizer);
                 faceIdentification.start();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

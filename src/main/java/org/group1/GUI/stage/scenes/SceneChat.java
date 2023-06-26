@@ -157,7 +157,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
         ButtonFactory.setDefaultActions(mtd);
         mtd.setOnAction(event -> {
             if(!isMTD){
-                mtd.setText("Turn of multi-turn");
+                mtd.setText("Turn off multi-turn");
                 isMTD=true;
             }else{
                 mtd.setText("Multi-turn mode");
@@ -266,7 +266,11 @@ public class SceneChat extends SceneManager implements ICustomScene {
                         setChatText(currentUserInput, false);
 
                         //Getting response from the bot
+                    if(isMTD) {
+                        setBotChatText(StageManager.getResponse(currentUserInput, true));
+                    }else {
                         setBotChatText(StageManager.getResponse(currentUserInput));
+                    }
                         setChatText(currentBotInput, true);
                         userInput.setText("");
 
@@ -456,8 +460,11 @@ public class SceneChat extends SceneManager implements ICustomScene {
                     String input = userInput.getText().replaceAll("\n", "");
                     setUserInput(input);
                     setChatText(input, false);
-
-                    setBotChatText(StageManager.getResponse(currentUserInput));
+                    if(isMTD) {
+                        setBotChatText(StageManager.getResponse(currentUserInput, true));
+                    }else {
+                        setBotChatText(StageManager.getResponse(currentUserInput));
+                    }
                     setChatText(currentBotInput, true);
                     userInput.setText("");
                 }
