@@ -7,11 +7,13 @@ import org.opencv.core.MatOfRect;
 import org.opencv.videoio.VideoCapture;
 import org.group1.back_end.Camera.Classifiers.*;
 import org.opencv.videoio.Videoio;
+import nu.pattern.OpenCV.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import nu.pattern.OpenCV.*;
 
 public class CameraEndPoint{
 
@@ -33,7 +35,6 @@ public class CameraEndPoint{
         }else{
             this.useFaceNet = false;
         }
-
 
         // Camera setup
         camera = new VideoCapture(0);

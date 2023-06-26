@@ -7,6 +7,11 @@ import org.group1.back_end.Camera.CameraEndPoint;
 import org.group1.back_end.Camera.Visualizer;
 import org.group1.back_end.response.Response;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class StageManager {
     protected static Stage UIstage = new Stage();
     protected Stage chatStage = new Stage();
@@ -16,17 +21,19 @@ public class StageManager {
 
     static {
         try {
-            endPoint = new CameraEndPoint();
+            endPoint = new CameraEndPoint(false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+
+
     private static Visualizer visualizer;
 
     static {
         try {
-            visualizer = new Visualizer(endPoint);
+                visualizer = new Visualizer(endPoint);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -37,8 +44,8 @@ public class StageManager {
     public StageManager(){
         try {
             connection = new Response();
-            faceIdentification = new Thread(visualizer);
-            faceIdentification.start();
+                faceIdentification = new Thread(visualizer);
+                faceIdentification.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -107,7 +107,8 @@ public class SceneChat extends SceneManager implements ICustomScene {
         UIPane.getChildren().add(auto);
 
         // multi-turn dialogue system
-        mtd = ButtonFactory.createButton("Multi-turn", 20, 250);
+        mtd = ButtonFactory.createButton("Multi-turn", 20, 280);
+        UIPane.getChildren().add(mtd);
 
         // mic button
         Image microphone = new Image("redMic.png");
