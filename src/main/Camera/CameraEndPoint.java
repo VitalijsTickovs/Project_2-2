@@ -8,6 +8,11 @@ import org.opencv.videoio.VideoCapture;
 import org.group1.back_end.Camera.Classifiers.*;
 import org.opencv.videoio.Videoio;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class CameraEndPoint{
 
     FaceNet faceNet;
@@ -22,7 +27,7 @@ public class CameraEndPoint{
     public CameraEndPoint(boolean useFaceNet) throws Exception{
         nu.pattern.OpenCV.loadLocally();
         cascade = new Cascade("src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
-        if(useFaceNet){
+        if(useFaceNet && !isAppleM1OrM2()) {
             faceNet = new FaceNet(cascade);
         }
         this.useFaceNet = useFaceNet;
@@ -34,6 +39,28 @@ public class CameraEndPoint{
             camera.set(Videoio.CAP_PROP_FRAME_WIDTH, Visualizer.WIDTH);
             camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, Visualizer.HEIGHT);
         }
+    }
+
+    public static boolean isAppleM1OrM2() {
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "sysctl -n machdep.cpu.brand_string");
+        Process process;
+        try {
+            process = processBuilder.start();
+
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("Apple M1") || line.contains("Apple M2")) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Mat paint(){
