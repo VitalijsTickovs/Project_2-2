@@ -1,8 +1,7 @@
 package org.group1.back_end.response.skills;
 
-import org.apache.ibatis.jdbc.SQL;
-import org.group1.back_end.response.Response;
 import org.group1.back_end.response.ResponseLibrary;
+import org.group1.back_end.response.skills.NLU.IntentGenerator;
 import org.group1.back_end.response.skills.NLU.JSONConverter;
 import org.group1.back_end.response.skills.databases.DB_Manager;
 import org.group1.back_end.response.skills.dataframe.DataFrame;
@@ -14,9 +13,6 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.group1.back_end.textprocessing.ComplexProcess.lemmas;
-
 
 public class Skill {
 
@@ -56,13 +52,15 @@ public class Skill {
     public void generateSkills() throws Exception {
         List<String> texts = SERVICE.readAll();
         List<String[]> pairSet = new ArrayList<>();
-        JSONConverter jsonConverter = new JSONConverter();
+//        JSONConverter jsonConverter = new JSONConverter();
+        List<HashMap<String,List<String>>> intentGeneratorList = new ArrayList<>();
         for (String text : texts){
             System.out.println("=====================================");
             System.out.println("Skill: \n" + text + "\n");
             SkillGenerator sp = new SkillGenerator(text);
 
-            jsonConverter.addInput(sp.input);
+//            jsonConverter.addInput(sp.input);
+//            intentGeneratorList.add(sp.input.getIntents());
 
             List<String> questions = sp.getQuestions();
             List<String> actions = sp.getActions();
@@ -107,8 +105,8 @@ public class Skill {
             System.out.println("===================================== \n\n");
         }
 
-        jsonConverter.makeJSON();
-
+//        jsonConverter.makeJSON();
+//        JSONConverter.makeJSON(intentGeneratorList);
         for (String[] pair : pairSet) {
             DATABASE_MANAGER.add(pair[0], pair[1]);
         }
@@ -125,7 +123,7 @@ public class Skill {
                 input.add(row);
             }
             ContextFreeGrammar cfg = new ContextFreeGrammar(input);
-            //TODO: FOR NATALIA
+
             Map<String, String[]> productions = cfg.formatTree.PRODUCTIONS;
             Map<String, Set<String>> slotsInRules = new HashMap<>();
             Pattern pattern = Pattern.compile("<(.*?)>");
@@ -163,7 +161,7 @@ public class Skill {
             }
             System.out.println("slot expanded SCHEDULE: " + expandedRules.get("<SCHEDULE>"));
             System.out.println("slot expanded LOCATION: " + expandedRules.get("<LOCATION>"));
-            ///// TODO: slotInRules is a hash map which has key as <LOCATION> and in the for loop
+            ///// slotInRules is a hash map which has key as <LOCATION> and in the for loop
             //// i get the largest set of slots used
             List<String[]> pairSet = cfg.getRealData();
 

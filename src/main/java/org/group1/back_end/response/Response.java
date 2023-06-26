@@ -1,10 +1,13 @@
 package org.group1.back_end.response;
 
 import org.group1.back_end.response.skills.ContextFreeGrammar;
+import org.group1.back_end.response.skills.RasaAPI;
 import org.group1.back_end.response.skills.Skill;
 import org.group1.back_end.response.skills.SkillData;
 import org.group1.back_end.textprocessing.ComplexProcess;
 import org.group1.back_end.textprocessing.SimpleProcess;
+
+import java.io.IOException;
 import java.util.*;
 
 import org.group1.back_end.textprocessing.SpellingCorrectProcess;
@@ -12,8 +15,8 @@ import org.group1.back_end.utilities.enums.DB;
 
 public class Response {
 
-
     public ResponseLibrary responseLibrary;
+    public RasaAPI rasaAPI;
 
     public static DB database = DB.DB_PERFECT_MATCHING;
 
@@ -24,6 +27,23 @@ public class Response {
     public String getResponse(String word){
        word = process(word);
         return responseLibrary.getResponseSkills(word);
+    }
+
+    public String getResponse(String word, boolean useMulti){
+        this.rasaAPI = new RasaAPI("http://0.0.0.0:5005");
+        String botOutput = "";
+        try {
+            botOutput = rasaAPI.sendMessageToRasa(word);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        if(useMulti && !botOutput.contains("Final output")){
+            return botOutput;
+        }else{
+            botOutput = botOutput.replace("Final output", "");
+            word = process(botOutput);
+            return responseLibrary.getResponseSkills(word);
+        }
     }
 
     public void reload() throws Exception{
@@ -38,7 +58,7 @@ public class Response {
                 words.set(i, SpellingCorrectProcess.correct(words.get(i)));
             }
         }
-//
+
         String result = "";
         for (String w: words) {
             result += " " + w + " ";

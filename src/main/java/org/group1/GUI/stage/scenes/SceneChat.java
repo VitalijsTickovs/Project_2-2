@@ -46,8 +46,9 @@ public class SceneChat extends SceneManager implements ICustomScene {
     // javafx elements
     private TextArea userInput;
     private Stage menuStage;
-    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, mic, auto;
+    private Button sendUserInput, helpButton, skillsButton, logoutButton, exitButton, mic, auto, mtd;
     private int chatYPos =0;
+    private boolean isMTD= false;
 
     public SceneChat(){
         makeNewPane();
@@ -105,6 +106,9 @@ public class SceneChat extends SceneManager implements ICustomScene {
         auto.setFont(Font.font("Impact", FontWeight.BOLD,20));
         UIPane.getChildren().add(auto);
 
+        // multi-turn dialogue system
+        mtd = ButtonFactory.createButton("Multi-turn", 20, 250);
+
         // mic button
         Image microphone = new Image("redMic.png");
         ImageView viewMic = new ImageView(microphone);
@@ -148,6 +152,18 @@ public class SceneChat extends SceneManager implements ICustomScene {
         exitButton.setOnAction( e -> {
             StageManager.close();
         });
+
+        ButtonFactory.setDefaultActions(mtd);
+        mtd.setOnAction(event -> {
+            if(!isMTD){
+                mtd.setText("Turn of multi-turn");
+                isMTD=true;
+            }else{
+                mtd.setText("Multi-turn mode");
+                isMTD = false;
+            }
+        });
+
         //auto button
         ButtonFactory.setDefaultActions(auto);
         auto.setOnAction( e -> {
@@ -202,7 +218,7 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 // Stop recording
                 try {
                     transcription = sd.recordStop();
-                    System.out.println("Transcription -> "+transcription);
+                    System.out.println("Transcription -> " + transcription);
 
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -212,9 +228,12 @@ public class SceneChat extends SceneManager implements ICustomScene {
                 // User input
                 setUserInput(transcription); // get from mic detection string
                 setChatText(currentUserInput, false); // set text on chat equal to user input
-
-                // Getting response from the bot
-                setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
+                if(isMTD) {
+                    setBotChatText(StageManager.getResponse(currentUserInput, true));
+                }else{
+                    // Getting response from the bot
+                    setBotChatText(StageManager.getResponse(currentUserInput)); // get response from bot
+                }
                 setChatText(currentBotInput, true); // set text on chat equal to bot response
                 userInput.setText(""); // reset user input text
                 // For TTS (s)

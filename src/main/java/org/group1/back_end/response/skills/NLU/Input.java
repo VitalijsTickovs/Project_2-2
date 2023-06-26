@@ -38,13 +38,6 @@ public class Input {
         }
     }
 
-    public void addExample(String query){
-
-    }
-
-    public void addStory(String output){
-
-    }
 
     public void setEntries(List<Entry> common_examples) {
         this.entries = common_examples;

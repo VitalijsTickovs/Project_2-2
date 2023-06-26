@@ -55,6 +55,9 @@ public class StageManager {
     public static String getResponse(String query){
         return connection.getResponse(query);
     }
+    public static String getResponse(String query, boolean isMTD){
+        return connection.getResponse(query, isMTD);
+    }
 
     public static void setScene(Scene newScene){
         UIstage.setScene(newScene);

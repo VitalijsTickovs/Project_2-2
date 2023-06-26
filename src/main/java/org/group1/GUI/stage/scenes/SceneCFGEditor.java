@@ -135,10 +135,39 @@ public class SceneCFGEditor extends SceneManager implements ICustomScene {
         ButtonFactory.setDefaultActions(saveButton);
         saveButton.setOnAction(e -> {
             List<String> allActions = new ArrayList<>();
+            List<String> allNonTerminals = new ArrayList<>();
             for(String key: tableCollection.keySet()){
                 //Doing rules
-                List<String> rules = new ArrayList<>();
+                TableView<ObservableList<String>> rule = tableCollection.get(key).get(1);
+                HashMap<String, List<String>> nonTerminals = new HashMap<>();
+                int ruleSize = rule.getItems().size();
+                for(int i=0; i<ruleSize; i++){
+                    String ruleKey = rule.getItems().get(i).get(0);
+                    if(nonTerminals.containsKey(ruleKey)){
+                        List<String> nonTerminalValues = nonTerminals.get(ruleKey);
+                        String value = rule.getItems().get(i).get(1);
+                        if(!value.equals("")) {
+                            nonTerminalValues.add(value);
+                        }
+                    }else{
+                        List<String> nonTerminalValues = new ArrayList<>();
+                        String value = rule.getItems().get(i).get(1);
+                        if(!value.equals("")) {
+                            nonTerminalValues.add(value);
+                            nonTerminals.put(ruleKey, nonTerminalValues);
+                        }
+                    }
+                }
 
+                for(String ruleKey: nonTerminals.keySet()){
+                    String nonTerminalEntry = "Rule " + ruleKey;
+                    List<String> nonTerminalValue = nonTerminals.get(ruleKey);
+                    for(String value: nonTerminalValue){
+                        nonTerminalEntry += " " + value + " | ";
+                    }
+                    nonTerminalEntry = nonTerminalEntry.substring(0, nonTerminalEntry.length()-2);
+                    allNonTerminals.add(nonTerminalEntry);
+                }
 
                 //Doing actions
                 TableView<ObservableList<String>> action = tableCollection.get(key).get(0);
@@ -171,7 +200,7 @@ public class SceneCFGEditor extends SceneManager implements ICustomScene {
                 allActions.addAll(ruleActions);
             }
             int actualID = id +1;
-            GeneralFileService.overWriteCFG(allActions, actualID);
+            GeneralFileService.overWriteCFG(allActions, allNonTerminals, actualID);
         });
         //back button
         ButtonFactory.setDefaultActions(back);

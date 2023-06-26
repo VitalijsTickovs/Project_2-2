@@ -43,11 +43,6 @@ public class ResponseLibrary {
     }
 
 
-    public String getResponseChatBot(String words){
-        return null;
-    }
-
-
     public List<SkillData> getSkillData(){
         return skills.getSkillData();
     }
