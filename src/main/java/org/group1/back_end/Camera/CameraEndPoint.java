@@ -17,7 +17,7 @@ public class CameraEndPoint{
 
     FaceNet faceNet;
     Cascade cascade;
-    boolean useFaceNet = true;
+    boolean useFaceNet;
     VideoCapture camera;
 
     public CameraEndPoint() throws Exception {
@@ -29,8 +29,11 @@ public class CameraEndPoint{
         cascade = new Cascade("src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
         if(useFaceNet && !isAppleM1OrM2()) {
             faceNet = new FaceNet(cascade);
+            this.useFaceNet = true;
+        }else{
+            this.useFaceNet = false;
         }
-        this.useFaceNet = useFaceNet;
+
 
         // Camera setup
         camera = new VideoCapture(0);
