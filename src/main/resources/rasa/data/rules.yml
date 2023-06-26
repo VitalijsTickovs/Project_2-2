@@ -1,0 +1,30 @@
+version: "3.1"
+
+rules:
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Event plan without any slots
+  steps:
+  - intent: event_plan
+  - action: event_plan_TIME_form
+  - action: DAY_form
+  - action: CITY_form
+  - action: utter_event_plan_values
+  - action: action_clear_slots
+
+
+- rule: interactive_story_1
+  steps:
+  - intent: forecast
+  - action: DAY_form
+  - action: CITY_form
+  - action: utter_forecast_values
+  - action: action_clear_slots

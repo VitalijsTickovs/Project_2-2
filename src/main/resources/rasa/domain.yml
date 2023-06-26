@@ -1,0 +1,82 @@
+version: '3.1'
+intents:
+- affirm
+- bot_challenge
+- deny
+- event_plan
+- event_plan_CITY_DAY
+- event_plan_CITY_TIME
+- event_plan_DAY
+- event_plan_TIME
+- forecast
+- forecast_DAY
+- forecast_DAY_LOCATION
+- forecast_LOCATION
+- goodbye
+- greet
+- lecture
+- mood_great
+- mood_unhappy
+responses:
+  utter_greet:
+  - text: Hey! How are you?
+  utter_cheer_up:
+  - text: 'Here is something to cheer you up:'
+    image: https://i.imgur.com/nGF1K8f.jpg
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+  utter_ask_slot_CITY:
+  - text: Where?
+  utter_ask_slot_event_plan_TIME:
+  - text: At what time?
+  utter_event_plan_values:
+  - text: Final output What event do I have planned on {slot_DAY} at {slot_event_plan_TIME} in {slot_CITY}?
+  utter_ask_slot_DAY:
+  - text: Which day of the week?
+  utter_forecast_values:
+  - text: Final output What is the forecast for {slot_DAY} in {slot_CITY}?
+entities:
+- slot_DAY
+- slot_CITY
+- slot_event_plan_TIME
+slots:
+  slot_CITY:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: slot_CITY
+  slot_DAY:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: slot_DAY
+  slot_event_plan_TIME:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: slot_event_plan_TIME
+forms:
+  event_plan_TIME_form:
+    required_slots:
+    - slot_event_plan_TIME
+  CITY_form:
+    required_slots:
+    - slot_CITY
+  DAY_form:
+    required_slots:
+    - slot_DAY
+actions:
+- action_clear_slots
+- utter_forecast_values
+- utter_event_plan_values
+- utter_greet
+- utter_happy
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

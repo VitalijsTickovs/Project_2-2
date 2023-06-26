@@ -1,0 +1,19 @@
+version: "3.1"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+#- story: Forecast without any location and day
+#  steps:
+#  - intent: forecast
+#  - action: DAY_form
+#  - action: CITY_form
+#  - action: utter_forecast_values
+#  - action: action_clear_slots
+
+
